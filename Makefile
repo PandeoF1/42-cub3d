@@ -6,7 +6,7 @@
 #    By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/09 13:04:45 by tnard             #+#    #+#              #
-#    Updated: 2022/02/21 12:36:05 by tnard            ###   ########lyon.fr    #
+#    Updated: 2022/02/21 16:31:50 by tnard            ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,19 +16,24 @@ RED			= \033[0;31m
 RST			= \033[0m
 END			= \e[0m
 
-SRCS		= cub3d.c
+SRCS		= cub3d.c srcs/check/ft_check_arg.c srcs/check/ft_check_map.c \
+				srcs/check/ft_check_texture.c srcs/check/ft_get_file.c \
+				srcs/utils/ft_strnjoin.c srcs/utils/ft_free_split.c \
+				srcs/utils/ft_splitlen.c
 NAME		= cub3d
 minilibx	= mlbx/libmlx.a
 OBJS_DIR	= objs/
 OBJS		= $(SRCS:.c=.o)
 OBJECTS_PREFIXED = $(addprefix $(OBJS_DIR), $(OBJS))
 CC			= gcc
-CC_FLAGS	= -Wall -Werror -Wextra
+CC_FLAGS	= #-Wall -Werror -Wextra
 MLB_FLAGS	= -I -g -L /usr/X11/lib -Lincludes -L./mlbx -lmlx -Imlx -lXext -lX11 -lz -lm libft/libft.a ft_printf/libftprintf.a
 
 $(OBJS_DIR)%.o : %.c includes/cub3d.h
 	@mkdir -p $(OBJS_DIR)
 	@mkdir -p $(OBJS_DIR)srcs
+	@mkdir -p $(OBJS_DIR)srcs/utils
+	@mkdir -p $(OBJS_DIR)srcs/check
 	@$(CC) $(CC_FLAGS) -c $< -o $@
 	@printf	"\033[2K\r${BLU}[BUILD - $(NAME)]${RST} '$<' $(END)"
 

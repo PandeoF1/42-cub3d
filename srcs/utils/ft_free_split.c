@@ -1,35 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_free_split.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/03 08:56:41 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/21 13:51:27 by tnard            ###   ########lyon.fr   */
+/*   Created: 2022/02/21 15:30:31 by tnard             #+#    #+#             */
+/*   Updated: 2022/02/21 15:30:48 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../includes/cub3d.h"
 
-char	*ft_strdup(const char *s1)
+void	ft_free_split(char **split)
 {
-	char	*ptr;
-	int		n;
-	int		l;
+	int	i;
 
-	l = 0;
-	n = 0;
-	while (s1[l])
-		l++;
-	ptr = malloc(sizeof(char) * l + 1);
-	if (ptr == NULL)
-		return (NULL);
-	while (s1[n])
+	i = 0;
+	while (split[i])
 	{
-		ptr[n] = s1[n];
-		n++;
+		free(split[i]);
+		i++;
 	}
-	ptr[n] = '\0';
-	return (ptr);
+	free(split);
 }
