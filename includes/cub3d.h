@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/21 16:46:33 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/02/21 17:38:14 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <fcntl.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <math.h>
 # include <stdio.h>
 # include <stdarg.h>
 
@@ -39,8 +40,15 @@ typedef struct t_map_check
 	char	*c;
 	char	**map;
 	int		max_x; // to remove
+	int		axis;
 }	t_map_check;
 
+typedef struct t_graphic
+{
+	void *mlx;
+	void *mlx_win;
+	t_map_check	*map_check;
+}	t_graphic;
 
 /* Utils */
 char	*ft_strnjoinf(char *s1, char *s2, int n); // free second
