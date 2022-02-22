@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/22 14:52:37 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/02/22 14:53:27 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,13 @@ int main(int argc, char *argv[])
 	{
 		while (check->map[x])
 			ft_printf("```%s```\n", check->map[x++]);
-		x = -1;
+		mlx = mlx_init();
+		ft_printf("uwu\n");
+		mlx_win = mlx_new_window(mlx, 1024, 512, "so_long | v1.0");
+		//ft_refresh(&graphic);
+		ft_printf("uwu\n");
+		mlx_loop(mlx);
+		/*x = -1;
 		y = -1;
 		mlx = mlx_init();
 	
