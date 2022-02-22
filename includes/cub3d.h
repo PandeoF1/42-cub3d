@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/22 14:32:01 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/02/22 15:09:12 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,9 @@
 # define EVENT_ESC 65307
 # define WIDTH 1024
 # define HEIGHT 512
+
+# define PI 3.14159265
+
 
 typedef struct s_map_check
 {
