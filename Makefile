@@ -6,7 +6,7 @@
 #    By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/09 13:04:45 by tnard             #+#    #+#              #
-#    Updated: 2022/02/21 16:31:50 by tnard            ###   ########lyon.fr    #
+#    Updated: 2022/02/22 10:42:52 by tnard            ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,8 @@ END			= \e[0m
 
 SRCS		= cub3d.c srcs/check/ft_check_arg.c srcs/check/ft_check_map.c \
 				srcs/check/ft_check_texture.c srcs/check/ft_get_file.c \
-				srcs/utils/ft_strnjoin.c srcs/utils/ft_free_split.c \
-				srcs/utils/ft_splitlen.c
+				srcs/check/ft_max_len.c srcs/utils/ft_strnjoin.c \
+				srcs/utils/ft_free_split.c srcs/utils/ft_splitlen.c
 NAME		= cub3d
 minilibx	= mlbx/libmlx.a
 OBJS_DIR	= objs/
