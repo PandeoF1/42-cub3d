@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 16:18:22 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/22 11:06:33 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/02/22 11:37:08 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,9 @@ void	ft_add_space(char *str, int i, char **tmp, int x)
 	i = 0;
 	while (i < y)
 		(*tmp)[i++] = ' ';
-	(*tmp)[i] = '\0';
-	tmp2 = ft_strdup((*tmp));
 	(*tmp)[i] = '\n';
 	(*tmp)[i + 1] = '\0';
+	tmp2 = ft_strdup((*tmp));
 	(*tmp) = ft_strnjoin((*tmp), str + x, ft_strlen(str + x));
 	(*tmp) = ft_strnjoin((*tmp), tmp2, ft_strlen(tmp2));
 	free(tmp2);
@@ -90,9 +89,8 @@ char	*ft_nspace(char *str, int x)
 	return (tmp);
 }
 
-int	ft_check_map(t_map_check *check, int x, char *str)
+int	ft_check_map(t_map_check *check, int x, char *str, int i)
 {
-	int		i;
 	char	*tmp;
 	char	**split;
 	char	*space;
@@ -116,5 +114,6 @@ int	ft_check_map(t_map_check *check, int x, char *str)
 		split[i] = ft_nspace(split[i], ft_max_len(str + x) + 2);
 	}
 	check->map = split;
+	free(tmp);
 	return (ft_check_border(check, -1, 0));
 }

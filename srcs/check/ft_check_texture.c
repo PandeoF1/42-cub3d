@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 16:19:11 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/21 16:30:37 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/02/22 11:37:45 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,16 @@ int	ft_check_texture(char *str, t_map_check *check)
 		if (check->n && check->s && check->w
 			&& check->e && check->f && check->c && split[x + 1])
 		{
-			if (ft_check_map(check, ft_pos(split[x + 1], str), str))
+			if (ft_check_map(check, ft_pos(split[x + 1], str), str, 0))
+			{
+				ft_free_split(split);
 				return (1);
-			else
-				return (0);
+			}
+			ft_free_split(split);
+			return (0);
 		}
 		x++;
 	}
+	ft_free_split(split);
 	return (0);
 }
