@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/23 11:14:03 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/02/23 16:39:03 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,23 @@ void	ft_free_check(t_map_check *check)
 	free(check);
 }
 
-void	ft_refresh(t_graphic *graphic, t_plan **plan)
+void	ft_refresh(t_graphic *graphic, t_plan *plan)
 {
 	int		i;
 	int		j;
 	float	r_h;
 	float	r_v;
+	float	t;
+	float	x;
+	float	y;
+	float	point_x;
+	float	point_y;
+	float	point_z;
+
 	t_rayon	rayon[HEIGHT + 1][WIDTH + 1];
+
+	x = 0;
+	y = 0;
 
 	i = 0;
 	printf("Debug: refresh (debut calcul)\n");
@@ -46,28 +56,53 @@ void	ft_refresh(t_graphic *graphic, t_plan **plan)
 		j = 0;
 		while (j <= WIDTH)
 		{
-			r_h = 2 * tan((60 * PI / 180) / 2) / WIDTH;
+			r_h = 2 * tan((60 * PI / 180) * 0.5) / WIDTH;
 			r_v = 2 * tan((60 * PI / 180) * HEIGHT / (WIDTH * 2)) / HEIGHT;
 			rayon[i][j].x = ((j - WIDTH * 0.5) * r_h);
-			rayon[i][j].z = -1.0;
-			rayon[i][j].y = ((HEIGHT * 0.5 - i) * r_v);
+			rayon[i][j].y = -1.0;
+			rayon[i][j].z = ((HEIGHT * 0.5 - i) * r_v);
+			int	u;
+			u = 0;
+			while (u < 4)
+			{
+				if ((plan[u].a * rayon[i][j].x + plan[u].b * rayon[i][j].y + plan[u].c * rayon[i][j].z) != 0) //Stock avant de refaire
+				{
+					t = -(plan[u].a * 0.0 + plan[u].b * 0.0 + plan[u].c * 0.5 + plan[u].d) / (plan[u].a * rayon[i][j].x + plan[u].b * rayon[i][j].y + plan[u].c * rayon[i][j].z);
+					// t = t = -d / uy;
+					if (t > 0)
+					{
+						//point_x = graphic->map_check->player_x + rayon[i][j].x * t;
+						//point_y = graphic->map_check->player_y + rayon[i][j].y * t;
+						point_x = 0 + rayon[i][j].x * t;
+						point_y = 0 + rayon[i][j].y * t;
+						point_z = 0.5 + rayon[i][j].z * t;
+						// printf("x y z : (%f, %f, %f) t : %f\n", point_x, point_y, point_z, t);
+						if (point_z < 1 && point_z > 0)
+						{
+							if (u == 0)
+								mlx_pixel_put(graphic->mlx, graphic->win, j, i, 0x0000FE);
+							if (u == 1)
+								mlx_pixel_put(graphic->mlx, graphic->win, j, i, 0xFE0000);
+							if (u == 2)
+								mlx_pixel_put(graphic->mlx, graphic->win, j, i, 0x00FF0F);
+							if (u == 3)
+								mlx_pixel_put(graphic->mlx, graphic->win, j, i, 0x00E8FF);
+						}
+					}
+				}
+				u++;
+			}
+			
+			y = 0;
+			t = 0;
 			j++;
 		}
 		i++;
-		/*printf("---------------------------------\n");
-		printf("r_h : (2 * tan((60 * %f / 180) / 2) / %d = %f\n", PI, WIDTH, r_h);
-		printf("r_v : (2 * tan((60 * %f / 180) * %d / (%d * 2)) / %d) = %f\n", PI, HEIGHT, WIDTH, HEIGHT, r_v);
-		printf("x : ((%d - %d * 0.5) * %f) = %f\n", j, WIDTH, r_h, rayon[i - 1][j - 1].x);
-		printf("z : ((%d * 0.5 - %d) * %f) = %f\n", HEIGHT, i, r_v, rayon[i - 1][j - 1].y);
-		printf("---------------------------------\n");*/
 	}
+	printf("rayon 0 0 : (%f, %f, %f)", rayon[0][0].x, rayon[0][0].y, rayon[0][0].z);
 	printf("Debug: fin calcul\n");
-	/*printf("Vecteur 1 x : %f, %f, %f, %d %d\n", rayon[0][0].x, rayon[0][0].z, rayon[0][0].y, 0, 0);
-	printf("Vecteur 2 x : %f, %f, %f, %d %d\n", rayon[0][WIDTH].x, rayon[0][WIDTH].z, rayon[0][WIDTH].y, 0, WIDTH);
-	printf("Vecteur 3 x : %f, %f, %f, %d %d\n", rayon[HEIGHT][0].x, rayon[HEIGHT][0].z, rayon[HEIGHT][0].y, HEIGHT, 0);
-	printf("Vecteur 4 x : %f, %f, %f, %d %d\n", rayon[HEIGHT][WIDTH].x, rayon[HEIGHT][WIDTH].z, rayon[HEIGHT][WIDTH].y, HEIGHT, WIDTH);*/
 	printf("Debug: refresh (debut affichage)\n");
-	
+	printf("Debug: refresh (fin affichage)\n");
 }
 
 void	ft_get_pos(t_map_check *check)
@@ -75,20 +110,20 @@ void	ft_get_pos(t_map_check *check)
 	int	x;
 	int	y;
 
-	x = 0;
-	while (check->map[x])
+	y = 0;
+	while (check->map[y])
 	{
-		y = 0;
-		while (check->map[x][y])
+		x = 0;
+		while (check->map[y][x])
 		{
-			if (check->map[x][y] == 'N')
+			if (check->map[y][x] == 'N')
 			{
 				check->player_x = x;
 				check->player_y = y;
 			}
-			y++;
+			x++;
 		}
-		x++;
+		y++;
 	}
 	check->max_y = ft_splitlen(check->map);
 }
@@ -98,11 +133,11 @@ t_plan	**ft_malloc_plan(t_map_check *check)
 	t_plan	**plan;
 	int		i;
 
-	plan = malloc(sizeof(t_plan *) * check->max_y);
+	plan = malloc(sizeof(t_plan *) * check->max_y + 1);
 	i = 0;
-	while (i < check->max_y)
+	while (i <= check->max_y)
 	{
-		plan[i] = malloc(sizeof(t_plan) * check->max_x);
+		plan[i] = malloc(sizeof(t_plan) * check->max_x + 1);
 		i++;
 	}
 	return (plan);
@@ -110,13 +145,18 @@ t_plan	**ft_malloc_plan(t_map_check *check)
 
 void	ft_create_plan(t_map_check *check)
 {
-	t_plan	**plan;
+	t_plan	plan[4];
 	int		x;
 	int		y;
 
-	plan = ft_malloc_plan(check);
+	//plan = ft_malloc_plan(check);
 	y = 0;
-	while (y < check->max_y)
+	plan[0] = (t_plan){0, 1, 0, 10};
+	plan[1] = (t_plan){1, 0, 0, 10};
+	plan[2] = (t_plan){0, -1, 0, 10};
+	plan[3] = (t_plan){-1, 0, 0, 10};
+	
+	/*while (y < check->max_y)
 	{
 		x = 0;
 		while (x < check->max_x)
@@ -131,7 +171,7 @@ void	ft_create_plan(t_map_check *check)
 			x++;
 		}
 		y++;
-	}
+	}*/
 	ft_refresh(check->graphic, plan);
 }
 
@@ -149,12 +189,12 @@ int main(int argc, char *argv[])
 		while (check->map[x])
 			ft_printf("```%s```\n", check->map[x++]);
 		check->graphic = &graphic;
+		graphic.map_check = check;
 		graphic.mlx = mlx_init();
-		ft_printf("uwu\n");
 		graphic.win = mlx_new_window(graphic.mlx, WIDTH, HEIGHT, "cub3d");
-		ft_printf("uwu\n");
 		//graphic->map_check = check;
 		ft_create_plan(check);
+		mlx_loop(graphic.mlx);
 	}
 	else
 		ft_printf("Error\n");

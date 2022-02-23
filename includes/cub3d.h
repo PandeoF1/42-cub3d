@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/23 11:13:48 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/02/23 16:25:06 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,10 @@
 
 typedef struct s_plan
 {
-	int	a;
-	int	b;
-	int	c;
-	int	d;
+	float	a;
+	float	b;
+	float	c;
+	float	d;
 }	t_plan;
 typedef struct s_graphic
 {
@@ -59,8 +59,8 @@ typedef struct s_map_check
 	char				*c;
 	char				**map;
 	int					axis;
-	int					player_x;
-	int					player_y;
+	float				player_x;
+	float				player_y;
 	int					player_dir;
 	int					max_y;
 	int					max_x;
