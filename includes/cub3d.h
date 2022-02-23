@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/22 15:09:12 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/02/23 11:13:48 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,24 +35,38 @@
 # define PI 3.14159265
 
 
-typedef struct s_map_check
+typedef struct s_plan
 {
-	char	*n;
-	char	*s;
-	char	*w;
-	char	*e;
-	char	*f;
-	char	*c;
-	char	**map;
-	int		axis;
-}	t_map_check;
-
+	int	a;
+	int	b;
+	int	c;
+	int	d;
+}	t_plan;
 typedef struct s_graphic
 {
-	void		*mlx;
-	void		*win;
-	t_map_check	*map_check;
+	void				*mlx;
+	void				*win;
+	struct s_map_check	*map_check;
 }	t_graphic;
+
+typedef struct s_map_check
+{
+	char				*n;
+	char				*s;
+	char				*w;
+	char				*e;
+	char				*f;
+	char				*c;
+	char				**map;
+	int					axis;
+	int					player_x;
+	int					player_y;
+	int					player_dir;
+	int					max_y;
+	int					max_x;
+	struct s_graphic	*graphic;
+//	t_plan	**plan;
+}	t_map_check;
 
 typedef struct s_rayon
 {
