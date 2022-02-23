@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/23 22:39:17 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/02/23 16:39:03 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,15 +65,18 @@ void	ft_refresh(t_graphic *graphic, t_plan *plan)
 			u = 0;
 			while (u < 4)
 			{
-				t = (plan[u].a * rayon[i][j].x + plan[u].b * rayon[i][j].y + plan[u].c * rayon[i][j].z);
-				if (t != 0) //Stock avant de refaire
+				if ((plan[u].a * rayon[i][j].x + plan[u].b * rayon[i][j].y + plan[u].c * rayon[i][j].z) != 0) //Stock avant de refaire
 				{
-					t = -(plan[u].a * 0.0 + plan[u].b * 0.0 + plan[u].c * 0.5 + plan[u].d) / t;
+					t = -(plan[u].a * 0.0 + plan[u].b * 0.0 + plan[u].c * 0.5 + plan[u].d) / (plan[u].a * rayon[i][j].x + plan[u].b * rayon[i][j].y + plan[u].c * rayon[i][j].z);
+					// t = t = -d / uy;
 					if (t > 0)
 					{
+						//point_x = graphic->map_check->player_x + rayon[i][j].x * t;
+						//point_y = graphic->map_check->player_y + rayon[i][j].y * t;
 						point_x = 0 + rayon[i][j].x * t;
 						point_y = 0 + rayon[i][j].y * t;
-						point_z = 0.5 + rayon[i][j].z * t; // Si pas besoin de le stocker le foutre directement dans le if
+						point_z = 0.5 + rayon[i][j].z * t;
+						// printf("x y z : (%f, %f, %f) t : %f\n", point_x, point_y, point_z, t);
 						if (point_z < 1 && point_z > 0)
 						{
 							if (u == 0)
@@ -96,7 +99,7 @@ void	ft_refresh(t_graphic *graphic, t_plan *plan)
 		}
 		i++;
 	}
-	printf("rayon 0 0 : (%f, %f, %f)\n", rayon[0][0].x, rayon[0][0].y, rayon[0][0].z);
+	printf("rayon 0 0 : (%f, %f, %f)", rayon[0][0].x, rayon[0][0].y, rayon[0][0].z);
 	printf("Debug: fin calcul\n");
 	printf("Debug: refresh (debut affichage)\n");
 	printf("Debug: refresh (fin affichage)\n");
@@ -142,70 +145,41 @@ t_plan	**ft_malloc_plan(t_map_check *check)
 
 void	ft_create_plan(t_map_check *check)
 {
-	check->plan[0] = (t_plan){0, 1, 0, 10};
-	check->plan[1] = (t_plan){1, 0, 0, 10};
-	check->plan[2] = (t_plan){0, -1, 0, 10};
-	check->plan[3] = (t_plan){-1, 0, 0, 10};
-}
+	t_plan	plan[4];
+	int		x;
+	int		y;
 
-void	ft_create_vector(t_map_check *check)
-{
-	int		i;
-	int		j;
-	float	r_h;
-	float	r_v;
-	t_rayon	**rayon;
-
-	rayon = check->rayon;
-	ft_printf("test : %f\n", check->rayon[0][0].x);
-	i = 0;
-	while (i <= HEIGHT)
+	//plan = ft_malloc_plan(check);
+	y = 0;
+	plan[0] = (t_plan){0, 1, 0, 10};
+	plan[1] = (t_plan){1, 0, 0, 10};
+	plan[2] = (t_plan){0, -1, 0, 10};
+	plan[3] = (t_plan){-1, 0, 0, 10};
+	
+	/*while (y < check->max_y)
 	{
-		j = 0;
-		while (j <= WIDTH)
+		x = 0;
+		while (x < check->max_x)
 		{
-			r_h = 2 * tan((60 * PI / 180) * 0.5) / WIDTH;
-			r_v = 2 * tan((60 * PI / 180) * HEIGHT / (WIDTH * 2)) / HEIGHT;
-			ft_printf("uwu\n");
-			printf("%p\n", check->rayon);
-			rayon[i][j].x = ((j - WIDTH * 0.5) * r_h);
-			rayon[i][j].y = -1.0;
-			rayon[i][j].z = ((HEIGHT * 0.5 - i) * r_v);
-			j++;
+			plan[y][x].a = 1;
+			plan[y][x].b = 0;
+			plan[y][x].c = 0;
+			if (check->map[y][x] == '1')
+				plan[y][x].d = x;
+			else
+				plan[y][x].d = 0;
+			x++;
 		}
-		i++;
-	}
-}
-
-void	ft_malloc_rayon(t_map_check *check)
-{
-	int		i;
-
-	check->rayon = malloc(sizeof(t_rayon *) * HEIGHT + 1);
-	i = 0;
-	while (i <= HEIGHT)
-	{
-		check->rayon[i] = malloc(sizeof(t_rayon) * WIDTH + 1);
-		i++;
-	}
-}
-
-void	ft_init_f(t_map_check *check)
-{
-	ft_printf("debut vector\n");
-	ft_create_vector(check);
-	ft_printf("fin vector\n");
-	ft_create_plan(check);
-	ft_printf("fin init\n");
+		y++;
+	}*/
+	ft_refresh(check->graphic, plan);
 }
 
 int main(int argc, char *argv[])
 {
 	int			x;
-	t_plan		plan[4];
 	t_map_check	*check;
 	t_graphic	graphic;
-	t_rayon		rayon[HEIGHT + 1][WIDTH + 1];
 
 	x = 0;
 	check = malloc(sizeof(t_map_check));
@@ -216,11 +190,6 @@ int main(int argc, char *argv[])
 			ft_printf("```%s```\n", check->map[x++]);
 		check->graphic = &graphic;
 		graphic.map_check = check;
-		check->plan = plan;
-		check->rayon = (t_rayon **)rayon;
-		check->rayon[0][0].x = 123;
-		printf("%p %p\n", rayon, check->rayon);
-		ft_init_f(check);
 		graphic.mlx = mlx_init();
 		graphic.win = mlx_new_window(graphic.mlx, WIDTH, HEIGHT, "cub3d");
 		//graphic->map_check = check;

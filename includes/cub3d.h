@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/23 21:18:43 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/02/23 16:25:06 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,8 @@ typedef struct s_map_check
 	int					player_dir;
 	int					max_y;
 	int					max_x;
-	struct s_plan		*plan;
-	struct s_rayon		**rayon;
 	struct s_graphic	*graphic;
+//	t_plan	**plan;
 }	t_map_check;
 
 typedef struct s_rayon

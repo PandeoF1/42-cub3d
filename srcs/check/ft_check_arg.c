@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:38:36 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/23 22:38:59 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/02/22 11:17:35 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,6 @@ int	ft_check_arg(int argc, char **argv, t_map_check *check)
 		return (0);
 	fd = open(argv[1], O_RDONLY);
 	str = ft_get_file(fd, 0, 0);
-	if (str[ft_strlen(str) - 1] != '\n')
-		str = ft_strnjoin(str, "\n", 1);
 	close(fd);
 	if (str == NULL)
 		return (0);
