@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/24 14:34:42 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/02/24 23:38:08 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,9 +212,12 @@ int	ft_update(t_map_check *check)
 		while (j < WIDTH)
 		{
 			u = 0;
-			rayon_temp.x = check->rayon[i][j].x * cos(check->angle) + check->rayon[i][j].y * -sin(check->angle) + check->rayon[i][j].z * 0; //z
-			rayon_temp.y = check->rayon[i][j].x * sin(check->angle) + check->rayon[i][j].y * cos(check->angle) + check->rayon[i][j].z * 0;
+			rayon_temp.x = check->rayon[i][j].x * cos(check->angle_z) + check->rayon[i][j].y * -sin(check->angle_z) + check->rayon[i][j].z * 0; //z
+			rayon_temp.y = check->rayon[i][j].x * sin(check->angle_z) + check->rayon[i][j].y * cos(check->angle_z) + check->rayon[i][j].z * 0;
 			rayon_temp.z = check->rayon[i][j].x * 0 + check->rayon[i][j].y * 0 + check->rayon[i][j].z * 1;
+			rayon_temp.x = rayon_temp.x * 1 + rayon_temp.y * 0 + rayon_temp.z * 0; //x
+			rayon_temp.y = rayon_temp.x * 0 + rayon_temp.y * cos(check->angle_x) + rayon_temp.z * -sin(check->angle_x);
+			rayon_temp.z = rayon_temp.x * 0 + rayon_temp.y * sin(check->angle_x) + rayon_temp.z * cos(check->angle_x);
 			while (u < 4)
 			{
 				t = (check->plan[u].a * rayon_temp.x  + check->plan[u].b * rayon_temp.y + check->plan[u].c * rayon_temp.z);
@@ -248,6 +251,7 @@ int	ft_update(t_map_check *check)
 		i++;
 	}
 	mlx_put_image_to_window(check->graphic->mlx, check->graphic->win, img.img_ptr, 0, 0);
+	mlx_destroy_image(check->graphic->mlx, img.img_ptr);
 	return (0);
 }
 
@@ -268,17 +272,20 @@ t_rayon **ft_malloc_rayon(void)
 
 int	ft_win_event(int keycode, t_map_check *check)
 {
-	if (keycode == 65363)
-		check->angle += 0.05;
-	if (keycode == 65361)
-		check->angle -= 0.05;
 	return (0);
 }
 
 int	ft_press(int keycode, t_map_check *check)
 {
+	printf("angle: %f\n", check->angle_z);
 	if (keycode == EVENT_W)
-		check->player_y -= 0.5;
+	{
+		//if ()
+		//check->player_y -= 0.5;
+		//check->player_x = (int)((x - player_x) * Math.Cos(Math.PI * angle / 180) - (y - player_y) * Math.Sin(Math.PI * angle / 180));
+		check->player_y -= (check->player_y) * cos(check->angle_z * PI / 180) + (check->player_x) * sin(check->angle_z * PI / 180);
+		check->player_x -= (check->player_y + 0.5) * -sin(check->angle_z * PI / 180) + (check->player_x + 0.5) * cos(check->angle_z * PI / 180);
+	}
 	if (keycode == EVENT_S)
 		check->player_y += 0.5;
 	if (keycode == EVENT_A)
@@ -286,9 +293,15 @@ int	ft_press(int keycode, t_map_check *check)
 	if (keycode == EVENT_D)
 		check->player_x += 0.5;
 	if (keycode == 65363)
-		check->angle += 0.07;
+		check->angle_z += 0.07;
 	if (keycode == 65361)
-		check->angle -= 0.07;
+		check->angle_z -= 0.07;
+	if (keycode == 65362) // bonus
+		if (check->angle_x > -0.2)
+			check->angle_x -= 0.01;
+	if (keycode == 65364)
+		if (check->angle_x < 0.2)
+			check->angle_x += 0.01;
 	return (0);
 }
 
@@ -310,7 +323,8 @@ int main(int argc, char *argv[])
 	x = 0;
 	rayon = ft_malloc_rayon();
 	check.rayon = rayon;
-	check.angle = 0;
+	check.angle_x = 0;
+	check.angle_z = 0;
 	if (ft_check_arg(argc, argv, &check))
 	{
 		ft_get_pos(&check);
