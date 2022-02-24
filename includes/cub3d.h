@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/24 10:16:24 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/02/24 13:44:59 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct s_map_check
 	char				*c;
 	char				**map;
 	int					axis;
+	float				angle;
 	float				player_x;
 	float				player_y;
 	int					player_dir;
@@ -69,6 +70,14 @@ typedef struct s_map_check
 	struct s_graphic	*graphic;
 }	t_map_check;
 
+typedef struct s_img
+{
+	void		*img_ptr;
+	int			*data;
+	int			size_l;
+	int			bpp;
+	int			endian;
+}				t_img;
 typedef struct s_rayon
 {
 	float		x;

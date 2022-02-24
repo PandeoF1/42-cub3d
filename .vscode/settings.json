@@ -1,6 +1,10 @@
 {
 	"files.associations": {
 		"cub3d.h": "c",
-		"algorithm": "c"
+		"algorithm": "c",
+		"array": "c",
+		"string": "c",
+		"string_view": "c",
+		"vector": "c"
 	}
 }

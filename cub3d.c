@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/24 11:24:14 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/02/24 14:34:42 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,38 +194,48 @@ int	ft_update(t_map_check *check)
 	float	point_x;
 	float	point_y;
 	float	point_z;
+	
+	t_rayon	rayon_temp;
+	t_img	img;
 
+	img.img_ptr = mlx_new_image(check->graphic->mlx, WIDTH, HEIGHT);
+	img.data = (int *)mlx_get_data_addr(img.img_ptr, &img.bpp, &img.size_l, &img.endian);
+    //addr = mlx_get_data_addr(image, );
 	x = 0;
 	y = 0;
 	i = 0;
-	dprintf(1, "Debug: refresh (debut calcul)\n");
+	//dprintf(1, "Debug: refresh (debut calcul) %f %f %f %f\n", uwua, uwub, uwuc, uwud);
+	//mlx_clear_window(check->graphic->mlx, check->graphic->win);
 	while (i < HEIGHT)
 	{
 		j = 0;
 		while (j < WIDTH)
 		{
 			u = 0;
+			rayon_temp.x = check->rayon[i][j].x * cos(check->angle) + check->rayon[i][j].y * -sin(check->angle) + check->rayon[i][j].z * 0; //z
+			rayon_temp.y = check->rayon[i][j].x * sin(check->angle) + check->rayon[i][j].y * cos(check->angle) + check->rayon[i][j].z * 0;
+			rayon_temp.z = check->rayon[i][j].x * 0 + check->rayon[i][j].y * 0 + check->rayon[i][j].z * 1;
 			while (u < 4)
 			{
-				t = (check->plan[u].a * check->rayon[i][j].x + check->plan[u].b * check->rayon[i][j].y + check->plan[u].c * check->rayon[i][j].z);
+				t = (check->plan[u].a * rayon_temp.x  + check->plan[u].b * rayon_temp.y + check->plan[u].c * rayon_temp.z);
 				if (t != 0) //Stock avant de refaire
 				{
-					t = -(check->plan[u].a * 0.0 + check->plan[u].b * 0.0 + check->plan[u].c * 0.5 + check->plan[u].d) / t;
+					t = -(check->plan[u].a * check->player_x + check->plan[u].b * check->player_y + check->plan[u].c * 0.5 + check->plan[u].d) / t;
 					if (t > 0)
 					{
-						point_x = 0 + check->rayon[i][j].x * t;
-						point_y = 0 + check->rayon[i][j].y * t;
-						point_z = 0.5 + check->rayon[i][j].z * t; // Si pas besoin de le stocker le foutre directement dans le if
+						point_x = 0 + rayon_temp.x * t;
+						point_y = 0 + rayon_temp.y * t;
+						point_z = 0.5 + rayon_temp.z * t; // Si pas besoin de le stocker le foutre directement dans le if
 						if (point_z < 1 && point_z > 0)
 						{
 							if (u == 0)
-								mlx_pixel_put(check->graphic->mlx, check->graphic->win, j, i, 0x0000FE);
+								img.data[i * WIDTH + j] = 0x0000FE;
 							if (u == 1)
-								mlx_pixel_put(check->graphic->mlx, check->graphic->win, j, i, 0xFE0000);
+								img.data[i * WIDTH + j] = 0xFE0000;
 							if (u == 2)
-								mlx_pixel_put(check->graphic->mlx, check->graphic->win, j, i, 0x00FF0F);
+								img.data[i * WIDTH + j] = 0x00FF0F;
 							if (u == 3)
-								mlx_pixel_put(check->graphic->mlx, check->graphic->win, j, i, 0x00E8FF);
+								img.data[i * WIDTH + j] = 0x00E8FF;
 						}
 					}
 				}
@@ -237,6 +247,7 @@ int	ft_update(t_map_check *check)
 		}
 		i++;
 	}
+	mlx_put_image_to_window(check->graphic->mlx, check->graphic->win, img.img_ptr, 0, 0);
 	return (0);
 }
 
@@ -255,6 +266,38 @@ t_rayon **ft_malloc_rayon(void)
 	return (rayon);
 }
 
+int	ft_win_event(int keycode, t_map_check *check)
+{
+	if (keycode == 65363)
+		check->angle += 0.05;
+	if (keycode == 65361)
+		check->angle -= 0.05;
+	return (0);
+}
+
+int	ft_press(int keycode, t_map_check *check)
+{
+	if (keycode == EVENT_W)
+		check->player_y -= 0.5;
+	if (keycode == EVENT_S)
+		check->player_y += 0.5;
+	if (keycode == EVENT_A)
+		check->player_x -= 0.5;
+	if (keycode == EVENT_D)
+		check->player_x += 0.5;
+	if (keycode == 65363)
+		check->angle += 0.07;
+	if (keycode == 65361)
+		check->angle -= 0.07;
+	return (0);
+}
+
+int	ft_unpress(int keycode, t_map_check *check)
+{
+	//ft_printf("unpress\n");
+	return (0);
+}
+
 int main(int argc, char *argv[])
 {
 	int			x;
@@ -267,11 +310,7 @@ int main(int argc, char *argv[])
 	x = 0;
 	rayon = ft_malloc_rayon();
 	check.rayon = rayon;
-	rayon[0][0].x = 123;
-	printf("%p %p\n", rayon, check.rayon);
-	printf("rayon : %f\n", rayon[0][0].x);
-	printf("checkrayon : %f\n", check.rayon[0][0].x);
-	//check = malloc(sizeof(t_map_check));
+	check.angle = 0;
 	if (ft_check_arg(argc, argv, &check))
 	{
 		ft_get_pos(&check);
@@ -283,7 +322,10 @@ int main(int argc, char *argv[])
 		ft_init_f(&check);
 		graphic.mlx = mlx_init();
 		graphic.win = mlx_new_window(graphic.mlx, WIDTH, HEIGHT, "cub3d");
+		//mlx_key_hook(graphic.win, ft_win_event, &check);
 		mlx_loop_hook(graphic.mlx, ft_update, &check);
+		mlx_hook(graphic.win, 2, 2, ft_press, &check);
+		mlx_hook(graphic.win, 3, 3, ft_unpress, &check);
 		//ft_create_plan(&check);
 		mlx_loop(graphic.mlx);
 	}
