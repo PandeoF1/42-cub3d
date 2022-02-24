@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/23 21:18:43 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/02/24 10:16:24 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,20 +34,20 @@
 
 # define PI 3.14159265
 
-
 typedef struct s_plan
 {
 	float	a;
 	float	b;
 	float	c;
 	float	d;
-}	t_plan;
+}				t_plan;
+
 typedef struct s_graphic
 {
 	void				*mlx;
 	void				*win;
 	struct s_map_check	*map_check;
-}	t_graphic;
+}				t_graphic;
 
 typedef struct s_map_check
 {
@@ -65,16 +65,16 @@ typedef struct s_map_check
 	int					max_y;
 	int					max_x;
 	struct s_plan		*plan;
-	struct s_rayon		**rayon;
+	struct s_rayon		*rayon;
 	struct s_graphic	*graphic;
-}	t_map_check;
+}				t_map_check;
 
 typedef struct s_rayon
 {
 	float		x;
 	float		y;
 	float		z;
-}	t_rayon;
+}				t_rayon;
 
 /* Utils */
 char	*ft_strnjoinf(char *s1, char *s2, int n); // free second
@@ -88,6 +88,5 @@ int		ft_check_arg(int argc, char **argv, t_map_check *check);
 int		ft_check_texture(char *str, t_map_check *check);
 int		ft_check_map(t_map_check *check, int x, char *str, int i);
 int		ft_max_len(char *str);
-
 
 #endif

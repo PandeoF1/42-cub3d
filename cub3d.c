@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/23 22:39:17 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/02/24 10:21:49 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,41 +154,41 @@ void	ft_create_vector(t_map_check *check)
 	int		j;
 	float	r_h;
 	float	r_v;
-	t_rayon	**rayon;
+	t_rayon	*rayon;
 
 	rayon = check->rayon;
-	ft_printf("test : %f\n", check->rayon[0][0].x);
-	i = 0;
-	while (i <= HEIGHT)
+	//printf("test : %f\n", check->rayon[0][0].x);
+	// i = 0;
+	// while (i <= HEIGHT)
+	// {
+	j = 0;
+	while (j < WIDTH * HEIGHT)
 	{
-		j = 0;
-		while (j <= WIDTH)
-		{
-			r_h = 2 * tan((60 * PI / 180) * 0.5) / WIDTH;
-			r_v = 2 * tan((60 * PI / 180) * HEIGHT / (WIDTH * 2)) / HEIGHT;
-			ft_printf("uwu\n");
-			printf("%p\n", check->rayon);
-			rayon[i][j].x = ((j - WIDTH * 0.5) * r_h);
-			rayon[i][j].y = -1.0;
-			rayon[i][j].z = ((HEIGHT * 0.5 - i) * r_v);
-			j++;
-		}
-		i++;
+		r_h = 2 * tan((60 * PI / 180) * 0.5) / WIDTH;
+		r_v = 2 * tan((60 * PI / 180) * HEIGHT / (WIDTH * 2)) / HEIGHT;
+		//ft_printf("uwu\n");
+		//printf("%p\n", check->rayon);
+		rayon[j].x = ((j - WIDTH * 0.5) * r_h);
+		rayon[j].y = -1.0;
+		rayon[j].z = ((HEIGHT * 0.5 - i) * r_v);
+		j++;
 	}
+	// 	i++;
+	// }
 }
 
-void	ft_malloc_rayon(t_map_check *check)
-{
-	int		i;
+// void	ft_malloc_rayon(t_map_check *check)
+// {
+// 	int		i;
 
-	check->rayon = malloc(sizeof(t_rayon *) * HEIGHT + 1);
-	i = 0;
-	while (i <= HEIGHT)
-	{
-		check->rayon[i] = malloc(sizeof(t_rayon) * WIDTH + 1);
-		i++;
-	}
-}
+// 	check->rayon = malloc(sizeof(t_rayon *) * HEIGHT + 1);
+// 	i = 0;
+// 	while (i <= HEIGHT)
+// 	{
+// 		check->rayon[i] = malloc(sizeof(t_rayon) * WIDTH + 1);
+// 		i++;
+// 	}
+// }
 
 void	ft_init_f(t_map_check *check)
 {
@@ -205,7 +205,7 @@ int main(int argc, char *argv[])
 	t_plan		plan[4];
 	t_map_check	*check;
 	t_graphic	graphic;
-	t_rayon		rayon[HEIGHT + 1][WIDTH + 1];
+	t_rayon		rayon[HEIGHT * WIDTH];
 
 	x = 0;
 	check = malloc(sizeof(t_map_check));
@@ -217,12 +217,18 @@ int main(int argc, char *argv[])
 		check->graphic = &graphic;
 		graphic.map_check = check;
 		check->plan = plan;
-		check->rayon = (t_rayon **)rayon;
-		check->rayon[0][0].x = 123;
-		printf("%p %p\n", rayon, check->rayon);
+		check->rayon = rayon;
+		// check->rayon[0].x = 123;
+		// printf("test\n");
+		// printf("%p %f\n", rayon, check->rayon[0].x);
 		ft_init_f(check);
 		graphic.mlx = mlx_init();
+		if (!graphic.mlx)
+			return (0);
 		graphic.win = mlx_new_window(graphic.mlx, WIDTH, HEIGHT, "cub3d");
+		if (!graphic.win)
+			return (0);
+		printf("bruh\n");
 		//graphic->map_check = check;
 		ft_create_plan(check);
 		mlx_loop(graphic.mlx);
