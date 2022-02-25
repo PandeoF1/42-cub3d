@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_check_texture.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 16:19:11 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/25 11:55:09 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/02/25 12:15:33 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,16 +63,17 @@ int	ft_check_texture(char *str, t_map_check *check)
 	int		x;
 	int		y;
 
-	x = 0;
+	x = -1;
 	split = ft_split(str, '\n');
-	while (split[x])
+	while (split[++x])
 	{
 		if (!ft_add_texture(split[x], check, x, y))
 			return (0);
 		if (check->n && check->s && check->w
 			&& check->e && check->f && check->c && split[x + 1])
 		{
-			if (ft_check_map(check, ft_pos(split[x + 1], str), str, 0))
+			if (ft_check_map(check, ft_pos(split[x + 1], str),
+					str, ft_pos(split[x + 1], str)))
 			{
 				ft_free_split(split);
 				return (1);
@@ -80,7 +81,6 @@ int	ft_check_texture(char *str, t_map_check *check)
 			ft_free_split(split);
 			return (0);
 		}
-		x++;
 	}
 	ft_free_split(split);
 	return (0);

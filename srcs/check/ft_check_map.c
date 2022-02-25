@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_check_map.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 16:18:22 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/25 12:06:34 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/02/25 12:14:56 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void	ft_add_space(char *str, int i, char **tmp, int x)
 	(*tmp)[i + 1] = '\0';
 	tmp2 = ft_strdup((*tmp));
 	(*tmp) = ft_strnjoin((*tmp), str + x, ft_strlen(str + x));
+	if ((*tmp)[ft_strlen(*tmp) - 1] != '\n')
+		(*tmp) = ft_strnjoin((*tmp), "\n", 1);
 	(*tmp) = ft_strnjoin((*tmp), tmp2, ft_strlen(tmp2));
 	free(tmp2);
 }
@@ -81,8 +83,6 @@ char	*ft_nspace(char *str, int x)
 	a = 0;
 	y = ft_strlen(str);
 	tmp = malloc(sizeof(char) * x - y + 1);
-	if (!tmp)
-		dprintf(1, "popopo\n");
 	while (a < x - y)
 		tmp[a++] = ' ';
 	tmp[a] = '\0';
@@ -97,7 +97,6 @@ int	ft_check_map(t_map_check *check, int x, char *str, int i)
 	char	**split;
 	char	*space;
 
-	i = x;
 	while (str[i])
 	{
 		if (str[i + 1] && str[i] == '\n' && str[i + 1] == '\n'
