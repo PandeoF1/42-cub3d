@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/25 12:22:12 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/02/25 12:25:33 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -363,6 +363,7 @@ int main(int argc, char *argv[])
 	check.angle_z = 0;
 	if (ft_check_arg(argc, argv, &check))
 	{
+		ft_printf("error\n");
 		ft_get_pos(&check);
 		while (check.map[x])
 			ft_printf("```%s```\n", check.map[x++]);
