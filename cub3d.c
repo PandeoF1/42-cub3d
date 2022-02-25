@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/25 12:03:20 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/02/25 12:07:39 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,7 +224,6 @@ void	ft_create_vector(t_map_check *check)
 
 void	ft_init_f(t_map_check *check)
 {
-	ft_printf("debut vector\n");
 	ft_create_vector(check);
 	ft_printf("fin vector\n");
 	if (ft_create_plan(check) == 0)
@@ -342,11 +341,8 @@ int	ft_press(int keycode, t_map_check *check)
 	//printf("angle: %f\n", check->angle_z);
 	if (keycode == EVENT_W)
 	{
-		//if ()
-		//check->player_y -= 0.5;
-		//check->player_x = (int)((x - player_x) * Math.Cos(Math.PI * angle / 180) - (y - player_y) * Math.Sin(Math.PI * angle / 180));
-		check->player_y -= (check->player_y) * cos(check->angle_z * PI / 180) + (check->player_x) * sin(check->angle_z * PI / 180);
-		check->player_x -= (check->player_y + 0.5) * -sin(check->angle_z * PI / 180) + (check->player_x + 0.5) * cos(check->angle_z * PI / 180);
+		check->player_x += 0.1 * cos(check->angle_z);
+		check->player_y -= 0.1 * cos(check->angle_z);
 	}
 	if (keycode == EVENT_S)
 		check->player_y += 0.5;
