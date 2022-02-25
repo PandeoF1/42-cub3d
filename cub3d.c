@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/25 12:11:48 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/02/25 12:22:12 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,22 +145,16 @@ int	ft_create_plan(t_map_check *check)
 	int	x;
 
 	x = 0;
-	check->plan = malloc (sizeof(float *) * 4);
+	check->plan = malloc (sizeof(float *) * 2);
 	if (!check->plan)
 		return (0);
-	check->plan[0] = malloc(sizeof(t_plan) * check->max_x);
+	check->plan[0] = malloc(sizeof(t_plan) * (check->max_x + 1));
 	if (!check->plan[0])
 		return (0);
-	check->plan[1] = malloc(sizeof(t_plan) * check->max_x);
+	check->plan[1] = malloc(sizeof(t_plan) * (check->max_y + 1));
 	if (!check->plan[1])
 		return (0);
-	check->plan[2] = malloc(sizeof(t_plan) * check->max_y);
-	if (!check->plan[2])
-		return (0);
-	check->plan[3] = malloc(sizeof(t_plan) * check->max_y);
-	if (!check->plan[3])
-		return (0);
-	while (x < check->max_x)
+	while (x <= check->max_y)
 	{
 		check->plan[0][x].a = 0;
 		check->plan[0][x].b = 1;
@@ -168,31 +162,13 @@ int	ft_create_plan(t_map_check *check)
 		check->plan[0][x].d = -x;
 		x++;
 	}
-	x = 1;
-	while (x <= check->max_x)
-	{
-		check->plan[1][x].a = 0;
-		check->plan[1][x].b = 1;
-		check->plan[1][x].c = 0;
-		check->plan[1][x].d = -x;
-		x++;
-	}
 	x = 0;
-	while (x < check->max_y)
+	while (x <= check->max_x)
 	{
 		check->plan[2][x].a = 1;
 		check->plan[2][x].b = 0;
 		check->plan[2][x].c = 0;
 		check->plan[2][x].d = -x;
-		x++;
-	}
-	x = 1;
-	while (x <= check->max_y)
-	{
-		check->plan[3][x].a = 1;
-		check->plan[3][x].b = 0;
-		check->plan[3][x].c = 0;
-		check->plan[3][x].d = -x;
 		x++;
 	}
 	return (1);
@@ -281,10 +257,9 @@ void	ft_init_f(t_map_check *check)
 // 					if (t > 0)
 // 					{
 // 						printf("%f\n", t);
-// 						point_x = 0 + rayon_temp.x * t;
-// 						point_y = 0 + rayon_temp.y * t;
+// 						point_x = rayon_temp.x * t;
+// 						point_y = rayon_temp.y * t;
 // 						point_z = 0.5 + rayon_temp.z * t; // Si pas besoin de le stocker le mettre directement dans le if
-// 						//printf("y : %c\n", check->map[(int)(check->player_x - point_x)][(int)(check->player_y - point_y)]);
 // 						if (point_z < 1 && point_z > 0 && (int)(check->player_x + point_x) >= 0 && (int)(check->player_y + point_y) >= 0 && (int)(check->player_x + point_x) < check->max_x && (int)(check->player_y + point_y) < check->max_y)
 // 						{
 // 							//printf("x : %f\n", check->player_x + point_x);
