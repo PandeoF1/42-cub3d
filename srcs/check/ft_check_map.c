@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_check_map.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 16:18:22 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/23 10:39:46 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/02/25 12:06:34 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ char	*ft_nspace(char *str, int x)
 	a = 0;
 	y = ft_strlen(str);
 	tmp = malloc(sizeof(char) * x - y + 1);
+	if (!tmp)
+		dprintf(1, "popopo\n");
 	while (a < x - y)
 		tmp[a++] = ' ';
 	tmp[a] = '\0';
