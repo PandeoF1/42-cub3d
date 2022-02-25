@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/24 14:34:42 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/02/25 10:02:20 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,10 +142,10 @@ t_plan	**ft_malloc_plan(t_map_check *check)
 
 void	ft_create_plan(t_map_check *check)
 {
-	check->plan[0] = (t_plan){0, 1, 0, 10};
-	check->plan[1] = (t_plan){1, 0, 0, 10};
-	check->plan[2] = (t_plan){0, -1, 0, 10};
-	check->plan[3] = (t_plan){-1, 0, 0, 10};
+	check->plan[0] = (t_plan){0, 1, 0, 5};//bleu fonce
+	check->plan[2] = (t_plan){0, 1, 0, -15};//vert
+	check->plan[1] = (t_plan){1, 0, 0, -15};// rouge
+	check->plan[3] = (t_plan){1, 0, 0, -25};//bleu clair
 }
 
 void	ft_create_vector(t_map_check *check)
@@ -225,17 +225,26 @@ int	ft_update(t_map_check *check)
 					{
 						point_x = 0 + rayon_temp.x * t;
 						point_y = 0 + rayon_temp.y * t;
-						point_z = 0.5 + rayon_temp.z * t; // Si pas besoin de le stocker le foutre directement dans le if
-						if (point_z < 1 && point_z > 0)
+						point_z = 0.5 + rayon_temp.z * t; // Si pas besoin de le stocker le mettre directement dans le if
+						//printf("y : %c\n", check->map[(int)(check->player_x - point_x)][(int)(check->player_y - point_y)]);
+						if (point_z < 1 && point_z > 0 && (int)(check->player_x + point_x) >= 0 && (int)(check->player_y + point_y) >= 0)
 						{
-							if (u == 0)
-								img.data[i * WIDTH + j] = 0x0000FE;
-							if (u == 1)
-								img.data[i * WIDTH + j] = 0xFE0000;
-							if (u == 2)
-								img.data[i * WIDTH + j] = 0x00FF0F;
-							if (u == 3)
-								img.data[i * WIDTH + j] = 0x00E8FF;
+							// printf("x : %f\n", point_x);
+							// printf("y : %f\n", point_y);
+							//printf("y : %c\n", check->map[(int)(check->player_y + point_y)][(int)(check->player_x + point_x)]);
+							// printf("x : %f\n", check->player_x);
+							// printf("y : %f\n", check->player_y);
+							if (check->map[(int)(check->player_y + point_y)][(int)(check->player_x + point_x)] == '1')
+							{
+								if (u == 0)
+									img.data[i * WIDTH + j] = 0x0000FE;
+								if (u == 1)
+									img.data[i * WIDTH + j] = 0xFE0000;
+								if (u == 2)
+									img.data[i * WIDTH + j] = 0x00FF0F;
+								if (u == 3)
+									img.data[i * WIDTH + j] = 0x00E8FF;
+							}
 						}
 					}
 				}
