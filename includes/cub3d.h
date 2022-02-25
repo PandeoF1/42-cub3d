@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/24 13:44:59 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/02/24 20:10:41 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ typedef struct s_map_check
 	char				*c;
 	char				**map;
 	int					axis;
-	float				angle;
+	float				angle_z;
+	float				angle_x;
 	float				player_x;
 	float				player_y;
 	int					player_dir;
