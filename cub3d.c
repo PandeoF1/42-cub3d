@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/25 13:45:05 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/02/25 15:04:29 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,7 +260,6 @@ int	ft_update(t_map_check *check)
 						t = -(check->plan[v][u].a * check->player_x + check->plan[v][u].b * check->player_y + check->plan[v][u].c * 0.5 + check->plan[v][u].d) / t;
 						if (t > 0)
 						{
-							//printf("%f\n", t);
 							point_x = rayon_temp.x * t;
 							point_y = rayon_temp.y * t;
 							point_z = 0.5 + rayon_temp.z * t; // Si pas besoin de le stocker le mettre directement dans le if
@@ -275,7 +274,7 @@ int	ft_update(t_map_check *check)
 								if (check->map[(int)(check->player_y + point_y)][(int)(check->player_x + point_x)] == '1')
 								{
 								//if (u == 0)
-									img.data[i * WIDTH + j] = 0x0000FE;
+									img.data[i * WIDTH + j] = 0xFFFFFF;
 								// if (u == 1)
 								// 	img.data[i * WIDTH + j] = 0xFE0000;
 								// if (u == 2)
