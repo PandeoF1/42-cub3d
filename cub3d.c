@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/25 13:05:42 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/02/25 13:45:05 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,13 +145,13 @@ int	ft_create_plan(t_map_check *check)
 	int	x;
 
 	x = 0;
-	check->plan = malloc (sizeof(float *) * 2);
+	check->plan = malloc (sizeof(t_plan *) * 2);
 	if (!check->plan)
 		return (0);
-	check->plan[0] = malloc(sizeof(t_plan) * (check->max_x + 1));
+	check->plan[0] = malloc(sizeof(t_plan) * (check->max_y + 1));
 	if (!check->plan[0])
 		return (0);
-	check->plan[1] = malloc(sizeof(t_plan) * (check->max_y + 1));
+	check->plan[1] = malloc(sizeof(t_plan) * (check->max_x + 1));
 	if (!check->plan[1])
 		return (0);
 	while (x <= check->max_y)
@@ -211,89 +211,96 @@ void	ft_init_f(t_map_check *check)
 	ft_printf("fin init\n");
 }
 
-// int	ft_update(t_map_check *check)
-// {
-// 	int		i;
-// 	int		j;
-// 	int		u;
-// 	float	r_h;
-// 	float	r_v;
-// 	float	t;
-// 	float	x;
-// 	float	y;
-// 	float	point_x;
-// 	float	point_y;
-// 	float	point_z;
+int	ft_update(t_map_check *check)
+{
+	int		i;
+	int		j;
+	int		u;
+	int		v;
+	float	r_h;
+	float	r_v;
+	float	t;
+	float	x;
+	float	y;
+	float	point_x;
+	float	point_y;
+	float	point_z;
 	
-// 	t_rayon	rayon_temp;
-// 	t_img	img;
+	t_rayon	rayon_temp;
+	t_img	img;
 
-// 	img.img_ptr = mlx_new_image(check->graphic->mlx, WIDTH, HEIGHT);
-// 	img.data = (int *)mlx_get_data_addr(img.img_ptr, &img.bpp, &img.size_l, &img.endian);
-//     //addr = mlx_get_data_addr(image, );
-// 	x = 0;
-// 	y = 0;
-// 	i = 0;
-// 	//dprintf(1, "Debug: refresh (debut calcul) %f %f %f %f\n", uwua, uwub, uwuc, uwud);
-// 	//mlx_clear_window(check->graphic->mlx, check->graphic->win);
-// 	while (i < HEIGHT)
-// 	{
-// 		j = 0;
-// 		while (j < WIDTH)
-// 		{
-// 			u = 0;
-// 			rayon_temp.x = check->rayon[i][j].x * cos(check->angle_z) + check->rayon[i][j].y * -sin(check->angle_z) + check->rayon[i][j].z * 0; //z
-// 			rayon_temp.y = check->rayon[i][j].x * sin(check->angle_z) + check->rayon[i][j].y * cos(check->angle_z) + check->rayon[i][j].z * 0;
-// 			rayon_temp.z = check->rayon[i][j].x * 0 + check->rayon[i][j].y * 0 + check->rayon[i][j].z * 1;
-// 			rayon_temp.x = rayon_temp.x * 1 + rayon_temp.y * 0 + rayon_temp.z * 0; //x
-// 			rayon_temp.y = rayon_temp.x * 0 + rayon_temp.y * cos(check->angle_x) + rayon_temp.z * -sin(check->angle_x);
-// 			rayon_temp.z = rayon_temp.x * 0 + rayon_temp.y * sin(check->angle_x) + rayon_temp.z * cos(check->angle_x);
-// 			while (u < 4)
-// 			{
-// 				t = (check->plan[u].a * rayon_temp.x  + check->plan[u].b * rayon_temp.y + check->plan[u].c * rayon_temp.z);
-// 				if (t != 0) //Stock avant de refaire
-// 				{
-// 					t = -(check->plan[u].a * check->player_x + check->plan[u].b * check->player_y + check->plan[u].c * 0.5 + check->plan[u].d) / t;
-// 					if (t > 0)
-// 					{
-// 						printf("%f\n", t);
-// 						point_x = rayon_temp.x * t;
-// 						point_y = rayon_temp.y * t;
-// 						point_z = 0.5 + rayon_temp.z * t; // Si pas besoin de le stocker le mettre directement dans le if
-// 						if (point_z < 1 && point_z > 0 && (int)(check->player_x + point_x) >= 0 && (int)(check->player_y + point_y) >= 0 && (int)(check->player_x + point_x) < check->max_x && (int)(check->player_y + point_y) < check->max_y)
-// 						{
-// 							//printf("x : %f\n", check->player_x + point_x);
-// 							//printf("y : %f\n", check->player_y + point_y);
-// 							//printf("%d -%d\n", check->max_x , check->max_y);
-// 							//printf("y : %c\n", check->map[(int)(check->player_y + point_y)][(int)(check->player_x + point_x)]);
-// 							// printf("x : %f\n", check->player_x);
-// 							// printf("y : %f\n", check->player_y);
-// 							if (check->map[(int)(check->player_y + point_y)][(int)(check->player_x + point_x)] == '1')
-// 							{
-// 								if (u == 0)
-// 									img.data[i * WIDTH + j] = 0x0000FE;
-// 								if (u == 1)
-// 									img.data[i * WIDTH + j] = 0xFE0000;
-// 								if (u == 2)
-// 									img.data[i * WIDTH + j] = 0x00FF0F;
-// 								if (u == 3)
-// 									img.data[i * WIDTH + j] = 0x00E8FF;
-// 							}
-// 						}
-// 					}
-// 				}
-// 				u++;
-// 			}
-// 			y = 0;
-// 			t = 0;
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// 	mlx_put_image_to_window(check->graphic->mlx, check->graphic->win, img.img_ptr, 0, 0);
-// 	mlx_destroy_image(check->graphic->mlx, img.img_ptr);
-// 	return (0);
-// }
+	img.img_ptr = mlx_new_image(check->graphic->mlx, WIDTH, HEIGHT);
+	img.data = (int *)mlx_get_data_addr(img.img_ptr, &img.bpp, &img.size_l, &img.endian);
+    //addr = mlx_get_data_addr(image, );
+	x = 0;
+	y = 0;
+	i = 0;
+	//dprintf(1, "Debug: refresh (debut calcul) %f %f %f %f\n", uwua, uwub, uwuc, uwud);
+	//mlx_clear_window(check->graphic->mlx, check->graphic->win);
+	while (i < HEIGHT)
+	{
+		j = 0;
+		while (j < WIDTH)
+		{
+			u = 0;
+			v = 0;
+			rayon_temp.x = check->rayon[i][j].x * cos(check->angle_z) + check->rayon[i][j].y * -sin(check->angle_z) + check->rayon[i][j].z * 0; //z
+			rayon_temp.y = check->rayon[i][j].x * sin(check->angle_z) + check->rayon[i][j].y * cos(check->angle_z) + check->rayon[i][j].z * 0;
+			rayon_temp.z = check->rayon[i][j].x * 0 + check->rayon[i][j].y * 0 + check->rayon[i][j].z * 1;
+			rayon_temp.x = rayon_temp.x * 1 + rayon_temp.y * 0 + rayon_temp.z * 0; //x
+			rayon_temp.y = rayon_temp.x * 0 + rayon_temp.y * cos(check->angle_x) + rayon_temp.z * -sin(check->angle_x);
+			rayon_temp.z = rayon_temp.x * 0 + rayon_temp.y * sin(check->angle_x) + rayon_temp.z * cos(check->angle_x);
+			while (u <= check->max_x)
+			{
+				while (v < 2)
+				{
+					t = (check->plan[v][u].a * rayon_temp.x  + check->plan[v][u].b * rayon_temp.y + check->plan[v][u].c * rayon_temp.z);
+					if (t != 0) //Stock avant de refaire
+					{
+						t = -(check->plan[v][u].a * check->player_x + check->plan[v][u].b * check->player_y + check->plan[v][u].c * 0.5 + check->plan[v][u].d) / t;
+						if (t > 0)
+						{
+							//printf("%f\n", t);
+							point_x = rayon_temp.x * t;
+							point_y = rayon_temp.y * t;
+							point_z = 0.5 + rayon_temp.z * t; // Si pas besoin de le stocker le mettre directement dans le if
+							if (point_z < 1 && point_z > 0 && (int)(check->player_x + point_x) >= 0 && (int)(check->player_y + point_y) >= 0 && (int)(check->player_x + point_x) < check->max_x && (int)(check->player_y + point_y) < check->max_y)
+							{
+								//printf("x : %f\n", check->player_x + point_x);
+								//printf("y : %f\n", check->player_y + point_y);
+								//printf("%d -%d\n", check->max_x , check->max_y);
+								//printf("y : %c\n", check->map[(int)(check->player_y + point_y)][(int)(check->player_x + point_x)]);
+								// printf("x : %f\n", check->player_x);
+								// printf("y : %f\n", check->player_y);
+								if (check->map[(int)(check->player_y + point_y)][(int)(check->player_x + point_x)] == '1')
+								{
+								//if (u == 0)
+									img.data[i * WIDTH + j] = 0x0000FE;
+								// if (u == 1)
+								// 	img.data[i * WIDTH + j] = 0xFE0000;
+								// if (u == 2)
+								// 	img.data[i * WIDTH + j] = 0x00FF0F;
+								// if (u == 3)
+								// 	img.data[i * WIDTH + j] = 0x00E8FF;
+								}
+							}
+						}
+					}
+					v++;
+				}
+				v = 0;
+				u++;
+			}
+			y = 0;
+			t = 0;
+			j++;
+		}
+		i++;
+	}
+	mlx_put_image_to_window(check->graphic->mlx, check->graphic->win, img.img_ptr, 0, 0);
+	mlx_destroy_image(check->graphic->mlx, img.img_ptr);
+	return (0);
+}
 
 t_rayon **ft_malloc_rayon(void)
 {
@@ -373,7 +380,7 @@ int main(int argc, char *argv[])
 		graphic.mlx = mlx_init();
 		graphic.win = mlx_new_window(graphic.mlx, WIDTH, HEIGHT, "cub3d");
 		//mlx_key_hook(graphic.win, ft_win_event, &check);
-		//mlx_loop_hook(graphic.mlx, ft_update, &check);
+		mlx_loop_hook(graphic.mlx, ft_update, &check);
 		mlx_hook(graphic.win, 2, 2, ft_press, &check);
 		mlx_hook(graphic.win, 3, 3, ft_unpress, &check);
 		//ft_create_plan(&check);
