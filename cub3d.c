@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/25 10:03:07 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/02/25 10:17:28 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,10 +230,11 @@ int	ft_update(t_map_check *check)
 						point_y = 0 + rayon_temp.y * t;
 						point_z = 0.5 + rayon_temp.z * t; // Si pas besoin de le stocker le mettre directement dans le if
 						//printf("y : %c\n", check->map[(int)(check->player_x - point_x)][(int)(check->player_y - point_y)]);
-						if (point_z < 1 && point_z > 0 && (int)(check->player_x + point_x) >= 0 && (int)(check->player_y + point_y) >= 0)
+						if (point_z < 1 && point_z > 0 && (int)(check->player_x + point_x) >= 0 && (int)(check->player_y + point_y) >= 0 && (int)(check->player_x + point_x) < check->max_x && (int)(check->player_y + point_y) < check->max_y)
 						{
-							// printf("x : %f\n", point_x);
-							// printf("y : %f\n", point_y);
+							//printf("x : %f\n", check->player_x + point_x);
+							//printf("y : %f\n", check->player_y + point_y);
+							//printf("%d -%d\n", check->max_x , check->max_y);
 							//printf("y : %c\n", check->map[(int)(check->player_y + point_y)][(int)(check->player_x + point_x)]);
 							// printf("x : %f\n", check->player_x);
 							// printf("y : %f\n", check->player_y);
@@ -286,7 +287,7 @@ int	ft_win_event(int keycode, t_map_check *check)
 
 int	ft_press(int keycode, t_map_check *check)
 {
-	printf("angle: %f\n", check->angle_z);
+	//printf("angle: %f\n", check->angle_z);
 	if (keycode == EVENT_W)
 	{
 		//if ()
