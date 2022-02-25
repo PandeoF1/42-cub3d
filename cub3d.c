@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/25 12:25:33 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/02/25 13:05:42 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,10 +165,10 @@ int	ft_create_plan(t_map_check *check)
 	x = 0;
 	while (x <= check->max_x)
 	{
-		check->plan[2][x].a = 1;
-		check->plan[2][x].b = 0;
-		check->plan[2][x].c = 0;
-		check->plan[2][x].d = -x;
+		check->plan[1][x].a = 1;
+		check->plan[1][x].b = 0;
+		check->plan[1][x].c = 0;
+		check->plan[1][x].d = -x;
 		x++;
 	}
 	return (1);
