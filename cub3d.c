@@ -6,11 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-<<<<<<< Updated upstream
-/*   Updated: 2022/02/25 12:11:48 by asaffroy         ###   ########lyon.fr   */
-=======
-/*   Updated: 2022/02/25 12:09:09 by tnard            ###   ########lyon.fr   */
->>>>>>> Stashed changes
+/*   Updated: 2022/02/25 12:16:43 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
