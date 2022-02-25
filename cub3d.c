@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/25 16:14:21 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/02/25 16:27:27 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,6 +218,7 @@ int	ft_update(t_map_check *check)
 	int		u;
 	int		v;
 	float	r_h;
+	int		switch_plan;
 	float	r_v;
 	float	t;
 	float	x;
@@ -250,9 +251,13 @@ int	ft_update(t_map_check *check)
 			rayon_temp.x = rayon_temp.x * 1 + rayon_temp.y * 0 + rayon_temp.z * 0; //x
 			rayon_temp.y = rayon_temp.x * 0 + rayon_temp.y * cos(check->angle_x) + rayon_temp.z * -sin(check->angle_x);
 			rayon_temp.z = rayon_temp.x * 0 + rayon_temp.y * sin(check->angle_x) + rayon_temp.z * cos(check->angle_x);
-			while (u <= check->max_x)
+			while (v < 2)
 			{
-				while (v < 2)
+				if (v == 0)
+					switch_plan = check->max_y;
+				else
+					switch_plan = check->max_x;
+				while (u <= switch_plan)
 				{
 					t = (check->plan[v][u].a * rayon_temp.x  + check->plan[v][u].b * rayon_temp.y + check->plan[v][u].c * rayon_temp.z);
 					if (t != 0) //Stock avant de refaire
@@ -285,10 +290,10 @@ int	ft_update(t_map_check *check)
 							}
 						}
 					}
-					v++;
+					u++;
 				}
-				v = 0;
-				u++;
+				u = 0;
+				v++;
 			}
 			y = 0;
 			t = 0;
