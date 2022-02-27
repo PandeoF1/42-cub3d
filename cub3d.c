@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/27 13:41:40 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/02/27 19:59:18 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,24 +276,22 @@ int	ft_update(t_map_check *check)
 								//printf("y : %c\n", check->map[(int)(check->player_y + point_y)][(int)(check->player_x + point_x)]);
 								// printf("x : %f\n", check->player_x);
 								// printf("y : %f\n", check->player_y);
-								if ((int)(check->player_y + point_y - 1) < check->max_y && (int)(check->player_y + point_y - 1) >= 0 && check->map[(int)(check->player_y + point_y - 1)][(int)(check->player_x + point_x)] == '1')
-								{
-									if (v == 0 && (check->player_y + point_y) < check->player_y)
-										img.data[i * WIDTH + j] = 0xFFFFFF;
-								}
-								if ((int)(check->player_x + point_x - 1) < check->max_x && (int)(check->player_x + point_x - 1) >= 0 && check->map[(int)(check->player_y + point_y)][(int)(check->player_x + point_x - 1)] == '1')
-								{
-									if (v == 1 && (check->player_x + point_x) < check->player_x)
-										img.data[i * WIDTH + j] = 0x00E8FF;
-								}
-								if (check->map[(int)(check->player_y + point_y)][(int)(check->player_x + point_x)] == '1')
-								{
+								if (v == 0 && (check->player_y + point_y) < check->player_y && (int)(-check->plan[v][u].d - 1) < check->max_y && (int)(-check->plan[v][u].d - 1) >= 0 && check->map[(int)(-check->plan[v][u].d - 1)][(int)(check->player_x + point_x)] == '1')
+									img.data[i * WIDTH + j] = 0xfce5cd;
+								else if (v == 1 && (check->player_x + point_x) < check->player_x && (int)(-check->plan[v][u].d - 1) < check->max_x && (int)(-check->plan[v][u].d - 1) >= 0 && check->map[(int)(check->player_y + point_y)][(int)(-check->plan[v][u].d - 1)] == '1')
+									img.data[i * WIDTH + j] = 0xffb2b2;
+								else if (v == 0 && (check->player_y + point_y) > check->player_y && (int)(-check->plan[v][u].d) < check->max_y && (int)(-check->plan[v][u].d) >= 0 && check->map[(int)(-check->plan[v][u].d)][(int)(check->player_x + point_x)] == '1')
+									img.data[i * WIDTH + j] = 0x90fff2;
+								else if (v == 1 && (check->player_x + point_x) > check->player_x && (int)(-check->plan[v][u].d) < check->max_x && (int)(-check->plan[v][u].d) >= 0 && check->map[(int)(check->player_y + point_y)][(int)(-check->plan[v][u].d)] == '1')
+									img.data[i * WIDTH + j] = 0xcaffa0;
+								// if (check->map[(int)(check->player_y + point_y)][(int)(check->player_x + point_x)] == '1')
+								// {
 								//if (u == 0)
 									//printf("%f\n", check->player_x + point_x);
-									if (v == 0 && (check->player_y + point_y) > check->player_y)
-										img.data[i * WIDTH + j] = 0x00FF0F;
-									else if (v == 1 && (check->player_x + point_x) > check->player_x)
-										img.data[i * WIDTH + j] = 0xFE0000;
+									// if (v == 0 && (check->player_y + point_y) > check->player_y)
+									// 	img.data[i * WIDTH + j] = 0x90fff2;
+									// if (v == 1 && (check->player_x + point_x) > check->player_x)
+									// 	img.data[i * WIDTH + j] = 0xcaffa0;
 									// else if (v == 1 && (check->player_x + point_x) < check->player_x)
 									// 	img.data[i * WIDTH + j] = 0x00E8FF;
 								// if (u == 1)
@@ -302,7 +300,7 @@ int	ft_update(t_map_check *check)
 								// 	img.data[i * WIDTH + j] = 0x00FF0F;
 								// if (u == 3)
 								// 	img.data[i * WIDTH + j] = 0x00E8FF;
-								}
+								//}
 							}
 						}
 					}
