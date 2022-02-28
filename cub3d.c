@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/28 15:08:43 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/02/28 15:24:22 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,7 +229,6 @@ int	ft_update(t_map_check *check)
 	int		u;
 	int		v;
 	float	r_h;
-	int		check1;
 	int		switch_plan;
 	float	r_v;
 	float	t;
@@ -255,9 +254,7 @@ int	ft_update(t_map_check *check)
 		j = 0;
 		while (j < WIDTH)
 		{
-			u = 0;
 			v = 0;
-			check1 = 0;
 			rayon_temp.x = check->rayon[i][j].x * cos(check->angle_z) + check->rayon[i][j].y * -sin(check->angle_z) + check->rayon[i][j].z * 0; //z
 			rayon_temp.y = check->rayon[i][j].x * sin(check->angle_z) + check->rayon[i][j].y * cos(check->angle_z) + check->rayon[i][j].z * 0;
 			rayon_temp.z = check->rayon[i][j].x * 0 + check->rayon[i][j].y * 0 + check->rayon[i][j].z * 1;
@@ -266,12 +263,11 @@ int	ft_update(t_map_check *check)
 			// rayon_temp.z = rayon_temp.x * 0 + rayon_temp.y * sin(check->angle_x) + rayon_temp.z * cos(check->angle_x);
 			while (v < 2)
 			{
-				if (check1 == 1)
-					break;
 				if (v == 0)
 					switch_plan = check->max_y;
 				else
 					switch_plan = check->max_x;
+				u = 0;
 				while (u <= switch_plan)
 				{
 					t = (check->plan[v][u].a * rayon_temp.x  + check->plan[v][u].b * rayon_temp.y + check->plan[v][u].c * rayon_temp.z);
@@ -285,81 +281,55 @@ int	ft_update(t_map_check *check)
 							point_z = 0.5 + rayon_temp.z * t; // Si pas besoin de le stocker le mettre directement dans le if
 							if (point_z < 1 && point_z > 0 && (int)(check->player_x + point_x) >= 0 && (int)(check->player_y + point_y) >= 0 && (int)(check->player_x + point_x) < check->max_x && (int)(check->player_y + point_y) < check->max_y)
 							{
-								//printf("x : %f\n", check->player_x + point_x);
-								//printf("y : %f\n", check->player_y + point_y);
-								//printf("%d -%d\n", check->max_x , check->max_y);
-								//printf("y : %c\n", check->map[(int)(check->player_y + point_y)][(int)(check->player_x + point_x)]);
-								// printf("x : %f\n", check->player_x);
-								// printf("y : %f\n", check->player_y);
 								if (v == 0 && (check->player_y + point_y) < check->player_y && (int)(-check->plan[v][u].d - 1) < check->max_y && (int)(-check->plan[v][u].d - 1) >= 0 && check->map[(int)(-check->plan[v][u].d - 1)][(int)(check->player_x + point_x)] == '1')
 								{
-									check1 = 1;
 									img.data[i * WIDTH + j] = 0xfce5cd;
-									break;
+									u = switch_plan + 1;
+									v = 2;
 								}
 								else if (v == 1 && (check->player_x + point_x) < check->player_x && (int)(-check->plan[v][u].d - 1) < check->max_x && (int)(-check->plan[v][u].d - 1) >= 0 && check->map[(int)(check->player_y + point_y)][(int)(-check->plan[v][u].d - 1)] == '1')
 								{
-									check1 = 1;
 									img.data[i * WIDTH + j] = 0xffb2b2;
-									break;
+									u = switch_plan + 1;
+									v = 2;
 								}
 								else if (v == 0 && (check->player_y + point_y) > check->player_y && (int)(-check->plan[v][u].d) < check->max_y && (int)(-check->plan[v][u].d) >= 0 && check->map[(int)(-check->plan[v][u].d)][(int)(check->player_x + point_x)] == '1')
 								{
-									check1 = 1;
 									img.data[i * WIDTH + j] = 0x90fff2;
-									break;
+									u = switch_plan + 1;
+									v = 2;
 								}
 								else if (v == 1 && (check->player_x + point_x) > check->player_x && (int)(-check->plan[v][u].d) < check->max_x && (int)(-check->plan[v][u].d) >= 0 && check->map[(int)(check->player_y + point_y)][(int)(-check->plan[v][u].d)] == '1')
 								{
-									check1 = 1;
 									img.data[i * WIDTH + j] = 0xcaffa0;
-									break;
+									u = switch_plan + 1;
+									v = 2;
 								}
-								// if (check->map[(int)(check->player_y + point_y)][(int)(check->player_x + point_x)] == '1')
-								// {
-								//if (u == 0)
-									//printf("%f\n", check->player_x + point_x);
-									// if (v == 0 && (check->player_y + point_y) > check->player_y)
-									// 	img.data[i * WIDTH + j] = 0x90fff2;
-									// if (v == 1 && (check->player_x + point_x) > check->player_x)
-									// 	img.data[i * WIDTH + j] = 0xcaffa0;
-									// else if (v == 1 && (check->player_x + point_x) < check->player_x)
-									// 	img.data[i * WIDTH + j] = 0x00E8FF;
-								// if (u == 1)
-								// 	img.data[i * WIDTH + j] = 0xFE0000;
-								// if (u == 2)
-								// 	img.data[i * WIDTH + j] = 0x00FF0F;
-								// if (u == 3)
-								// 	img.data[i * WIDTH + j] = 0x00E8FF;
-								//}
 							}
 						}
 					}
 					u++;
 				}
-				u = 0;
 				v++;
 			}
-			check1 = 0;
 			y = 0;
 			t = 0;
 			j++;
 		}
 		i++;
 	}
-	//printf("%c\n", check->map[i - 1][j - 1]);
 	mlx_put_image_to_window(check->graphic->mlx, check->graphic->win, img.img_ptr, 0, 0);
 	mlx_destroy_image(check->graphic->mlx, img.img_ptr);
-	// if (get_time() - g_fps < 1000)
-	// {
-	// 	g_frame++;
-	// }
-	// else
-	// {
-	// 	ft_printf("\033[2K\rFPS: %d\e[0m", g_frame);
-	// 	g_fps = get_time();
-	// 	g_frame = 0;
-	// }
+	if (get_time() - g_fps < 1000)
+	{
+		g_frame++;
+	}
+	else
+	{
+		ft_printf("\033[2K\rFPS: %d\e[0m", g_frame);
+		g_fps = get_time();
+		g_frame = 0;
+	}
 	return (0);
 }
 
@@ -388,8 +358,9 @@ int	ft_press(int keycode, t_map_check *check)
 	//printf("angle: %f\n", check->angle_z);
 	if (keycode == EVENT_W)
 	{
-		check->player_x = check->player_x * cos(check->angle_z) + check->player_y * -sin(check->angle_z); //z
-		check->player_y = check->player_x * sin(check->angle_z) + check->player_y * cos(check->angle_z);
+		check->player_y -= 0.5;
+		//check->player_x = check->player_x * cos(check->angle_z) + check->player_y * -sin(check->angle_z); //z
+		//check->player_y = check->player_x * sin(check->angle_z) + check->player_y * cos(check->angle_z);
 	}
 	if (keycode == EVENT_S)
 		check->player_y += 0.5;
