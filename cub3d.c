@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/28 11:49:10 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/02/28 15:08:43 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,6 +229,7 @@ int	ft_update(t_map_check *check)
 	int		u;
 	int		v;
 	float	r_h;
+	int		check1;
 	int		switch_plan;
 	float	r_v;
 	float	t;
@@ -256,6 +257,7 @@ int	ft_update(t_map_check *check)
 		{
 			u = 0;
 			v = 0;
+			check1 = 0;
 			rayon_temp.x = check->rayon[i][j].x * cos(check->angle_z) + check->rayon[i][j].y * -sin(check->angle_z) + check->rayon[i][j].z * 0; //z
 			rayon_temp.y = check->rayon[i][j].x * sin(check->angle_z) + check->rayon[i][j].y * cos(check->angle_z) + check->rayon[i][j].z * 0;
 			rayon_temp.z = check->rayon[i][j].x * 0 + check->rayon[i][j].y * 0 + check->rayon[i][j].z * 1;
@@ -264,6 +266,8 @@ int	ft_update(t_map_check *check)
 			// rayon_temp.z = rayon_temp.x * 0 + rayon_temp.y * sin(check->angle_x) + rayon_temp.z * cos(check->angle_x);
 			while (v < 2)
 			{
+				if (check1 == 1)
+					break;
 				if (v == 0)
 					switch_plan = check->max_y;
 				else
@@ -288,13 +292,29 @@ int	ft_update(t_map_check *check)
 								// printf("x : %f\n", check->player_x);
 								// printf("y : %f\n", check->player_y);
 								if (v == 0 && (check->player_y + point_y) < check->player_y && (int)(-check->plan[v][u].d - 1) < check->max_y && (int)(-check->plan[v][u].d - 1) >= 0 && check->map[(int)(-check->plan[v][u].d - 1)][(int)(check->player_x + point_x)] == '1')
+								{
+									check1 = 1;
 									img.data[i * WIDTH + j] = 0xfce5cd;
+									break;
+								}
 								else if (v == 1 && (check->player_x + point_x) < check->player_x && (int)(-check->plan[v][u].d - 1) < check->max_x && (int)(-check->plan[v][u].d - 1) >= 0 && check->map[(int)(check->player_y + point_y)][(int)(-check->plan[v][u].d - 1)] == '1')
+								{
+									check1 = 1;
 									img.data[i * WIDTH + j] = 0xffb2b2;
+									break;
+								}
 								else if (v == 0 && (check->player_y + point_y) > check->player_y && (int)(-check->plan[v][u].d) < check->max_y && (int)(-check->plan[v][u].d) >= 0 && check->map[(int)(-check->plan[v][u].d)][(int)(check->player_x + point_x)] == '1')
+								{
+									check1 = 1;
 									img.data[i * WIDTH + j] = 0x90fff2;
+									break;
+								}
 								else if (v == 1 && (check->player_x + point_x) > check->player_x && (int)(-check->plan[v][u].d) < check->max_x && (int)(-check->plan[v][u].d) >= 0 && check->map[(int)(check->player_y + point_y)][(int)(-check->plan[v][u].d)] == '1')
+								{
+									check1 = 1;
 									img.data[i * WIDTH + j] = 0xcaffa0;
+									break;
+								}
 								// if (check->map[(int)(check->player_y + point_y)][(int)(check->player_x + point_x)] == '1')
 								// {
 								//if (u == 0)
@@ -320,6 +340,7 @@ int	ft_update(t_map_check *check)
 				u = 0;
 				v++;
 			}
+			check1 = 0;
 			y = 0;
 			t = 0;
 			j++;
