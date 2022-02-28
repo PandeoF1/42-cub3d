@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/28 11:49:10 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/02/28 12:24:59 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,12 +281,6 @@ int	ft_update(t_map_check *check)
 							point_z = 0.5 + rayon_temp.z * t; // Si pas besoin de le stocker le mettre directement dans le if
 							if (point_z < 1 && point_z > 0 && (int)(check->player_x + point_x) >= 0 && (int)(check->player_y + point_y) >= 0 && (int)(check->player_x + point_x) < check->max_x && (int)(check->player_y + point_y) < check->max_y)
 							{
-								//printf("x : %f\n", check->player_x + point_x);
-								//printf("y : %f\n", check->player_y + point_y);
-								//printf("%d -%d\n", check->max_x , check->max_y);
-								//printf("y : %c\n", check->map[(int)(check->player_y + point_y)][(int)(check->player_x + point_x)]);
-								// printf("x : %f\n", check->player_x);
-								// printf("y : %f\n", check->player_y);
 								if (v == 0 && (check->player_y + point_y) < check->player_y && (int)(-check->plan[v][u].d - 1) < check->max_y && (int)(-check->plan[v][u].d - 1) >= 0 && check->map[(int)(-check->plan[v][u].d - 1)][(int)(check->player_x + point_x)] == '1')
 									img.data[i * WIDTH + j] = 0xfce5cd;
 								else if (v == 1 && (check->player_x + point_x) < check->player_x && (int)(-check->plan[v][u].d - 1) < check->max_x && (int)(-check->plan[v][u].d - 1) >= 0 && check->map[(int)(check->player_y + point_y)][(int)(-check->plan[v][u].d - 1)] == '1')
@@ -295,23 +289,6 @@ int	ft_update(t_map_check *check)
 									img.data[i * WIDTH + j] = 0x90fff2;
 								else if (v == 1 && (check->player_x + point_x) > check->player_x && (int)(-check->plan[v][u].d) < check->max_x && (int)(-check->plan[v][u].d) >= 0 && check->map[(int)(check->player_y + point_y)][(int)(-check->plan[v][u].d)] == '1')
 									img.data[i * WIDTH + j] = 0xcaffa0;
-								// if (check->map[(int)(check->player_y + point_y)][(int)(check->player_x + point_x)] == '1')
-								// {
-								//if (u == 0)
-									//printf("%f\n", check->player_x + point_x);
-									// if (v == 0 && (check->player_y + point_y) > check->player_y)
-									// 	img.data[i * WIDTH + j] = 0x90fff2;
-									// if (v == 1 && (check->player_x + point_x) > check->player_x)
-									// 	img.data[i * WIDTH + j] = 0xcaffa0;
-									// else if (v == 1 && (check->player_x + point_x) < check->player_x)
-									// 	img.data[i * WIDTH + j] = 0x00E8FF;
-								// if (u == 1)
-								// 	img.data[i * WIDTH + j] = 0xFE0000;
-								// if (u == 2)
-								// 	img.data[i * WIDTH + j] = 0x00FF0F;
-								// if (u == 3)
-								// 	img.data[i * WIDTH + j] = 0x00E8FF;
-								//}
 							}
 						}
 					}
@@ -329,16 +306,16 @@ int	ft_update(t_map_check *check)
 	//printf("%c\n", check->map[i - 1][j - 1]);
 	mlx_put_image_to_window(check->graphic->mlx, check->graphic->win, img.img_ptr, 0, 0);
 	mlx_destroy_image(check->graphic->mlx, img.img_ptr);
-	// if (get_time() - g_fps < 1000)
-	// {
-	// 	g_frame++;
-	// }
-	// else
-	// {
-	// 	ft_printf("\033[2K\rFPS: %d\e[0m", g_frame);
-	// 	g_fps = get_time();
-	// 	g_frame = 0;
-	// }
+	if (get_time() - g_fps < 1000)
+	{
+		g_frame++;
+	}
+	else
+	{
+		ft_printf("\033[2K\rFPS: %d\e[0m", g_frame);
+		g_fps = get_time();
+		g_frame = 0;
+	}
 	return (0);
 }
 
