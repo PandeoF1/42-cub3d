@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/28 12:24:59 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/02/28 13:07:48 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,7 +254,6 @@ int	ft_update(t_map_check *check)
 		j = 0;
 		while (j < WIDTH)
 		{
-			u = 0;
 			v = 0;
 			rayon_temp.x = check->rayon[i][j].x * cos(check->angle_z) + check->rayon[i][j].y * -sin(check->angle_z) + check->rayon[i][j].z * 0; //z
 			rayon_temp.y = check->rayon[i][j].x * sin(check->angle_z) + check->rayon[i][j].y * cos(check->angle_z) + check->rayon[i][j].z * 0;
@@ -268,6 +267,7 @@ int	ft_update(t_map_check *check)
 					switch_plan = check->max_y;
 				else
 					switch_plan = check->max_x;
+				u = 0;
 				while (u <= switch_plan)
 				{
 					t = (check->plan[v][u].a * rayon_temp.x  + check->plan[v][u].b * rayon_temp.y + check->plan[v][u].c * rayon_temp.z);
@@ -282,19 +282,34 @@ int	ft_update(t_map_check *check)
 							if (point_z < 1 && point_z > 0 && (int)(check->player_x + point_x) >= 0 && (int)(check->player_y + point_y) >= 0 && (int)(check->player_x + point_x) < check->max_x && (int)(check->player_y + point_y) < check->max_y)
 							{
 								if (v == 0 && (check->player_y + point_y) < check->player_y && (int)(-check->plan[v][u].d - 1) < check->max_y && (int)(-check->plan[v][u].d - 1) >= 0 && check->map[(int)(-check->plan[v][u].d - 1)][(int)(check->player_x + point_x)] == '1')
+								{
 									img.data[i * WIDTH + j] = 0xfce5cd;
+									u = switch_plan + 1;
+									v = 2;
+								}
 								else if (v == 1 && (check->player_x + point_x) < check->player_x && (int)(-check->plan[v][u].d - 1) < check->max_x && (int)(-check->plan[v][u].d - 1) >= 0 && check->map[(int)(check->player_y + point_y)][(int)(-check->plan[v][u].d - 1)] == '1')
+								{
 									img.data[i * WIDTH + j] = 0xffb2b2;
+									u = switch_plan + 1;
+									v = 2;
+								}
 								else if (v == 0 && (check->player_y + point_y) > check->player_y && (int)(-check->plan[v][u].d) < check->max_y && (int)(-check->plan[v][u].d) >= 0 && check->map[(int)(-check->plan[v][u].d)][(int)(check->player_x + point_x)] == '1')
+								{
 									img.data[i * WIDTH + j] = 0x90fff2;
+									u = switch_plan + 1;
+									v = 2;
+								}
 								else if (v == 1 && (check->player_x + point_x) > check->player_x && (int)(-check->plan[v][u].d) < check->max_x && (int)(-check->plan[v][u].d) >= 0 && check->map[(int)(check->player_y + point_y)][(int)(-check->plan[v][u].d)] == '1')
+								{
 									img.data[i * WIDTH + j] = 0xcaffa0;
+									u = switch_plan + 1;
+									v = 2;
+								}
 							}
 						}
 					}
 					u++;
 				}
-				u = 0;
 				v++;
 			}
 			y = 0;
@@ -344,8 +359,9 @@ int	ft_press(int keycode, t_map_check *check)
 	//printf("angle: %f\n", check->angle_z);
 	if (keycode == EVENT_W)
 	{
-		check->player_x = check->player_x * cos(check->angle_z) + check->player_y * -sin(check->angle_z); //z
-		check->player_y = check->player_x * sin(check->angle_z) + check->player_y * cos(check->angle_z);
+		check->player_y -= 0.5;
+		//check->player_x = check->player_x * cos(check->angle_z) + check->player_y * -sin(check->angle_z); //z
+		//check->player_y = check->player_x * sin(check->angle_z) + check->player_y * cos(check->angle_z);
 	}
 	if (keycode == EVENT_S)
 		check->player_y += 0.5;
