@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/27 20:02:31 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/02/28 11:49:10 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,10 +259,10 @@ int	ft_update(t_map_check *check)
 			rayon_temp.x = check->rayon[i][j].x * cos(check->angle_z) + check->rayon[i][j].y * -sin(check->angle_z) + check->rayon[i][j].z * 0; //z
 			rayon_temp.y = check->rayon[i][j].x * sin(check->angle_z) + check->rayon[i][j].y * cos(check->angle_z) + check->rayon[i][j].z * 0;
 			rayon_temp.z = check->rayon[i][j].x * 0 + check->rayon[i][j].y * 0 + check->rayon[i][j].z * 1;
-			//rayon_temp.x = rayon_temp.x * 1 + rayon_temp.y * 0 + rayon_temp.z * 0; //x
-			//rayon_temp.y = rayon_temp.x * 0 + rayon_temp.y * cos(check->angle_x) + rayon_temp.z * -sin(check->angle_x);
-			//rayon_temp.z = rayon_temp.x * 0 + rayon_temp.y * sin(check->angle_x) + rayon_temp.z * cos(check->angle_x);
-			while (u <= check->max_x)
+			// rayon_temp.x = rayon_temp.x * 1 + rayon_temp.y * 0 + rayon_temp.z * 0; //x
+			// rayon_temp.y = rayon_temp.x * 0 + rayon_temp.y * cos(check->angle_x) + rayon_temp.z * -sin(check->angle_x);
+			// rayon_temp.z = rayon_temp.x * 0 + rayon_temp.y * sin(check->angle_x) + rayon_temp.z * cos(check->angle_x);
+			while (v < 2)
 			{
 				if (v == 0)
 					switch_plan = check->max_y;
@@ -326,18 +326,19 @@ int	ft_update(t_map_check *check)
 		}
 		i++;
 	}
+	//printf("%c\n", check->map[i - 1][j - 1]);
 	mlx_put_image_to_window(check->graphic->mlx, check->graphic->win, img.img_ptr, 0, 0);
 	mlx_destroy_image(check->graphic->mlx, img.img_ptr);
-	if (get_time() - g_fps < 1000)
-	{
-		g_frame++;
-	}
-	else
-	{
-		ft_printf("\033[2K\rFPS: %d\e[0m", g_frame);
-		g_fps = get_time();
-		g_frame = 0;
-	}
+	// if (get_time() - g_fps < 1000)
+	// {
+	// 	g_frame++;
+	// }
+	// else
+	// {
+	// 	ft_printf("\033[2K\rFPS: %d\e[0m", g_frame);
+	// 	g_fps = get_time();
+	// 	g_frame = 0;
+	// }
 	return (0);
 }
 
