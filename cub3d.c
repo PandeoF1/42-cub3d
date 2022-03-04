@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/28 15:24:22 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/04 18:08:48 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,6 +229,9 @@ int	ft_update(t_map_check *check)
 	int		u;
 	int		v;
 	float	r_h;
+	float	best_t;
+	int		v_plan;
+	int		u_plan;
 	int		switch_plan;
 	float	r_v;
 	float	t;
@@ -243,24 +246,24 @@ int	ft_update(t_map_check *check)
 
 	img.img_ptr = mlx_new_image(check->graphic->mlx, WIDTH, HEIGHT);
 	img.data = (int *)mlx_get_data_addr(img.img_ptr, &img.bpp, &img.size_l, &img.endian);
-    //addr = mlx_get_data_addr(image, );
 	x = 0;
 	y = 0;
 	i = 0;
-	//dprintf(1, "Debug: refresh (debut calcul) %f %f %f %f\n", uwua, uwub, uwuc, uwud);
-	//mlx_clear_window(check->graphic->mlx, check->graphic->win);
 	while (i < HEIGHT)
 	{
 		j = 0;
 		while (j < WIDTH)
 		{
-			v = 0;
 			rayon_temp.x = check->rayon[i][j].x * cos(check->angle_z) + check->rayon[i][j].y * -sin(check->angle_z) + check->rayon[i][j].z * 0; //z
 			rayon_temp.y = check->rayon[i][j].x * sin(check->angle_z) + check->rayon[i][j].y * cos(check->angle_z) + check->rayon[i][j].z * 0;
 			rayon_temp.z = check->rayon[i][j].x * 0 + check->rayon[i][j].y * 0 + check->rayon[i][j].z * 1;
 			// rayon_temp.x = rayon_temp.x * 1 + rayon_temp.y * 0 + rayon_temp.z * 0; //x
 			// rayon_temp.y = rayon_temp.x * 0 + rayon_temp.y * cos(check->angle_x) + rayon_temp.z * -sin(check->angle_x);
 			// rayon_temp.z = rayon_temp.x * 0 + rayon_temp.y * sin(check->angle_x) + rayon_temp.z * cos(check->angle_x);
+			v = 0;
+			best_t = 0;
+			v_plan = 3;
+			u_plan = -7;
 			while (v < 2)
 			{
 				if (v == 0)
@@ -278,32 +281,17 @@ int	ft_update(t_map_check *check)
 						{
 							point_x = rayon_temp.x * t;
 							point_y = rayon_temp.y * t;
-							point_z = 0.5 + rayon_temp.z * t; // Si pas besoin de le stocker le mettre directement dans le if
+							point_z = 0.5 + rayon_temp.z * t;
 							if (point_z < 1 && point_z > 0 && (int)(check->player_x + point_x) >= 0 && (int)(check->player_y + point_y) >= 0 && (int)(check->player_x + point_x) < check->max_x && (int)(check->player_y + point_y) < check->max_y)
 							{
-								if (v == 0 && (check->player_y + point_y) < check->player_y && (int)(-check->plan[v][u].d - 1) < check->max_y && (int)(-check->plan[v][u].d - 1) >= 0 && check->map[(int)(-check->plan[v][u].d - 1)][(int)(check->player_x + point_x)] == '1')
+								if ((best_t == 0 || t < best_t) && ((v == 0 && (check->player_y + point_y) < check->player_y && (int)(-check->plan[v][u].d) < check->max_y && (int)(-check->plan[v][u].d - 1) >= 0 && check->map[(int)(-check->plan[v][u].d - 1)][(int)(check->player_x + point_x)] == '1')
+								|| (v == 1 && (check->player_x + point_x) < check->player_x && (int)(-check->plan[v][u].d - 1) < check->max_x && (int)(-check->plan[v][u].d - 1) >= 0 && check->map[(int)(check->player_y + point_y)][(int)(-check->plan[v][u].d - 1)] == '1')
+								|| (v == 0 && (check->player_y + point_y) > check->player_y && (int)(-check->plan[v][u].d) < check->max_y && (int)(-check->plan[v][u].d) >= 0 && check->map[(int)(-check->plan[v][u].d)][(int)(check->player_x + point_x)] == '1')
+								|| (v == 1 && (check->player_x + point_x) > check->player_x && (int)(-check->plan[v][u].d) < check->max_x && (int)(-check->plan[v][u].d) >= 0 && check->map[(int)(check->player_y + point_y)][(int)(-check->plan[v][u].d)] == '1')))
 								{
-									img.data[i * WIDTH + j] = 0xfce5cd;
-									u = switch_plan + 1;
-									v = 2;
-								}
-								else if (v == 1 && (check->player_x + point_x) < check->player_x && (int)(-check->plan[v][u].d - 1) < check->max_x && (int)(-check->plan[v][u].d - 1) >= 0 && check->map[(int)(check->player_y + point_y)][(int)(-check->plan[v][u].d - 1)] == '1')
-								{
-									img.data[i * WIDTH + j] = 0xffb2b2;
-									u = switch_plan + 1;
-									v = 2;
-								}
-								else if (v == 0 && (check->player_y + point_y) > check->player_y && (int)(-check->plan[v][u].d) < check->max_y && (int)(-check->plan[v][u].d) >= 0 && check->map[(int)(-check->plan[v][u].d)][(int)(check->player_x + point_x)] == '1')
-								{
-									img.data[i * WIDTH + j] = 0x90fff2;
-									u = switch_plan + 1;
-									v = 2;
-								}
-								else if (v == 1 && (check->player_x + point_x) > check->player_x && (int)(-check->plan[v][u].d) < check->max_x && (int)(-check->plan[v][u].d) >= 0 && check->map[(int)(check->player_y + point_y)][(int)(-check->plan[v][u].d)] == '1')
-								{
-									img.data[i * WIDTH + j] = 0xcaffa0;
-									u = switch_plan + 1;
-									v = 2;
+									best_t = t;
+									v_plan = v;
+									u_plan = u;
 								}
 							}
 						}
@@ -311,6 +299,21 @@ int	ft_update(t_map_check *check)
 					u++;
 				}
 				v++;
+			}
+			if (best_t != 0 && v_plan != 3 && u_plan != - 7)
+			{
+				point_x = rayon_temp.x * best_t;
+				point_y = rayon_temp.y * best_t;
+				point_z = 0.5 + rayon_temp.z * best_t; // Si pas besoin de le stocker le mettre directement dans le if
+				if (v_plan == 0 && (check->player_y + point_y) < check->player_y && (int)(-check->plan[v_plan][u_plan].d - 1) < check->max_y && (int)(-check->plan[v_plan][u_plan].d - 1) >= 0 && check->map[(int)(-check->plan[v_plan][u_plan].d - 1)][(int)(check->player_x + point_x)] == '1')
+					img.data[i * WIDTH + j] = 0xfce5cd; //beige
+				else if (v_plan == 1 && (check->player_x + point_x) < check->player_x && (int)(-check->plan[v_plan][u_plan].d - 1) < check->max_x && (int)(-check->plan[v_plan][u_plan].d - 1) >= 0 && check->map[(int)(check->player_y + point_y)][(int)(-check->plan[v_plan][u_plan].d - 1)] == '1')
+					img.data[i * WIDTH + j] = 0xffb2b2; // rose clair
+				else if (v_plan == 0 && (check->player_y + point_y) > check->player_y && (int)(-check->plan[v_plan][u_plan].d) < check->max_y && (int)(-check->plan[v_plan][u_plan].d) >= 0 && check->map[(int)(-check->plan[v_plan][u_plan].d)][(int)(check->player_x + point_x)] == '1')
+					img.data[i * WIDTH + j] = 0x90fff2; // bleu clair
+				else
+					img.data[i * WIDTH + j] = 0xcaffa0; //vert clair
+				// else if (v_plan == 1 && (check->player_x + point_x) > check->player_x && (int)(-check->plan[v_plan][u_plan].d) < check->max_x && (int)(-check->plan[v_plan][u_plan].d) >= 0 && check->map[(int)(check->player_y + point_y)][(int)(-check->plan[v_plan][u_plan].d)] == '1')
 			}
 			y = 0;
 			t = 0;
@@ -378,6 +381,10 @@ int	ft_press(int keycode, t_map_check *check)
 	if (keycode == 65364)
 		if (check->angle_x < 0.2)
 			check->angle_x += 0.01;
+	if (check->angle_z >= PI * 2)
+		check->angle_z -= PI * 2;
+	if (check->angle_z <= -PI * 2)
+		check->angle_z += PI * 2;
 	return (0);
 }
 
