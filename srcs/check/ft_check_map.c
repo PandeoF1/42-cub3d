@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 16:18:22 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/25 12:14:56 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/05 23:19:21 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,11 @@ int	ft_check_corner(char **split, int x, int y)
 	return (1);
 }
 
-int	ft_check_border(t_map_check *check,	int x, int y)
+int	ft_check_border(t_game *game,	int x, int y)
 {
 	char	**split;
 
-	split = check->map;
+	split = game->map;
 	x = -1;
 	while (split[++x])
 	{
@@ -91,7 +91,7 @@ char	*ft_nspace(char *str, int x)
 	return (tmp);
 }
 
-int	ft_check_map(t_map_check *check, int x, char *str, int i)
+int	ft_check_map(t_game *game, int x, char *str, int i)
 {
 	char	*tmp;
 	char	**split;
@@ -106,7 +106,7 @@ int	ft_check_map(t_map_check *check, int x, char *str, int i)
 			return (0);
 		i++;
 	}
-	check->max_x = ft_max_len(str + x);
+	game->max_x = ft_max_len(str + x) + 1;
 	ft_add_space(str, i, &tmp, x);
 	split = ft_split(tmp, '\n');
 	i = -1;
@@ -115,7 +115,7 @@ int	ft_check_map(t_map_check *check, int x, char *str, int i)
 		split[i] = ft_strnjoinf(" ", split[i], ft_strlen(split[i]));
 		split[i] = ft_nspace(split[i], ft_max_len(str + x) + 2);
 	}
-	check->map = split;
+	game->map = split;
 	free(tmp);
-	return (ft_check_border(check, -1, 0));
+	return (ft_check_border(game, -1, 0));
 }

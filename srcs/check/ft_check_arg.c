@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_check_arg.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:38:36 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/25 11:54:29 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/05 23:19:12 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,23 +27,23 @@ int	ft_check_file(char *path)
 	return (1);
 }
 
-void	ft_init(t_map_check *map_check)
+void	ft_init(t_game *game)
 {
-	map_check->n = NULL;
-	map_check->s = NULL;
-	map_check->w = NULL;
-	map_check->e = NULL;
-	map_check->f = NULL;
-	map_check->c = NULL;
-	map_check->map = NULL;
+	game->n = NULL;
+	game->s = NULL;
+	game->w = NULL;
+	game->e = NULL;
+	game->f = NULL;
+	game->c = NULL;
+	game->map = NULL;
 }
 
-int	ft_check_arg(int argc, char **argv, t_map_check *check)
+int	ft_check_arg(int argc, char **argv, t_game *game)
 {
 	char		*str;
 	int			fd;
 
-	ft_init(check);
+	ft_init(game);
 	if (argc != 2 || !ft_check_file(argv[1]))
 		return (0);
 	fd = open(argv[1], O_RDONLY);
@@ -51,7 +51,7 @@ int	ft_check_arg(int argc, char **argv, t_map_check *check)
 	close(fd);
 	if (str == NULL)
 		return (0);
-	if (!ft_check_texture(str, check))
+	if (!ft_check_texture(str, game))
 	{
 		free(str);
 		return (0);

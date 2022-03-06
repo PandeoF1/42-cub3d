@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+         #
+#    By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/09 13:04:45 by tnard             #+#    #+#              #
-#    Updated: 2022/03/04 10:23:40 by asaffroy         ###   ########lyon.fr    #
+#    Updated: 2022/03/05 23:07:03 by tnard            ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,14 +19,16 @@ END			= \e[0m
 SRCS		= cub3d.c srcs/check/ft_check_arg.c srcs/check/ft_check_map.c \
 				srcs/check/ft_check_texture.c srcs/check/ft_get_file.c \
 				srcs/check/ft_max_len.c srcs/utils/ft_strnjoin.c \
-				srcs/utils/ft_free_split.c srcs/utils/ft_splitlen.c
+				srcs/utils/ft_free_split.c srcs/utils/ft_splitlen.c \
+				srcs/event/ft_key_event.c srcs/event/ft_move.c
+
 NAME		= cub3d
 minilibx	= mlbx/libmlx.a
 OBJS_DIR	= objs/
 OBJS		= $(SRCS:.c=.o)
 OBJECTS_PREFIXED = $(addprefix $(OBJS_DIR), $(OBJS))
 CC			= gcc
-CC_FLAGS	= -O3 -Ofast -flto -march=native -ffast-math#-Wall -Werror -Wextra -g3 -fsanitize=address 
+CC_FLAGS	= -O3 -Ofast -flto -march=native -ffast-math #-fsanitize=address #-Wall -Werror -Wextra -g3  
 MLB_FLAGS	= -I -g -L /usr/X11/lib -Lincludes -L./mlbx -lmlx -Imlx -lXext -lX11 -lz -lm libft/libft.a ft_printf/libftprintf.a
 
 $(OBJS_DIR)%.o : %.c includes/cub3d.h
@@ -34,6 +36,7 @@ $(OBJS_DIR)%.o : %.c includes/cub3d.h
 	@mkdir -p $(OBJS_DIR)srcs
 	@mkdir -p $(OBJS_DIR)srcs/utils
 	@mkdir -p $(OBJS_DIR)srcs/check
+	@mkdir -p $(OBJS_DIR)srcs/event
 	@$(CC) $(CC_FLAGS) -c $< -o $@
 	@printf	"\033[2K\r${BLU}[BUILD - $(NAME)]${RST} '$<' $(END)"
 
