@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/06 02:01:22 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/06 07:50:17 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,7 @@ int	ft_update(t_game *game)
 	t_rayon	rayon_temp;
 	t_img	img;
 
+	ft_mouse(game);
 	img.img_ptr = mlx_new_image(game->graphic->mlx, WIDTH, HEIGHT);
 	img.data = (int *)mlx_get_data_addr(img.img_ptr, &img.bpp, &img.size_l, &img.endian);
 	x = 0;
@@ -377,6 +378,22 @@ int	ft_create_image(t_game *game)
 	return (ft_data_image(game));
 }
 
+void ft_mouse(t_game *game)
+{
+	int	x;
+	int	y;
+
+	mlx_mouse_get_pos(game->graphic->mlx, game->graphic->win, &x, &y);
+	mlx_mouse_hide(game->graphic->mlx, game->graphic->win);
+	if (x == WIDTH / 2)
+		game->angle_z += 0;
+	else if (x > WIDTH / 2)
+		game->angle_z += 0.1;
+	else
+		game->angle_z -= 0.1;
+	mlx_mouse_move(game->graphic->mlx, game->graphic->win, WIDTH / 2, HEIGHT / 2);
+}
+
 int main(int argc, char *argv[])
 {
 	t_game		game;
@@ -400,6 +417,7 @@ int main(int argc, char *argv[])
 		mlx_loop_hook(graphic.mlx, ft_update, &game);
 		mlx_hook(graphic.win, 2, 2, ft_press, &game);
 		mlx_hook(graphic.win, 3, 3, ft_unpress, &game);
+		mlx_mouse_hide(graphic.mlx, graphic.win);
 		mlx_hook(graphic.win, 17, 1L << 17, ft_exit_hook, &game);
 		mlx_loop(graphic.mlx);
 	}

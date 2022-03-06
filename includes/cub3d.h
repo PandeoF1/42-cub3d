@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/06 01:23:45 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/06 07:50:16 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,4 +113,6 @@ int		ft_unpress(int keycode, t_game *game);
 void	ft_move_next(int keycode, t_game *game);
 void	ft_move(int keycode, t_game *game);
 int		ft_exit_hook(t_game *game);
+void 	ft_mouse(t_game *game);
+
 #endif
