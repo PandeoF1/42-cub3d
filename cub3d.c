@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/07 02:57:49 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/07 08:33:38 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,6 +230,33 @@ void ft_map(t_game *game)
 	mlx_destroy_image(game->graphic->mlx, img.img_ptr);
 }
 
+void	ft_door(t_game *game)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y < game->max_y)
+	{
+		x = 0;
+		while (x < game->max_x)
+		{
+			if (game->map[y][x] == 'A')
+				game->map[y][x] = 'B';
+			else if (game->map[y][x] == 'B')
+				game->map[y][x] = 'C';
+			else if (game->map[y][x] == 'C')
+				game->map[y][x] = 'D';
+			else if (game->map[y][x] == 'D')
+				game->map[y][x] = 'E';
+			else if (game->map[y][x] == 'E')
+				game->map[y][x] = 'A';
+			x++;
+		}
+		y++;
+	}
+}
+
 int	ft_update(t_game *game)
 {
 	int		i;
@@ -252,6 +279,7 @@ int	ft_update(t_game *game)
 	t_rayon	rayon_temp;
 	t_img	img;
 
+	ft_door(game);
 	ft_mouse(game);
 	img.img_ptr = mlx_new_image(game->graphic->mlx, WIDTH, HEIGHT);
 	img.data = (int *)mlx_get_data_addr(img.img_ptr, &img.bpp, &img.size_l, &img.endian);
@@ -292,6 +320,11 @@ int	ft_update(t_game *game)
 							{
 								if ((best_t == 0 || t < best_t) && ((v == 0 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v][u].d) < game->max_y && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(-game->plan[v][u].d - 1)][(int)(game->player_x + point_x)] == '1')
 								|| (v == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v][u].d - 1) < game->max_x && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d - 1)] == '1')
+								|| (v == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v][u].d - 1) < game->max_x && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d - 1)] == 'A') //Porte
+								|| (v == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v][u].d - 1) < game->max_x && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d - 1)] == 'B') //Porte
+								|| (v == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v][u].d - 1) < game->max_x && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d - 1)] == 'C') //Porte
+								|| (v == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v][u].d - 1) < game->max_x && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d - 1)] == 'D') //Porte
+								|| (v == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v][u].d - 1) < game->max_x && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d - 1)] == 'E') //Porte
 								|| (v == 0 && (game->player_y + point_y) > game->player_y && (int)(-game->plan[v][u].d) < game->max_y && (int)(-game->plan[v][u].d) >= 0 && game->map[(int)(-game->plan[v][u].d)][(int)(game->player_x + point_x)] == '1')
 								|| (v == 1 && (game->player_x + point_x) > game->player_x && (int)(-game->plan[v][u].d) < game->max_x && (int)(-game->plan[v][u].d) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d)] == '1')))
 								{
@@ -327,6 +360,26 @@ int	ft_update(t_game *game)
 					//printf("x : %d y : %d | size : %d | color : 0x%08.8X\n", x, y, (int)(game->img_n.size_l * 0.25), game->img_n.data[(int)(x * (game->img_n.size_l * 0.25) + y)]);
 					//img.data[i * WIDTH + j] = game->img_n.data[(int)(y * (game->img_n.size_l * 0.25) + x)];
 				}
+				else if (v_plan == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_x && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v_plan][u_plan].d - 1)] == 'A')
+				{
+					img.data[i * WIDTH + j] = game->door_color[0];
+				}
+				else if (v_plan == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_x && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v_plan][u_plan].d - 1)] == 'B')
+				{
+					img.data[i * WIDTH + j] = game->door_color[1];
+				}
+				else if (v_plan == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_x && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v_plan][u_plan].d - 1)] == 'C')
+				{
+					img.data[i * WIDTH + j] = game->door_color[2];
+				}
+				else if (v_plan == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_x && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v_plan][u_plan].d - 1)] == 'D')
+				{
+					img.data[i * WIDTH + j] = game->door_color[3];
+				}
+				else if (v_plan == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_x && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v_plan][u_plan].d - 1)] == 'E')
+				{
+					img.data[i * WIDTH + j] = game->door_color[4];
+				}
 				else if (v_plan == 0 && (game->player_y + point_y) > game->player_y && (int)(-game->plan[v_plan][u_plan].d) < game->max_y && (int)(-game->plan[v_plan][u_plan].d) >= 0 && game->map[(int)(-game->plan[v_plan][u_plan].d)][(int)(game->player_x + point_x)] == '1')
 					img.data[i * WIDTH + j] = 0x90fff2; // bleu clair
 				else
@@ -360,19 +413,19 @@ t_rayon **ft_malloc_rayon(void)
 	return (rayon);
 }
 
-int	ft_image_len(char *str)
+int	ft_image_len(char *str, int y)
 {
 	int	x;
 
 	x = 0;
 	while (str[x])
 	{
-		if (x > 1)
-			if (x == 2 && str[x] != ' ')
+		if (x > y - 1)
+			if (x == y && str[x] != ' ')
 				return (0);
 		x++;
 	}
-	if (str[x - 1] == ' ' || x < 4)
+	if (str[x - 1] == ' ' || x < y + 2)
 		return (0);
 	return (x);
 }
@@ -399,8 +452,52 @@ void	*ft_open_xpm(t_game *game, char *str, int size_x)
 			&size_x));
 }
 
+int	ft_split_number(char **split)
+{
+	int	x;
+	int	y;
+
+	x = 0;
+	while (split[x])
+	{
+		y = 0;
+		while (split[x][y])
+		{
+			if (split[x][y] < '0' || split[x][y] > '9')
+				return (0);
+			y++;
+		}
+		x++;
+	}
+	return (1);
+}
+
+int	ft_color_format(char *str)
+{
+	char	**split;
+
+	split = ft_split(str, ',');
+	if (ft_splitlen(split) != 3 || !ft_split_number(split))
+	{
+		ft_free_split(split);
+		return (-1);
+	}
+	
+	return ((ft_atoi(split[0]) << 16) + (ft_atoi(split[1]) << 8) + ft_atoi(split[2]));
+}
+
 int	ft_data_image(t_game *game)
 {
+	if (ft_image_len(game->f, 1) == 0)
+		return (0);
+	game->floor_color = ft_color_format(game->f + 2);
+	if (game->floor_color == -1)
+		return (0);
+	if (ft_image_len(game->c, 1) == 0)
+		return (0);
+	game->ceiling_color = ft_color_format(game->c + 2);
+	if (game->ceiling_color == -1)
+		return (0);
 	game->img_n.data = (int *)mlx_get_data_addr(game->img_n.img_ptr, &game->img_n.bpp, &game->img_n.size_l, &game->img_n.endian);
 	game->img_s.data = (int *)mlx_get_data_addr(game->img_s.img_ptr, &game->img_s.bpp, &game->img_s.size_l, &game->img_s.endian);
 	game->img_e.data = (int *)mlx_get_data_addr(game->img_e.img_ptr, &game->img_e.bpp, &game->img_e.size_l, &game->img_e.endian);
@@ -410,25 +507,25 @@ int	ft_data_image(t_game *game)
 
 int	ft_create_image(t_game *game)
 {
-	if (ft_image_len(game->n) == 0)
+	if (ft_image_len(game->n, 2) == 0)
 		return (0);
 	if (ft_check_image(game->n + 3))
 		game->img_n.img_ptr = ft_open_xpm(game, game->n + 3, game->img_n.size_l);
 	else
 		return (0);
-	if (ft_image_len(game->n) == 0)
+	if (ft_image_len(game->n, 2) == 0)
 		return (0);
 	if (ft_check_image(game->s + 3))
 		game->img_s.img_ptr = ft_open_xpm(game, game->s + 3, game->img_s.size_l);
 	else
 		return (0);
-	if (ft_image_len(game->n) == 0)
+	if (ft_image_len(game->n, 2) == 0)
 		return (0);
 	if (ft_check_image(game->w + 3))
 		game->img_w.img_ptr = ft_open_xpm(game, game->w + 3, game->img_w.size_l);
 	else
 		return (0);
-	if (ft_image_len(game->n) == 0)
+	if (ft_image_len(game->n, 2) == 0)
 		return (0);
 	if (ft_check_image(game->e + 3))
 		game->img_e.img_ptr = ft_open_xpm(game, game->e + 3, game->img_e.size_l);
@@ -459,6 +556,12 @@ int main(int argc, char *argv[])
 	t_graphic	graphic;
 	t_rayon		**rayon;
 
+	game.door_color[0] = 0xFF0000;
+	game.door_color[1] = 0x00FF00;
+	game.door_color[2] = 0x0000FF;
+	game.door_color[3] = 0xFFFF00;
+	game.door_color[4] = 0x00FFFF;
+	game.door_color[5] = 0xFF00FF;
 	g_fps = get_time();
 	rayon = ft_malloc_rayon();
 	game.rayon = rayon;

@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/06 08:02:22 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/07 08:06:37 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct s_game
 	struct s_img		img_e;
 	int					floor_color;
 	int					ceiling_color;
+	int					door_color[6];
 	char				**map;
 	float				angle_z;
 	float				player_x;
@@ -96,6 +97,7 @@ char	*ft_strnjoinf(char *s1, char *s2, int n); // free second
 char	*ft_strnjoin(char *s1, char *s2, int n); // free first
 void	ft_free_split(char **split);
 int		ft_splitlen(char **split);
+int		ft_atoi_base(char *str, char *base);
 
 /* Check - Parsing */
 char	*ft_get_file(int fd, int size, int len);

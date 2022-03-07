@@ -6,7 +6,7 @@
 #    By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/09 13:04:45 by tnard             #+#    #+#              #
-#    Updated: 2022/03/05 23:07:03 by tnard            ###   ########lyon.fr    #
+#    Updated: 2022/03/07 03:42:12 by tnard            ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,8 @@ SRCS		= cub3d.c srcs/check/ft_check_arg.c srcs/check/ft_check_map.c \
 				srcs/check/ft_check_texture.c srcs/check/ft_get_file.c \
 				srcs/check/ft_max_len.c srcs/utils/ft_strnjoin.c \
 				srcs/utils/ft_free_split.c srcs/utils/ft_splitlen.c \
-				srcs/event/ft_key_event.c srcs/event/ft_move.c
+				srcs/event/ft_key_event.c srcs/event/ft_move.c \
+				srcs/utils/ft_atoi_base.c
 
 NAME		= cub3d
 minilibx	= mlbx/libmlx.a
