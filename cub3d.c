@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/07 10:06:27 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/07 10:43:11 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,12 +175,9 @@ void ft_fps(t_game *game)
 	}
 	else
 	{
-		ft_printf("\033[2K\r");
-		dprintf(1, "FPS: %d - POS: x - %f | y - %f - Angle : %f", frame, game->player_x, game->player_y, game->angle_z);
-		ft_printf("\e[0m");
 		lframe = frame;
 		fps = get_time();
-		frame = 0;
+		frame = 1;
 	}
 	test = ft_itoa(lframe);
 	mlx_string_put(game->graphic->mlx, game->graphic->win, 2, 10, 0xffffff, "FPS: ");
