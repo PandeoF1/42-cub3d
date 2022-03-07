@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/07 10:43:11 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/07 11:53:16 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,6 +263,27 @@ void	ft_door(t_game *game)
 	}
 }
 
+void	ft_fill_screen(t_img img, t_game *game)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y < HEIGHT)
+	{
+		x = 0;
+		while (x < WIDTH)
+		{
+			if (y < HEIGHT / 2)
+				img.data[y * WIDTH + x] = game->ceiling_color;
+			else
+				img.data[y * WIDTH + x] =  game->floor_color;
+			x++;
+		}
+		y++;
+	}
+}
+
 int	ft_update(t_game *game)
 {
 	int		i;
@@ -293,6 +314,7 @@ int	ft_update(t_game *game)
 	x = 0;
 	y = 0;
 	i = 0;
+	ft_fill_screen(img, game);
 	while (i < HEIGHT)
 	{
 		j = 0;
