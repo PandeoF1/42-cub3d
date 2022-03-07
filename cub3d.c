@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/06 07:50:17 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/07 02:50:55 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ void	ft_get_pos(t_game *game)
 				game->player_x = x + 0.5;
 				game->player_y = y + 0.5;
 			}
+			//game->map[y][x] = '0';
 			x++;
 		}
 	}
@@ -152,6 +153,83 @@ int64_t	get_time(void)
 	return ((tv.tv_sec * (int64_t)1000) + (tv.tv_usec / 1000));
 }
 
+void ft_fps(t_game *game)
+{
+	static int	lframe = 0;
+	static int	frame = 0;
+	static int64_t	fps = 0;
+	char		*test;
+
+	if (get_time() - fps < 1000)
+	{
+		frame++;
+	}
+	else
+	{
+		ft_printf("\033[2K\r");
+		dprintf(1, "FPS: %d - POS: x - %f | y - %f - Angle : %f", frame, game->player_x, game->player_y, game->angle_z);
+		ft_printf("\e[0m");
+		lframe = frame;
+		fps = get_time();
+		frame = 0;
+	}
+	test = ft_itoa(lframe);
+	mlx_string_put(game->graphic->mlx, game->graphic->win, 2, 10, 0xffffff, "FPS: ");
+	mlx_string_put(game->graphic->mlx, game->graphic->win, 30, 10, 0xffffff, test);
+	free(test);
+}
+
+void ft_draw_square(t_img img, int y, int x, int max_y, int color)
+{
+	int		i;
+	int		j;
+
+	i = 0;
+	while (i < 4)
+	{
+		j = 0;
+		while (j < 4)
+		{
+			img.data[(i + x) * (max_y * 4) + (j + y)] = color;
+			j++;
+		}
+		i++;
+	}
+}
+
+void ft_map(t_game *game)
+{
+	int		i;
+	int		j;
+	t_img	img;
+
+	img.img_ptr = mlx_new_image(game->graphic->mlx, game->max_x * 4, game->max_y * 4);
+	img.data = (int *)mlx_get_data_addr(img.img_ptr, &img.bpp, &img.size_l, &img.endian);
+	i = 0;
+	while (i < game->max_x * 4)
+	{
+		j = 0;
+		while (j < game->max_y * 4)
+		{
+			if ((int)(i * 0.25) == (int)game->player_x && j * 0.25 == (int)game->player_y)
+			{
+				ft_draw_square(img, i , j, game->max_x, 0xffffff);
+				j += 3;
+			}
+			else if (game->map[(int)(j * 0.25)][(int)(i * 0.25)] == '1')
+				ft_draw_square(img, i , j, game->max_x, 0x9000ff);
+			else if (game->map[(int)(j * 0.25)][(int)(i * 0.25)] == '0' || game->map[(int)(j * 0.25)][(int)(i * 0.25)] == 'N')
+				ft_draw_square(img, i, j, game->max_x, 0x2205ff);
+			else
+				ft_draw_square(img, i, j, game->max_x, 0x5e5e5e);
+			j++;
+		}
+		i++;
+	}
+	mlx_put_image_to_window(game->graphic->mlx, game->graphic->win, img.img_ptr, WIDTH - (game->max_x * 4), 0);
+	mlx_destroy_image(game->graphic->mlx, img.img_ptr);
+}
+
 int	ft_update(t_game *game)
 {
 	int		i;
@@ -188,9 +266,6 @@ int	ft_update(t_game *game)
 			rayon_temp.x = game->rayon[i][j].x * cos(game->angle_z) + game->rayon[i][j].y * -sin(game->angle_z) + game->rayon[i][j].z * 0; //z
 			rayon_temp.y = game->rayon[i][j].x * sin(game->angle_z) + game->rayon[i][j].y * cos(game->angle_z) + game->rayon[i][j].z * 0;
 			rayon_temp.z = game->rayon[i][j].x * 0 + game->rayon[i][j].y * 0 + game->rayon[i][j].z * 1;
-			//rayon_temp.x = rayon_temp.x * 1 + rayon_temp.y * 0 + rayon_temp.z * 0; //x
-			//rayon_temp.y = rayon_temp.x * 0 + rayon_temp.y * cos(game->angle_x) + rayon_temp.z * -sin(game->angle_x);
-			//rayon_temp.z = rayon_temp.x * 0 + rayon_temp.y * sin(game->angle_x) + rayon_temp.z * cos(game->angle_x);
 			v = 0;
 			best_t = 0;
 			v_plan = 3;
@@ -238,19 +313,19 @@ int	ft_update(t_game *game)
 				point_z = 0.5 + rayon_temp.z * best_t; // Si pas besoin de le stocker le mettre directement dans le if
 				if (v_plan == 0 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_y && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(-game->plan[v_plan][u_plan].d - 1)][(int)(game->player_x + point_x)] == '1')
 				{
-					//ft_get_pixel
 					img.data[i * WIDTH + j] = 0xfce5cd; //beige
 				}
 				else if (v_plan == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_x && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v_plan][u_plan].d - 1)] == '1')
 				{
-					int	x, y;
-					float	fx, fy;
-					x = (int)(((int)(point_y) - point_y) * game->img_n.size_l * 0.25); // * 0.25 car y a 64 * 4 pixels
-					y = (int)(((int)(point_z) - point_z) * game->img_n.size_l * 0.25);
-					y = -y;
-					x = -x;
+					//int	x, y;
+					//float	fx, fy;
+					//x = (int)(((int)(point_y) - point_y) * game->img_n.size_l * 0.25); // * 0.25 car y a 64 * 4 pixels
+					//y = (int)(((int)(point_z) - point_z) * game->img_n.size_l * 0.25);
+					//y = -y;
+					//x = -x;
+					img.data[i * WIDTH + j] = 0x90f000; // vert foncer (commente ca et decommente le reste sauf printf pour les textures)
 					//printf("x : %d y : %d | size : %d | color : 0x%08.8X\n", x, y, (int)(game->img_n.size_l * 0.25), game->img_n.data[(int)(x * (game->img_n.size_l * 0.25) + y)]);
-					img.data[i * WIDTH + j] = game->img_n.data[(int)(y * (game->img_n.size_l * 0.25) + x)];
+					//img.data[i * WIDTH + j] = game->img_n.data[(int)(y * (game->img_n.size_l * 0.25) + x)];
 				}
 				else if (v_plan == 0 && (game->player_y + point_y) > game->player_y && (int)(-game->plan[v_plan][u_plan].d) < game->max_y && (int)(-game->plan[v_plan][u_plan].d) >= 0 && game->map[(int)(-game->plan[v_plan][u_plan].d)][(int)(game->player_x + point_x)] == '1')
 					img.data[i * WIDTH + j] = 0x90fff2; // bleu clair
@@ -265,24 +340,8 @@ int	ft_update(t_game *game)
 	}
 	mlx_put_image_to_window(game->graphic->mlx, game->graphic->win, img.img_ptr, 0, 0);
 	mlx_destroy_image(game->graphic->mlx, img.img_ptr);
-	if (get_time() - g_fps < 1000)
-	{
-		g_frame++;
-	}
-	else
-	{
-		ft_printf("\033[2K\r");
-		dprintf(1, "FPS: %d - POS: x - %f | y - %f - Angle : %f", g_frame, game->player_x, game->player_y, game->angle_z);
-		ft_printf("\e[0m");
-		g_lframe = g_frame;
-		g_fps = get_time();
-		g_frame = 0;
-	}
-	char *test;
-	test = ft_itoa(g_lframe);
-	mlx_string_put(game->graphic->mlx, game->graphic->win, 2, 10, 0xffffff, "FPS: ");
-	mlx_string_put(game->graphic->mlx, game->graphic->win, 30, 10, 0xffffff, test);
-	free(test);
+	ft_map(game);
+	ft_fps(game);
 	return (0);
 }
 
@@ -403,7 +462,6 @@ int main(int argc, char *argv[])
 	g_fps = get_time();
 	rayon = ft_malloc_rayon();
 	game.rayon = rayon;
-	game.angle_x = 0;
 	game.angle_z = 0;
 	game.graphic = &graphic;
 	graphic.map_check = &game;

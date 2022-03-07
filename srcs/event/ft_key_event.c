@@ -35,20 +35,11 @@ int	ft_press(int keycode, t_game *game)
 		game->angle_z += 0.07;
 	if (keycode == 65361)
 		game->angle_z -= 0.07;
-	if (keycode == 65362) // bonus
-		if (game->angle_x > -0.2)
-			game->angle_x -= 0.01;
-	if (keycode == 65364)
-		if (game->angle_x < 0.2)
-			game->angle_x += 0.01;
 	if (game->angle_z >= PI * 2)
 		game->angle_z -= PI * 2;
 	if (game->angle_z <= 0)
 		game->angle_z += PI * 2;
 	if (keycode == EVENT_ESC)
-	{
 		mlx_loop_end(game->graphic->mlx);
-		return (0);
-	}
 	return (0);
 }

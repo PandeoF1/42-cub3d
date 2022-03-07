@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/06 07:50:16 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/06 08:02:22 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ typedef struct s_game
 	int					ceiling_color;
 	char				**map;
 	float				angle_z;
-	float				angle_x;
 	float				player_x;
 	float				player_y;
 	int					max_y;
