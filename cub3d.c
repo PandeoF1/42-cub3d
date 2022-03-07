@@ -6,15 +6,11 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/07 10:05:04 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/07 10:06:27 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/cub3d.h"
-
-int64_t	g_fps;
-int		g_frame;
-int		g_lframe;
 
 void	ft_free_rayon(t_rayon **rayon)
 {
@@ -314,6 +310,7 @@ int	ft_update(t_game *game)
 			u_plan = -7;
 			while (v < 2)
 			{
+				u = 0;
 				if (v == 0)
 				{
 					switch_plan = game->max_y;
@@ -425,6 +422,7 @@ int	ft_update(t_game *game)
 	mlx_destroy_image(game->graphic->mlx, img.img_ptr);
 	ft_map(game);
 	ft_fps(game);
+	mlx_string_put(game->graphic->mlx, game->graphic->win, WIDTH * 0.5, HEIGHT * 0.5, 0xFF0000, "+");
 	return (0);
 }
 
@@ -592,7 +590,6 @@ int main(int argc, char *argv[])
 	game.door_color[3] = 0xFFFF00;
 	game.door_color[4] = 0x00FFFF;
 	game.door_color[5] = 0xFF00FF;
-	g_fps = get_time();
 	rayon = ft_malloc_rayon();
 	game.rayon = rayon;
 	game.angle_z = 0;
