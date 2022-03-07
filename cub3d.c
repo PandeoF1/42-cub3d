@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/07 08:33:38 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/07 08:42:32 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,19 +66,32 @@ void	ft_get_pos(t_game *game)
 	{
 		x = 0;
 		while (game->map[y][x])
-		{	
-			//if (game->map[y][x] == 'N')
-			//	var = -3.14 / 2;
-			//else if (game->map[y][x] == 'S')
-			//	var = 3.14 / 2;
-			//else if (game->map[y][x] == 'W')
-			//	var = 3.14;
+		{
 			if (game->map[y][x] == 'N')
 			{
 				game->player_x = x + 0.5;
 				game->player_y = y + 0.5;
+				game->angle_z = 0;
 			}
-			//game->map[y][x] = '0';
+			if (game->map[y][x] == 'S')
+			{
+				game->player_x = x + 0.5;
+				game->player_y = y + 0.5;
+				game->angle_z = 3.14;
+			}
+			if (game->map[y][x] == 'W')
+			{
+				game->player_x = x + 0.5;
+				game->player_y = y + 0.5;
+				game->angle_z = 3.14 * 0.5;
+			}
+			if (game->map[y][x] == 'E')
+			{
+				game->player_x = x + 0.5;
+				game->player_y = y + 0.5;
+				game->angle_z = 3.14 * 0.5 + 3.14;
+			}
+			//
 			x++;
 		}
 	}
