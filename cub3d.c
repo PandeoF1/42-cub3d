@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/07 10:06:27 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/07 10:43:46 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -353,9 +353,8 @@ int	ft_update(t_game *game)
 									best_t = t;
 									v_plan = v;
 									u_plan = u;
+									//break;
 									u = -8;
-									// dprintf(1, "%d\n", chou);
-									// exit(1);
 								}
 							}
 						}
@@ -381,7 +380,7 @@ int	ft_update(t_game *game)
 					//y = (int)(((int)(point_z) - point_z) * game->img_n.size_l * 0.25);
 					//y = -y;
 					//x = -x;
-					img.data[i * WIDTH + j] = 0x90f000; // vert foncer (commente ca et decommente le reste sauf printf pour les textures)
+					img.data[i * WIDTH + j] = 0xFFB2B2; // vert foncer (commente ca et decommente le reste sauf printf pour les textures)
 					//printf("x : %d y : %d | size : %d | color : 0x%08.8X\n", x, y, (int)(game->img_n.size_l * 0.25), game->img_n.data[(int)(x * (game->img_n.size_l * 0.25) + y)]);
 					//img.data[i * WIDTH + j] = game->img_n.data[(int)(y * (game->img_n.size_l * 0.25) + x)];
 				}
