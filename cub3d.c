@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/07 08:42:32 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/07 08:47:50 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,47 +55,47 @@ void	ft_close(t_game *game)
 	printf("\nCub3d: exit\n");
 }
 
-void	ft_get_pos(t_game *game)
+int	ft_select_pos(t_game *game, int x, int y)
+{
+	if (game->map[y][x] == 'N')
+		game->angle_z = 0;
+	else if (game->map[y][x] == 'S')
+		game->angle_z = 3.14;
+	else if (game->map[y][x] == 'W')
+		game->angle_z = 3.14 * 0.5;
+	else if (game->map[y][x] == 'E')
+		game->angle_z = 3.14 * 0.5 + 3.14;
+	else
+		return (1);
+	if (game->player_x != -1 || game->player_y != -1)
+		return (0);
+	game->player_x = x + 0.5;
+	game->player_y = y + 0.5;
+	game->map[y][x] = '0';
+	return (1);
+}
+
+int	ft_get_pos(t_game *game)
 {
 	int			x;
 	int			y;
-	double		var;
 
-	y = -1;
-	while (game->map[++y])
+	y = 0;
+	while (game->map[y])
 	{
 		x = 0;
 		while (game->map[y][x])
 		{
-			if (game->map[y][x] == 'N')
-			{
-				game->player_x = x + 0.5;
-				game->player_y = y + 0.5;
-				game->angle_z = 0;
-			}
-			if (game->map[y][x] == 'S')
-			{
-				game->player_x = x + 0.5;
-				game->player_y = y + 0.5;
-				game->angle_z = 3.14;
-			}
-			if (game->map[y][x] == 'W')
-			{
-				game->player_x = x + 0.5;
-				game->player_y = y + 0.5;
-				game->angle_z = 3.14 * 0.5;
-			}
-			if (game->map[y][x] == 'E')
-			{
-				game->player_x = x + 0.5;
-				game->player_y = y + 0.5;
-				game->angle_z = 3.14 * 0.5 + 3.14;
-			}
-			//
+			if (!ft_select_pos(game, x, y))
+				return (0);
 			x++;
 		}
+		y++;
 	}
 	game->max_y = ft_splitlen(game->map);
+	if (game->player_x == -1 || game->player_y == -1)
+		return (0);
+	return (1);
 }
 
 int	ft_create_plan(t_game *game)
@@ -579,13 +579,15 @@ int main(int argc, char *argv[])
 	rayon = ft_malloc_rayon();
 	game.rayon = rayon;
 	game.angle_z = 0;
+	game.player_x = -1;
+	game.player_y = -1;
 	game.graphic = &graphic;
 	graphic.map_check = &game;
 	graphic.mlx = mlx_init();
 	graphic.win = mlx_new_window(graphic.mlx, WIDTH, HEIGHT, "cub3d");
-	if (ft_check_arg(argc, argv, &game) && ft_create_image(&game))
+	if (ft_check_arg(argc, argv, &game)
+		&& ft_create_image(&game) && ft_get_pos(&game))
 	{
-		ft_get_pos(&game);
 		ft_create_vector(&game);
 		ft_create_plan(&game);
 		mlx_loop_hook(graphic.mlx, ft_update, &game);
