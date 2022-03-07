@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/07 08:06:37 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/07 09:15:36 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # define EVENT_S 115
 # define EVENT_D 100
 # define EVENT_ESC 65307
-# define WIDTH 1024
+# define WIDTH 1080
 # define HEIGHT 512
 
 # define PI 3.14159265
