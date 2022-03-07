@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/07 08:47:50 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/07 10:05:04 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,6 +281,7 @@ int	ft_update(t_game *game)
 	int		v_plan;
 	int		u_plan;
 	int		switch_plan;
+	int		add;
 	float	r_v;
 	float	t;
 	float	x;
@@ -314,11 +315,22 @@ int	ft_update(t_game *game)
 			while (v < 2)
 			{
 				if (v == 0)
+				{
 					switch_plan = game->max_y;
+					u = game->player_y;
+				}
 				else
+				{
 					switch_plan = game->max_x;
-				u = 0;
-				while (u <= switch_plan)
+					u = game->player_x;
+				}
+				add = 1;
+				//u = 0;
+				if (v == 0 && rayon_temp.y < 0)
+					add = -1;
+				else if (v == 1 && rayon_temp.x < 0)
+					add = -1;
+				while (u <= switch_plan && u >= 0)
 				{
 					t = (game->plan[v][u].a * rayon_temp.x  + game->plan[v][u].b * rayon_temp.y + game->plan[v][u].c * rayon_temp.z);
 					if (t != 0)
@@ -344,11 +356,14 @@ int	ft_update(t_game *game)
 									best_t = t;
 									v_plan = v;
 									u_plan = u;
+									u = -8;
+									// dprintf(1, "%d\n", chou);
+									// exit(1);
 								}
 							}
 						}
 					}
-					u++;
+					u += add;
 				}
 				v++;
 			}
@@ -398,6 +413,8 @@ int	ft_update(t_game *game)
 				else
 					img.data[i * WIDTH + j] = 0xcaffa0; //vert clair
 			}
+			else if (v_plan == -6)
+				img.data[i * WIDTH + j] = game->door_color[4];
 			y = 0;
 			t = 0;
 			j++;
@@ -557,9 +574,9 @@ void ft_mouse(t_game *game)
 	if (x == WIDTH / 2)
 		game->angle_z += 0;
 	else if (x > WIDTH / 2)
-		game->angle_z += 0.1;
+		game->angle_z += 0.3;
 	else
-		game->angle_z -= 0.1;
+		game->angle_z -= 0.3;
 	mlx_mouse_move(game->graphic->mlx, game->graphic->win, WIDTH / 2, HEIGHT / 2);
 }
 
