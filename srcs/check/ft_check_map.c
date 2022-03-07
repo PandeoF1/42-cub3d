@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 16:18:22 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/05 23:19:21 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/07 03:05:58 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	ft_check_map(t_game *game, int x, char *str, int i)
 			return (0);
 		i++;
 	}
-	game->max_x = ft_max_len(str + x) + 1;
+	game->max_x = ft_max_len(str + x) + 2;
 	ft_add_space(str, i, &tmp, x);
 	split = ft_split(tmp, '\n');
 	i = -1;
