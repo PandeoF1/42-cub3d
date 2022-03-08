@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/08 06:12:38 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/08 09:00:53 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	ft_close(t_game *game)
 	mlx_destroy_image(game->graphic->mlx, game->img_w.img_ptr);
 	mlx_destroy_window(game->graphic->mlx, game->graphic->win);
 	mlx_destroy_display(game->graphic->mlx);
-	printf("\nCub3d: exit\n");
+	printf("Cub3d: exit\n");
 }
 
 int	ft_select_pos(t_game *game, int x, int y)
@@ -99,7 +99,7 @@ int	ft_create_plan(t_game *game)
 	int	x;
 
 	x = 0;
-	game->plan = malloc (sizeof(t_plan *) * 3);
+	game->plan = malloc(sizeof(t_plan *) * 4);
 	if (!game->plan)
 		return (0);
 	game->plan[0] = malloc(sizeof(t_plan) * (game->max_y + 1));
@@ -107,6 +107,12 @@ int	ft_create_plan(t_game *game)
 		return (0);
 	game->plan[1] = malloc(sizeof(t_plan) * (game->max_x + 1));
 	if (!game->plan[1])
+		return (0);
+	game->plan[2] = malloc(sizeof(t_plan) * 1);
+	if (!game->plan[2])
+		return (0);
+	game->plan[3] = malloc(sizeof(t_plan) * 1);
+	if (!game->plan[3])
 		return (0);
 	while (x <= game->max_y)
 	{
@@ -125,8 +131,14 @@ int	ft_create_plan(t_game *game)
 		game->plan[1][x].d = -x;
 		x++;
 	}
-	if (!game->plan[1])
-		return (0);
+	game->plan[2][0].a = 0;
+	game->plan[2][0].b = 0;
+	game->plan[2][0].c = 1;
+	game->plan[2][0].d = 0;
+	game->plan[3][0].a = 0;
+	game->plan[3][0].b = 0;
+	game->plan[3][0].c = 1;
+	game->plan[3][0].d = -1;
 	return (1);
 }
 
@@ -295,9 +307,9 @@ void	*ft_updater(void	*data)
 		j = 0;
 		while (j < WIDTH)
 		{
-			rayon_temp.x = game->rayon[i][j].x * cos(game->angle_z) + game->rayon[i][j].y * -sin(game->angle_z) + game->rayon[i][j].z * 0; //z
-			rayon_temp.y = game->rayon[i][j].x * sin(game->angle_z) + game->rayon[i][j].y * cos(game->angle_z) + game->rayon[i][j].z * 0;
-			rayon_temp.z = game->rayon[i][j].x * 0 + game->rayon[i][j].y * 0 + game->rayon[i][j].z * 1;
+			rayon_temp.x = game->rayon[i][j].x * cos(game->angle_z) + game->rayon[i][j].y * -sin(game->angle_z); //z
+			rayon_temp.y = game->rayon[i][j].x * sin(game->angle_z) + game->rayon[i][j].y * cos(game->angle_z);
+			rayon_temp.z = game->rayon[i][j].z * 1;
 			v = 0;
 			best_t = 0;
 			v_plan = 3;
@@ -374,15 +386,11 @@ void	*ft_updater(void	*data)
 				}
 				else if (v_plan == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_x && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v_plan][u_plan].d - 1)] == '1')
 				{
-					//int	x, y;
-					//float	fx, fy;
-					//x = (int)(((int)(point_y) - point_y) * game->img_n.size_l * 0.25); // * 0.25 car y a 64 * 4 pixels
-					//y = (int)(((int)(point_z) - point_z) * game->img_n.size_l * 0.25);
-					//y = -y;
-					//x = -x;
-					update->img->data[i * WIDTH + j] = 0xFFB2B2; // vert foncer (commente ca et decommente le reste sauf printf pour les textures)
-					//printf("x : %d y : %d | size : %d | color : 0x%08.8X\n", x, y, (int)(game->img_n.size_l * 0.25), game->img_n.data[(int)(x * (game->img_n.size_l * 0.25) + y)]);
-					//img.data[i * WIDTH + j] = game->img_n.data[(int)(y * (game->img_n.size_l * 0.25) + x)];
+					int	x, y;
+					float	fx, fy;
+					x = (int)(((game->player_y + point_y) - (int)(game->player_y + point_y)) * game->img_n.size_l * 0.25);
+					y = (int)((point_z - (int)(point_z)) * game->img_n.size_l * 0.25);
+					update->img->data[i * WIDTH + j] = game->img_n.data[(int)(y * (game->img_n.size_l * 0.25) + x)];
 				}
 				else if (v_plan == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_x && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v_plan][u_plan].d - 1)] == 'A')
 				{
@@ -442,14 +450,12 @@ int	ft_update(t_game *game)
 		update[x].game = game;
 		pthread_create(&thread[x], NULL, &ft_updater, &update[x]);
 		x++;
-		x++;
 	}
 	x = 0;
 	while (x < NB_THREAD)
 	{
 		update[x].status = 0;
 		pthread_join(thread[x], NULL);
-		x++;
 		x++;
 	}
 	ft_map(game, img);
