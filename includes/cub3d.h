@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/07 09:15:36 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/08 06:11:50 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,16 @@
 # include <stdio.h>
 # include <stdarg.h>
 # include <sys/time.h>
+# include <pthread.h>
 
 # define EVENT_W 119
 # define EVENT_A 97
 # define EVENT_S 115
 # define EVENT_D 100
 # define EVENT_ESC 65307
-# define WIDTH 1080
+# define WIDTH 1024
 # define HEIGHT 512
+# define NB_THREAD 16
 
 # define PI 3.14159265
 
@@ -42,6 +44,15 @@ typedef struct s_plan
 	float	c;
 	float	d;
 }				t_plan;
+
+typedef struct s_update
+{
+	float			end_y;
+	float			start_y;
+	int				status;
+	struct s_img	*img;
+	struct s_game	*game;
+}				t_update;
 
 typedef struct s_graphic
 {
