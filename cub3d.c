@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/08 13:26:31 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/08 09:47:41 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -350,13 +350,7 @@ void	*ft_updater(void	*data)
 							else if (point_z > 1.0 || point_z < 0.0)
 							{
 								if (point_z > 1.0)
-								{
-									// int x, y;
-									// x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->img_n.size_l * 0.25);
-									// y = (int)((point_z - (int)(point_z)) * game->img_n.size_l * 0.25);
-									// update->img->data[i * WIDTH + j] = game->img_n.data[(int)(y * (game->img_n.size_l * 0.25) + x)];
 									update->img->data[i * WIDTH + j] = game->ceiling_color;
-								}
 								else
 									update->img->data[i * WIDTH + j] = game->floor_color;
 								u = -8;
@@ -369,18 +363,19 @@ void	*ft_updater(void	*data)
 			}
 			if (best_t != 0 && v_plan != 3 && u_plan != - 7)
 			{
-				int	x, y;
 				point_x = rayon_temp.x * best_t;
 				point_y = rayon_temp.y * best_t;
 				point_z = 0.5 + rayon_temp.z * best_t; // Si pas besoin de le stocker le mettre directement dans le if
 				if (v_plan == 0 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_y && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(-game->plan[v_plan][u_plan].d - 1)][(int)(game->player_x + point_x)] == '1')
 				{
+					int	x, y;
 					x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->img_n.size_l * 0.25);
 					y = (int)((point_z - (int)(point_z)) * game->img_n.size_l * 0.25);
 					update->img->data[i * WIDTH + j] = game->img_n.data[(int)(y * (game->img_n.size_l * 0.25) + x)];
 				}
 				else if (v_plan == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_x && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v_plan][u_plan].d - 1)] == '1')
 				{
+					int	x, y;
 					x = (int)(((game->player_y + point_y) - (int)(game->player_y + point_y)) * game->img_e.size_l * 0.25);
 					y = (int)((point_z - (int)(point_z)) * game->img_e.size_l * 0.25);
 					update->img->data[i * WIDTH + j] = game->img_e.data[(int)(y * (game->img_e.size_l * 0.25) + x)];
@@ -407,12 +402,14 @@ void	*ft_updater(void	*data)
 				//}
 				else if (v_plan == 0 && (game->player_y + point_y) > game->player_y && (int)(-game->plan[v_plan][u_plan].d) < game->max_y && (int)(-game->plan[v_plan][u_plan].d) >= 0 && game->map[(int)(-game->plan[v_plan][u_plan].d)][(int)(game->player_x + point_x)] == '1')
 				{
+					int	x, y;
 					x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->img_s.size_l * 0.25);
 					y = (int)((point_z - (int)(point_z)) * game->img_s.size_l * 0.25);
 					update->img->data[i * WIDTH + j] = game->img_s.data[(int)(y * (game->img_s.size_l * 0.25) + x)];
 				}
 				else
 				{
+					int	x, y;
 					x = (int)(((game->player_y + point_y) - (int)(game->player_y + point_y)) * game->img_w.size_l * 0.25);
 					y = (int)((point_z - (int)(point_z)) * game->img_w.size_l * 0.25);
 					update->img->data[i * WIDTH + j] = game->img_w.data[(int)(y * (game->img_w.size_l * 0.25) + x)];
@@ -551,16 +548,12 @@ int	ft_color_format(char *str)
 		ft_free_split(split);
 		return (-1);
 	}
+	
 	return ((ft_atoi(split[0]) << 16) + (ft_atoi(split[1]) << 8) + ft_atoi(split[2]));
 }
 
 int	ft_data_image(t_game *game)
 {
-	int	x;
-	int	temp;
-	int	t;
-	int	value;
-
 	if (ft_image_len(game->f, 1) == 0)
 		return (0);
 	game->floor_color = ft_color_format(game->f + 2);
@@ -571,80 +564,10 @@ int	ft_data_image(t_game *game)
 	game->ceiling_color = ft_color_format(game->c + 2);
 	if (game->ceiling_color == -1)
 		return (0);
-	x = 0;
 	game->img_n.data = (int *)mlx_get_data_addr(game->img_n.img_ptr, &game->img_n.bpp, &game->img_n.size_l, &game->img_n.endian);
-	value = game->img_n.size_l * 0.25 * game->img_n.size_l * 0.25;
-	while (x < value / 2)
-	{
-		temp = game->img_n.data[x];
-		game->img_n.data[x] = game->img_n.data[value - 1 - x];
-		game->img_n.data[value - 1 - x] = temp;
-		x++;
-	}
-	x = 0;
-	t = 0;
-	value = game->img_n.size_l * 0.25;
-	while (x < (game->img_n.size_l * 0.25 *  game->img_n.size_l * 0.25))
-	{
-		if (x == value)
-		{
-			x = value;
-			t = 0;
-			value += game->img_n.size_l * 0.25;
-		}
-		temp = game->img_n.data[x];
-		game->img_n.data[x] = game->img_n.data[value - 1 - t];
-		game->img_n.data[value - 1 - t] = temp;
-		t++;
-		x++;
-	}
-	x = 0;
 	game->img_s.data = (int *)mlx_get_data_addr(game->img_s.img_ptr, &game->img_s.bpp, &game->img_s.size_l, &game->img_s.endian);
-	value = game->img_s.size_l * 0.25 * game->img_s.size_l * 0.25;
-	while (x < value / 2)
-	{
-		temp = game->img_s.data[x];
-		game->img_s.data[x] = game->img_s.data[value - 1 - x];
-		game->img_s.data[value - 1 - x] = temp;
-		x++;
-	}
-	x = 0;
 	game->img_e.data = (int *)mlx_get_data_addr(game->img_e.img_ptr, &game->img_e.bpp, &game->img_e.size_l, &game->img_e.endian);
-	value = game->img_e.size_l * 0.25 * game->img_e.size_l * 0.25;
-	while (x < value / 2)
-	{
-		temp = game->img_e.data[x];
-		game->img_e.data[x] = game->img_e.data[value - 1 - x];
-		game->img_e.data[value - 1 - x] = temp;
-		x++;
-	}
-	x = 0;
 	game->img_w.data = (int *)mlx_get_data_addr(game->img_w.img_ptr, &game->img_w.bpp, &game->img_w.size_l, &game->img_w.endian);
-	value = game->img_w.size_l * 0.25 * game->img_w.size_l * 0.25;
-	while (x < value / 2)
-	{
-		temp = game->img_w.data[x];
-		game->img_w.data[x] = game->img_w.data[value - 1 - x];
-		game->img_w.data[value - 1 - x] = temp;
-		x++;
-	}
-	x = 0;
-	t = 0;
-	value = game->img_w.size_l * 0.25;
-	while (value < (game->img_w.size_l * 0.25 *  game->img_w.size_l * 0.25))
-	{
-		if (x == value)
-		{
-			x = value;
-			t = 0;
-			value += (game->img_w.size_l * 0.25);
-		}
-		temp = game->img_w.data[x];
-		game->img_w.data[x] = game->img_w.data[value - 1 - t];
-		game->img_w.data[value - 1 - t] = temp;
-		t++;
-		x++;
-	}
 	return (1);
 }
 
