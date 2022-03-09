@@ -387,12 +387,14 @@ void	*ft_updater(void	*data)
 				point_z = 0.5 + rayon_temp.z * best_t; // Si pas besoin de le stocker le mettre directement dans le if
 				if (v_plan == 0 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_y && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(-game->plan[v_plan][u_plan].d - 1)][(int)(game->player_x + point_x)] == '1')
 				{
+					int	x, y;
 					x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->img_n.size_l * 0.25);
 					y = (int)((point_z - (int)(point_z)) * game->img_n.size_l * 0.25);
 					update->img->data[i * WIDTH + j] = game->img_n.data[(int)(y * (game->img_n.size_l * 0.25) + x)];
 				}
 				else if (v_plan == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_x && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v_plan][u_plan].d - 1)] == '1')
 				{
+					int	x, y;
 					x = (int)(((game->player_y + point_y) - (int)(game->player_y + point_y)) * game->img_e.size_l * 0.25);
 					y = (int)((point_z - (int)(point_z)) * game->img_e.size_l * 0.25);
 					update->img->data[i * WIDTH + j] = game->img_e.data[(int)(y * (game->img_e.size_l * 0.25) + x)];
@@ -419,12 +421,14 @@ void	*ft_updater(void	*data)
 				//}
 				else if (v_plan == 0 && (game->player_y + point_y) > game->player_y && (int)(-game->plan[v_plan][u_plan].d) < game->max_y && (int)(-game->plan[v_plan][u_plan].d) >= 0 && game->map[(int)(-game->plan[v_plan][u_plan].d)][(int)(game->player_x + point_x)] == '1')
 				{
+					int	x, y;
 					x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->img_s.size_l * 0.25);
 					y = (int)((point_z - (int)(point_z)) * game->img_s.size_l * 0.25);
 					update->img->data[i * WIDTH + j] = game->img_s.data[(int)(y * (game->img_s.size_l * 0.25) + x)];
 				}
 				else
 				{
+					int	x, y;
 					x = (int)(((game->player_y + point_y) - (int)(game->player_y + point_y)) * game->img_w.size_l * 0.25);
 					y = (int)((point_z - (int)(point_z)) * game->img_w.size_l * 0.25);
 					update->img->data[i * WIDTH + j] = game->img_w.data[(int)(y * (game->img_w.size_l * 0.25) + x)];
@@ -571,7 +575,7 @@ int	ft_data_image(t_game *game)
 {
 	if (ft_image_len(game->f, 1) == 0)
 		return (0);
-	game->floor_color = ft_color_format(game->f + 2);
+	game->floor_color = ft_color_format(game->f + 2); //verif si inf a 255 et sup a 0
 	if (game->floor_color == -1)
 		return (0);
 	if (ft_image_len(game->c, 1) == 0)
