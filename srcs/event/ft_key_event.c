@@ -31,6 +31,12 @@ int	ft_exit_hook(t_game *game)
 int	ft_press(int keycode, t_game *game)
 {
 	ft_move(keycode, game);
+	if (keycode == 65362)
+		if (game->angle_x >= -0.5)
+			game->angle_x -= 0.03;
+	if (keycode == 65364)
+		if (game->angle_x <= 0.75)
+			game->angle_x += 0.03;
 	if (keycode == 65363)
 		game->angle_z += 0.07;
 	if (keycode == 65361)
