@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/08 13:26:31 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/08 15:44:48 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,8 @@ void ft_fps(t_game *game)
 {
 	static int	lframe = 0;
 	static int	frame = 0;
+	static int	total_frame = 0;
+	static int	total_second = -1;
 	static int64_t	fps = 0;
 	char		*test;
 
@@ -175,11 +177,20 @@ void ft_fps(t_game *game)
 	{
 		lframe = frame;
 		fps = get_time();
+		total_frame += frame;
+		total_second += 1;
 		frame = 1;
 	}
 	test = ft_itoa(lframe);
 	mlx_string_put(game->graphic->mlx, game->graphic->win, 2, 10, 0xffffff, "FPS: ");
 	mlx_string_put(game->graphic->mlx, game->graphic->win, 30, 10, 0xffffff, test);
+	if (total_second > 1)
+	{
+		free(test);
+		test = ft_itoa(total_frame / total_second);
+		mlx_string_put(game->graphic->mlx, game->graphic->win, 2, 30, 0xffffff, "Moy FPS : ");
+		mlx_string_put(game->graphic->mlx, game->graphic->win, 60, 30, 0xffffff, test);
+	}
 	free(test);
 }
 
@@ -295,12 +306,12 @@ void	*ft_updater(void	*data)
 		{
 			rayon_temp.x = game->rayon[i][j].x * cos(game->angle_z) + game->rayon[i][j].y * -sin(game->angle_z); //z
 			rayon_temp.y = game->rayon[i][j].x * sin(game->angle_z) + game->rayon[i][j].y * cos(game->angle_z);
-			rayon_temp.z = game->rayon[i][j].z * 1;
+			rayon_temp.z  = game->rayon[i][j].z * 1;
 			v = 0;
 			best_t = 0;
 			v_plan = 3;
 			u_plan = -7;
-			while (v < 2)
+			while (v <= 1)
 			{
 				u = 0;
 				if (v == 0)
@@ -324,6 +335,15 @@ void	*ft_updater(void	*data)
 					if (t != 0)
 					{
 						t = -(game->plan[v][u].a * game->player_x + game->plan[v][u].b * game->player_y + game->plan[v][u].c * 0.5 + game->plan[v][u].d) / t;
+						//ft_printf("\033[2K\r");
+						//dprintf(1, "u: %d, v: %d, t: %f\n", u, v, t);
+						//if (u == 70 || u == 103)
+						//	best_t = 0;
+						//else
+						//	exit(1);
+						//ft_printf("\e[0m");
+						if (best_t != 0 && best_t < t)
+							u = -8;
 						if (t > 0)
 						{
 							point_x = rayon_temp.x * t;
@@ -342,8 +362,9 @@ void	*ft_updater(void	*data)
 								|| (v == 1 && (game->player_x + point_x) > game->player_x && (int)(-game->plan[v][u].d) < game->max_x && (int)(-game->plan[v][u].d) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d)] == '1')))
 								{
 									best_t = t;
-									v_plan = v;
 									u_plan = u;
+									v_plan = v;
+									//exit(1);
 									u = -8;
 								}
 							}
@@ -563,7 +584,7 @@ int	ft_data_image(t_game *game)
 
 	if (ft_image_len(game->f, 1) == 0)
 		return (0);
-	game->floor_color = ft_color_format(game->f + 2);
+	game->floor_color = ft_color_format(game->f + 2); //verif si inf a 255 et sup a 0
 	if (game->floor_color == -1)
 		return (0);
 	if (ft_image_len(game->c, 1) == 0)
