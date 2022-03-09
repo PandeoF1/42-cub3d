@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/09 16:46:46 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/09 17:12:06 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,11 +110,6 @@ int	ft_is_double_y(char	**str, int y)
 	return (1);
 }
 
-int	ft_is_empty_y(char	*str, int y)
-{
-	return (1);
-}
-
 int	ft_is_double_x(char	**str, int x)
 {
 	int	y;
@@ -123,16 +118,11 @@ int	ft_is_double_x(char	**str, int x)
 	while (str[y] && str[y][x] && str[y][x + 1])
 	{
 		//printf("y : %d %d - %c %c\n", y, x, str[y][x], str[y][x + 1]);
-		if (str[y][x] != ' ' && str[y][x + 1] != ' ')
-			if (str[y][x] != str[y][x + 1])
-				return (0);
+		//if (str[y][x] != ' ' && str[y][x + 1] != ' ')
+		if (str[y][x] != str[y][x + 1])
+			return (0);
 		y++;
 	}
-	return (1);
-}
-
-int	ft_is_empty_x(char	*str, int y)
-{
 	return (1);
 }
 
@@ -143,8 +133,6 @@ int	ft_create_plan(t_game *game)
 
 	x = 0;
 	next = 0;
-	game->plan_y = 0;
-	game->plan_x = 0;
 	game->plan = malloc(sizeof(t_plan *) * 2);
 	if (!game->plan)
 		return (0);
@@ -156,41 +144,63 @@ int	ft_create_plan(t_game *game)
 		return (0);
 	while (x < game->max_y - 1)
 	{
-		if ((!ft_is_double_y(game->map, x) || !ft_is_empty_y(game->map, x)))
+		if ((!ft_is_double_y(game->map, x)))
 		{
-			ft_printf("x : %s - %d\n", game->map[x], x);
-			game->plan[0][x].a = 0;
-			game->plan[0][x].b = 0;
-			game->plan[0][x].c = 0;
-			game->plan[0][x].d = 0;
+			ft_printf("x : \033[0;32m%s - %d\e[0m\n", game->map[x], x);
+			//game->plan[0][x].a = 0;
+			//game->plan[0][x].b = 0;
+			//game->plan[0][x].c = 0;
+			//game->plan[0][x].d = 0;
 			//game->plan_x++;
-		}
-		else
-		{
 			game->plan[0][x].a = 0;
 			game->plan[0][x].b = 1;
 			game->plan[0][x].c = 0;
 			game->plan[0][x].d = -x;
 		}
+		else
+		{
+			ft_printf("x : \033[0;31m%s - %d\e[0m\n", game->map[x], x);
+			game->plan[0][x].a = 0;
+			game->plan[0][x].b = 0;
+			game->plan[0][x].c = 0;
+			game->plan[0][x].d = 0;
+			
+			//game->plan[0][x].a = 0;
+			//game->plan[0][x].b = 1;
+			//game->plan[0][x].c = 0;
+			//game->plan[0][x].d = -x;
+		}
 		x++;
 	}
 	x = 0;
+	ft_printf("y :  ");
 	while (x < game->max_x - 1)
 	{
-		if ((!ft_is_double_x(game->map, x) || !ft_is_empty_x(game->map, x)))
+		if ((!ft_is_double_x(game->map, x)))
 		{
-			game->plan[1][x].a = 0;
-			game->plan[1][x].b = 0;
-			game->plan[1][x].c = 0;
-			game->plan[1][x].d = 0;
-			//game->plan_x++;
-		}
-		else
-		{
+			ft_printf("+");
+			//game->plan[1][x].a = 0;
+			//game->plan[1][x].b = 0;
+			//game->plan[1][x].c = 0;
+			//game->plan[1][x].d = 0;
+			
 			game->plan[1][x].a = 1;
 			game->plan[1][x].b = 0;
 			game->plan[1][x].c = 0;
 			game->plan[1][x].d = -x;
+			//game->plan_x++;
+		}
+		else
+		{
+			ft_printf("-");
+			//game->plan[1][x].a = 1;
+			//game->plan[1][x].b = 0;
+			//game->plan[1][x].c = 0;
+			//game->plan[1][x].d = -x;
+			game->plan[1][x].a = 0;
+			game->plan[1][x].b = 0;
+			game->plan[1][x].c = 0;
+			game->plan[1][x].d = 0;
 		}
 		x++;
 	}
