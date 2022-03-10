@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/10 08:23:22 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/10 09:56:38 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,7 +204,7 @@ int	ft_create_plan(t_game *game)
 		}
 		x++;
 	}
-	while (x < game->max_x - 1)
+	//while (x < game->max_x - 1)
 	//{
 	//	game->plan[1][x].a = 1;
 	//	game->plan[1][x].b = 0;
@@ -747,13 +747,13 @@ int	ft_data_image(t_game *game)
 	x = 0;
 	t = 0;
 	value = game->img_w.size_l * 0.25;
-	while (value < (game->img_w.size_l * 0.25 *  game->img_w.size_l * 0.25))
+	while (x < (game->img_w.size_l * 0.25 *  game->img_w.size_l * 0.25))
 	{
 		if (x == value)
 		{
 			x = value;
 			t = 0;
-			value += (game->img_w.size_l * 0.25);
+			value += game->img_w.size_l * 0.25;
 		}
 		temp = game->img_w.data[x];
 		game->img_w.data[x] = game->img_w.data[value - 1 - t];
@@ -800,9 +800,9 @@ void ft_mouse(t_game *game)
 	mlx_mouse_get_pos(game->graphic->mlx, game->graphic->win, &x, &y);
 	mlx_mouse_hide(game->graphic->mlx, game->graphic->win);
 	if (x > WIDTH / 2)
-		game->angle_z += 0.025;
+		game->angle_z += 0.05;
 	else if (x < WIDTH / 2)
-		game->angle_z -= 0.025;
+		game->angle_z -= 0.05;
 	if (y > HEIGHT / 2 && game->angle_x <= 0.75)
 		game->angle_x += 0.025;
 	else if (y < HEIGHT / 2 && game->angle_x >= -0.5)
