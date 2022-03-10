@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/10 11:30:04 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/10 11:34:12 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -415,10 +415,10 @@ void	*ft_updater(void	*data)
 		while (j < WIDTH)
 		{
 			rayon_tempp.x = game->rayon[i][j].x * 1; // save cos et sin
-			rayon_tempp.y = game->rayon[i][j].y * cos(game->angle_x) + game->rayon[i][j].z * -sin(game->angle_x);
-			rayon_tempp.z = game->rayon[i][j].y * sin(game->angle_x) + game->rayon[i][j].z * cos(game->angle_x);
-			rayon_temp.x = rayon_tempp.x * cos(game->angle_z) + rayon_tempp.y * -sin(game->angle_z); //z
-			rayon_temp.y = rayon_tempp.x * sin(game->angle_z) + rayon_tempp.y * cos(game->angle_z);
+			rayon_tempp.y = game->rayon[i][j].y * game->cos_x + game->rayon[i][j].z * -game->sin_x;
+			rayon_tempp.z = game->rayon[i][j].y * game->sin_x + game->rayon[i][j].z * game->cos_x;
+			rayon_temp.x = rayon_tempp.x * game->cos_z + rayon_tempp.y * -game->sin_z; //z
+			rayon_temp.y = rayon_tempp.x * game->sin_z + rayon_tempp.y * game->cos_z;
 			rayon_temp.z = rayon_tempp.z * 1;
 			v = 0;
 			best_t = 0;

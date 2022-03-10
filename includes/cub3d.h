@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/10 11:25:24 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/10 11:32:00 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,10 @@ typedef struct s_game
 	char				**map;
 	float				angle_z;
 	float				angle_x;
+	float				cos_z;
+	float				cos_x;
+	float				sin_z;
+	float				sin_x;
 	float				player_x;
 	float				player_y;
 	int					max_y;
