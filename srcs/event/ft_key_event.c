@@ -20,7 +20,7 @@ int	ft_win_event(int keycode, t_game *game)
 
 int	ft_unpress(int keycode, t_game *game)
 {
-	printf("Unpress keycode: %d\n", keycode);
+	//printf("Unpress keycode: %d\n", keycode);
 	return (0);
 }
 
