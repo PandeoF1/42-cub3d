@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/10 13:10:01 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/10 17:49:38 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,63 @@ int	ft_is_double_x(char	**str, int x)
 	return (1);
 }
 
+int	ft_nb_of(t_game *game, char	charset)
+{
+	int	x;
+	int	y;
+	int	total;
+
+	x = 0;
+	total = 0;
+	while (game->map[x])
+	{
+		y = 0;
+		while (game->map[x][y])
+		{
+			if (game->map[x][y] == charset)
+				total++;
+			y++;
+		}
+		x++;
+	}
+	return (total);
+}
+
+void	ft_create_sprite(t_game *game, char *charset)
+{
+	int a;
+	int	b;
+	int	x;
+	int	y;
+	
+	a = 0;
+	b = 0;
+    while (a < ft_strlen(charset))
+    {
+		y = 0;
+        while (game->map[y])
+		{
+			x = 0;
+			while (game->map[y][x])
+			{
+				if (game->map[y][x] == charset[a])
+				{
+					game->sprites[b].sx = x + 0.5;
+					game->sprites[b].sy = y + 0.5;
+					game->plan[2][b].a = 0;
+					game->plan[2][b].b = 0;
+					game->plan[2][b].c = 0;
+					game->plan[2][b].d = 0;
+					b++;
+				}
+				x++;
+			}
+			y++;
+		}
+		a++;
+    }
+}
+
 int	ft_create_plan(t_game *game)
 {
 	int	x;
@@ -133,7 +190,7 @@ int	ft_create_plan(t_game *game)
 
 	x = 1;
 	next = 0;
-	game->plan = malloc(sizeof(t_plan *) * 2);
+	game->plan = malloc(sizeof(t_plan *) * 3);
 	if (!game->plan)
 		return (0);
 	game->plan[0] = malloc(sizeof(t_plan) * (game->max_y + 1));
@@ -142,11 +199,22 @@ int	ft_create_plan(t_game *game)
 	game->plan[1] = malloc(sizeof(t_plan) * (game->max_x + 1));
 	if (!game->plan[1])
 		return (0);
+	game->nb_sprites = ft_nb_of(game, 'W') + ft_nb_of(game, 'T') + ft_nb_of(game, 'U') + ft_nb_of(game, 'V');
+	if (game->nb_sprites != 0)
+	{
+		game->plan[2] = malloc(sizeof(t_plan) * game->nb_sprites);
+		if (!game->plan[2])
+			return (0);
+		game->sprites = malloc(sizeof(t_sprite) * game->nb_sprites);
+		if (!game->sprites)
+			return (0);
+		ft_create_sprite(game, "TUVW");
+	}
 	while (x < game->max_y - 1)
 	{
 		if ((!ft_is_double_y(game->map, x)))
 		{
-			ft_printf("x : \033[0;32m%s - %d\e[0m\n", game->map[x], x);
+			dprintf(1, "x : \033[0;32m%s - %d\e[0m\n", game->map[x], x);
 			//game->plan[0][x].a = 0;
 			//game->plan[0][x].b = 0;
 			//game->plan[0][x].c = 0;
@@ -159,12 +227,11 @@ int	ft_create_plan(t_game *game)
 		}
 		else
 		{
-			ft_printf("x : \033[0;31m%s - %d\e[0m\n", game->map[x], x);
+			dprintf(1, "x : \033[0;31m%s - %d\e[0m\n", game->map[x], x);
 			game->plan[0][x].a = 0;
 			game->plan[0][x].b = 0;
 			game->plan[0][x].c = 0;
-			game->plan[0][x].d = 0;
-			
+			game->plan[0][x].d = 0;			
 			//game->plan[0][x].a = 0;
 			//game->plan[0][x].b = 1;
 			//game->plan[0][x].c = 0;
@@ -172,7 +239,7 @@ int	ft_create_plan(t_game *game)
 		}
 		x++;
 	}
-	x = 0;
+	x = 1;
 	ft_printf("y :  ");
 	while (x < game->max_x - 1)
 	{
@@ -183,7 +250,6 @@ int	ft_create_plan(t_game *game)
 			//game->plan[1][x].b = 0;
 			//game->plan[1][x].c = 0;
 			//game->plan[1][x].d = 0;
-			
 			game->plan[1][x].a = 1;
 			game->plan[1][x].b = 0;
 			game->plan[1][x].c = 0;
@@ -419,7 +485,7 @@ void	*ft_updater(void	*data)
 			rayon_temp.z = game->rayon[i][j].y * game->sin_x + game->rayon[i][j].z * game->cos_x;
 			v = 0;
 			best_t = 0;
-			v_plan = 3;
+			v_plan = 4;
 			u_plan = -7;
 			while (v < 2)
 			{
@@ -433,14 +499,17 @@ void	*ft_updater(void	*data)
 					switch_plan = game->max_x;
 					u = game->player_x;
 				}
+				else if (v == 2)
+				{
+					switch_plan = game->nb_sprites - 1;
+					u = 0;
+				}
 				add = 1;
-				if (v == 0 && rayon_temp.y < 0)
-					add = -1;
-				else if (v == 1 && rayon_temp.x < 0)
+				if ((v == 0 && rayon_temp.y < 0) || (v == 1 && rayon_temp.x < 0))
 					add = -1;
 				while (u <= switch_plan && u >= 0)
 				{
-					if (game->plan[v][u].a == 1 || game->plan[v][u].b == 1)
+					if (game->plan[v][u].a == 1 || game->plan[v][u].b == 1 || v == 2)
 					{
 						t = (game->plan[v][u].a * rayon_temp.x  + game->plan[v][u].b * rayon_temp.y + game->plan[v][u].c * rayon_temp.z);
 						if (t != 0)
@@ -471,6 +540,11 @@ void	*ft_updater(void	*data)
 										u = -8;
 									}
 								}
+								else if (v == 2)
+								{
+									update->img->data[i * WIDTH + j] = 0xFFFFFF;
+									u = -8;
+								}
 								else if (point_z > 1.0 || point_z < 0.0)
 								{
 									if (point_z > 1.0)
@@ -486,7 +560,7 @@ void	*ft_updater(void	*data)
 				}
 				v++;
 			}
-			if (best_t != 0 && v_plan != 3 && u_plan != - 7)
+			if (best_t != 0 && v_plan != 4 && u_plan != - 7)
 			{
 				point_x = rayon_temp.x * best_t;
 				point_y = rayon_temp.y * best_t;
@@ -544,6 +618,23 @@ void	*ft_updater(void	*data)
 	}
 }
 
+void	ft_set_sprites(t_game *game)
+{
+	int	x;
+	int	a;
+	int	b;
+
+	x = 0;
+	while (x < game->nb_sprites)
+	{
+		game->plan[2][x].a = game->sprites[x].sx - game->player_x;
+		game->plan[2][x].b = game->sprites[x].sy - game->player_y;
+		game->plan[2][x].c = 0;
+		game->plan[2][x].d = -(a * game->sprites[x].sx) - (b * game->sprites[x].sy);
+		x++;
+	}
+}
+
 int	ft_update(t_game *game)
 {
 	t_update	update[NB_THREAD];
@@ -554,6 +645,7 @@ int	ft_update(t_game *game)
 	ft_door(game);
 	ft_move(game);
 	ft_mouse(game);
+	ft_set_sprites(game);
 	img.img_ptr = mlx_new_image(game->graphic->mlx, WIDTH, HEIGHT);
 	img.data = (int *)mlx_get_data_addr(img.img_ptr, &img.bpp, &img.size_l, &img.endian);
 	x = 0;

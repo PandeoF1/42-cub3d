@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/10 12:15:09 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/10 17:07:28 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@
 # define EVENT_ESC 65307
 # define WIDTH 1280
 # define HEIGHT 720
-# define NB_THREAD 2
+# define NB_THREAD 16
 
 # define MUSIC 0
 
 # ifdef __APPLE__
-	#  define MUSIC 1
+	#  define MUSIC 0
 # endif
 
 typedef struct s_keyboard
@@ -62,6 +62,12 @@ typedef struct s_plan
 	float	c;
 	float	d;
 }				t_plan;
+
+typedef struct s_sprite
+{
+	float	sx;
+	float	sy;
+}				t_sprite;
 
 typedef struct s_update
 {
@@ -114,7 +120,9 @@ typedef struct s_game
 	float				player_y;
 	int					max_y;
 	int					max_x;
+	int					nb_sprites;
 	struct s_plan		**plan;
+	struct s_sprite		*sprites;
 	struct s_rayon		**rayon;
 	struct s_graphic	*graphic;
 }	t_game;
