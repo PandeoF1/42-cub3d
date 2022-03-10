@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/10 10:22:16 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/10 11:20:45 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -414,7 +414,7 @@ void	*ft_updater(void	*data)
 		j = 0;
 		while (j < WIDTH)
 		{
-			rayon_tempp.x = game->rayon[i][j].x * 1;
+			rayon_tempp.x = game->rayon[i][j].x * 1; // save cos et sin
 			rayon_tempp.y = game->rayon[i][j].y * cos(game->angle_x) + game->rayon[i][j].z * -sin(game->angle_x);
 			rayon_tempp.z = game->rayon[i][j].y * sin(game->angle_x) + game->rayon[i][j].z * cos(game->angle_x);
 			rayon_temp.x = rayon_tempp.x * cos(game->angle_z) + rayon_tempp.y * -sin(game->angle_z); //z
@@ -561,6 +561,7 @@ int	ft_update(t_game *game)
 	int			x;
 
 	ft_door(game);
+	ft_move(game);
 	ft_mouse(game);
 	img.img_ptr = mlx_new_image(game->graphic->mlx, WIDTH, HEIGHT);
 	img.data = (int *)mlx_get_data_addr(img.img_ptr, &img.bpp, &img.size_l, &img.endian);
@@ -827,6 +828,14 @@ int main(int argc, char *argv[])
 	t_graphic	graphic;
 	t_rayon		**rayon;
 
+	game.keyboard.w = 0;
+	game.keyboard.a = 0;
+	game.keyboard.s = 0;
+	game.keyboard.d = 0;
+	game.keyboard.up = 0;
+	game.keyboard.down = 0;
+	game.keyboard.left = 0;
+	game.keyboard.right = 0;
 	game.door_color[0] = 0xFF0000;
 	game.door_color[1] = 0x00FF00;
 	game.door_color[2] = 0x0000FF;
@@ -849,10 +858,11 @@ int main(int argc, char *argv[])
 		ft_create_vector(&game);
 		ft_create_plan(&game);
 		mlx_loop_hook(graphic.mlx, ft_update, &game);
-		mlx_hook(graphic.win, 2, 0, ft_win_event, &game);
-		mlx_hook(graphic.win, 3, 1, ft_unpress, &game);
-		mlx_mouse_hide(graphic.mlx, graphic.win);
+		
 		mlx_hook(graphic.win, 17, 1L << 17, ft_exit_hook, &game);
+		mlx_hook(graphic.win, 02, 1L << 0, ft_win_event, &game);
+		mlx_hook(graphic.win, 03, 1L << 1, ft_unpress, &game);
+		mlx_mouse_hide(graphic.mlx, graphic.win);
 		mlx_loop(graphic.mlx);
 	}
 	else

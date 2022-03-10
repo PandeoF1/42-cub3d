@@ -12,47 +12,66 @@
 
 #include "../../includes/cub3d.h"
 
-void	ft_move_next(int keycode, t_game *game)
+void	ft_move_camera(t_game *game)
+{
+	if (game->keyboard.up)
+		if (game->angle_x >= -0.5)
+			game->angle_x -= 0.015;
+	if (game->keyboard.down)
+		if (game->angle_x <= 0.75)
+			game->angle_x += 0.015;
+	if (game->keyboard.left)
+		game->angle_z += 0.04;
+	if (game->keyboard.right)
+		game->angle_z -= 0.04;
+	if (game->angle_z >= PI * 2)
+		game->angle_z -= PI * 2;
+	if (game->angle_z <= 0)
+		game->angle_z += PI * 2;
+}
+
+void	ft_move_next(t_game *game)
 {	
-	if (keycode == EVENT_A)
+	if (game->keyboard.a)
 	{
 		if (game->map[(int)(game->player_y - sin(game->angle_z) * 0.30)]
 			[(int)(game->player_x - cos(game->angle_z) * 0.30)] != '1')
 		{
-			game->player_x -= cos(game->angle_z) * 0.2;
-			game->player_y -= sin(game->angle_z) * 0.2;
+			game->player_x -= cos(game->angle_z) * 0.05;
+			game->player_y -= sin(game->angle_z) * 0.05;
 		}
 	}
-	if (keycode == EVENT_D)
+	if (game->keyboard.d)
 	{
 		if (game->map[(int)(game->player_y + sin(game->angle_z) * 0.30)]
 			[(int)(game->player_x + cos(game->angle_z) * 0.30)] != '1')
 		{
-			game->player_x += cos(game->angle_z) * 0.2;
-			game->player_y += sin(game->angle_z) * 0.2;
+			game->player_x += cos(game->angle_z) * 0.05;
+			game->player_y += sin(game->angle_z) * 0.05;
 		}
 	}
+	ft_move_camera(game);
 }
 
-void	ft_move(int keycode, t_game *game)
+void	ft_move(t_game *game)
 {
-	if (keycode == EVENT_W)
+	if (game->keyboard.w)
 	{
 		if (game->map[(int)(game->player_y - cos(game->angle_z) * 0.30)]
 			[(int)(game->player_x + sin(game->angle_z) * 0.30)] != '1')
 		{
-			game->player_x += sin(game->angle_z) * 0.2;
-			game->player_y -= cos(game->angle_z) * 0.2;
+			game->player_x += sin(game->angle_z) * 0.05;
+			game->player_y -= cos(game->angle_z) * 0.05;
 		}
 	}
-	if (keycode == EVENT_S)
+	if (game->keyboard.s)
 	{
 		if (game->map[(int)(game->player_y + cos(game->angle_z) * 0.30)]
 			[(int)(game->player_x - sin(game->angle_z) * 0.30)] != '1')
 		{
-			game->player_x -= sin(game->angle_z) * 0.2;
-			game->player_y += cos(game->angle_z) * 0.2;
+			game->player_x -= sin(game->angle_z) * 0.05;
+			game->player_y += cos(game->angle_z) * 0.05;
 		}
 	}
-	ft_move_next(keycode, game);
+	ft_move_next(game);
 }
