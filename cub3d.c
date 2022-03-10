@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/09 17:12:06 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/10 08:23:22 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,11 +99,11 @@ int	ft_is_double_y(char	**str, int y)
 	int	x;
 
 	x = 0;
-	if (ft_strlen(str[y]) != ft_strlen(str[y + 1]))
+	if (ft_strlen(str[y]) != ft_strlen(str[y - 1]))
 		return (0);
-	while (str[y][x])
+	while (str[y][x] && str[y - 1][x])
 	{
-		if (str[y][x] != str[y + 1][x])
+		if (str[y][x] != str[y - 1][x])
 			return (0);
 		x++;
 	}
@@ -115,11 +115,11 @@ int	ft_is_double_x(char	**str, int x)
 	int	y;
 
 	y = 0;
-	while (str[y] && str[y][x] && str[y][x + 1])
+	while (str[y] && str[y][x] && str[y][x - 1])
 	{
 		//printf("y : %d %d - %c %c\n", y, x, str[y][x], str[y][x + 1]);
 		//if (str[y][x] != ' ' && str[y][x + 1] != ' ')
-		if (str[y][x] != str[y][x + 1])
+		if (str[y][x] != str[y][x - 1])
 			return (0);
 		y++;
 	}
@@ -131,7 +131,7 @@ int	ft_create_plan(t_game *game)
 	int	x;
 	int	next;
 
-	x = 0;
+	x = 1;
 	next = 0;
 	game->plan = malloc(sizeof(t_plan *) * 2);
 	if (!game->plan)
