@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/10 10:27:13 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/10 10:22:16 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -849,8 +849,8 @@ int main(int argc, char *argv[])
 		ft_create_vector(&game);
 		ft_create_plan(&game);
 		mlx_loop_hook(graphic.mlx, ft_update, &game);
-		mlx_hook(graphic.win, 2, 2, ft_press, &game);
-		mlx_hook(graphic.win, 3, 3, ft_unpress, &game);
+		mlx_hook(graphic.win, 2, 0, ft_win_event, &game);
+		mlx_hook(graphic.win, 3, 1, ft_unpress, &game);
 		mlx_mouse_hide(graphic.mlx, graphic.win);
 		mlx_hook(graphic.win, 17, 1L << 17, ft_exit_hook, &game);
 		mlx_loop(graphic.mlx);

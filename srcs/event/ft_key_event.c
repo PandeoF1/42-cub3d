@@ -14,13 +14,13 @@
 
 int	ft_win_event(int keycode, t_game *game)
 {
-	printf("Press : %d\n", keycode);
+	printf("Press keycode: %d\n", keycode);
 	return (0);
 }
 
 int	ft_unpress(int keycode, t_game *game)
 {
-	printf("Unpress : %d\n", keycode);
+	printf("Unpress keycode: %d\n", keycode);
 	return (0);
 }
 
