@@ -14,40 +14,50 @@
 
 int	ft_win_event(int keycode, t_game *game)
 {
-	printf("Press keycode: %d\n", keycode);
+	if (keycode == EVENT_ESC)
+		mlx_loop_end(game->graphic->mlx);
+	if (keycode == EVENT_W)
+		game->keyboard.w = 1;
+	if (keycode == EVENT_S)
+		game->keyboard.s = 1;
+	if (keycode == EVENT_A)
+		game->keyboard.a = 1;
+	if (keycode == EVENT_D)
+		game->keyboard.d = 1;
+	if (keycode == 65362)
+		game->keyboard.up = 1;
+	if (keycode == 65364)
+		game->keyboard.down = 1;
+	if (keycode == 65363)
+		game->keyboard.left = 1;
+	if (keycode == 65361)
+		game->keyboard.right = 1;
 	return (0);
 }
 
 int	ft_unpress(int keycode, t_game *game)
 {
-	//printf("Unpress keycode: %d\n", keycode);
+	if (keycode == EVENT_W)
+		game->keyboard.w = 0;
+	if (keycode == EVENT_S)
+		game->keyboard.s = 0;
+	if (keycode == EVENT_A)
+		game->keyboard.a = 0;
+	if (keycode == EVENT_D)
+		game->keyboard.d = 0;
+	if (keycode == 65362)
+		game->keyboard.up = 0;
+	if (keycode == 65364)
+		game->keyboard.down = 0;
+	if (keycode == 65363)
+		game->keyboard.left = 0;
+	if (keycode == 65361)
+		game->keyboard.right = 0;
 	return (0);
 }
 
 int	ft_exit_hook(t_game *game)
 {
 	mlx_loop_end(game->graphic->mlx);
-	return (0);
-}
-
-int	ft_press(int keycode, t_game *game)
-{
-	ft_move(keycode, game);
-	if (keycode == 65362)
-		if (game->angle_x >= -0.5)
-			game->angle_x -= 0.03;
-	if (keycode == 65364)
-		if (game->angle_x <= 0.75)
-			game->angle_x += 0.03;
-	if (keycode == 65363)
-		game->angle_z += 0.07;
-	if (keycode == 65361)
-		game->angle_z -= 0.07;
-	if (game->angle_z >= PI * 2)
-		game->angle_z -= PI * 2;
-	if (game->angle_z <= 0)
-		game->angle_z += PI * 2;
-	if (keycode == EVENT_ESC)
-		mlx_loop_end(game->graphic->mlx);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/10 10:01:37 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/10 11:25:24 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,18 @@
 # define NB_THREAD 16
 
 # define PI 3.14159265
+
+typedef struct s_keyboard
+{
+	int	w;
+	int	a;
+	int	s;
+	int	d;
+	int	up;
+	int	down;
+	int	right;
+	int	left;
+}				t_keyboard;
 
 typedef struct s_plan
 {
@@ -78,6 +90,7 @@ typedef struct s_game
 	char				*e;
 	char				*f;
 	char				*c;
+	struct s_keyboard	keyboard;
 	struct s_img		img_n;
 	struct s_img		img_s;
 	struct s_img		img_w;
@@ -121,10 +134,9 @@ int		ft_max_len(char *str);
 /* Event */
 
 int		ft_win_event(int keycode, t_game *game);
-int		ft_press(int keycode, t_game *game);
 int		ft_unpress(int keycode, t_game *game);
-void	ft_move_next(int keycode, t_game *game);
-void	ft_move(int keycode, t_game *game);
+void	ft_move_next(t_game *game);
+void	ft_move(t_game *game);
 int		ft_exit_hook(t_game *game);
 void 	ft_mouse(t_game *game);
 
