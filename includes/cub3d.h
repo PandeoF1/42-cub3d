@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/10 11:45:48 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/10 12:15:09 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 # include <sys/time.h>
 # include <pthread.h>
 
+# define PI 3.14159265
+
 # define EVENT_W 119
 # define EVENT_A 97
 # define EVENT_S 115
@@ -33,9 +35,13 @@
 # define EVENT_ESC 65307
 # define WIDTH 1280
 # define HEIGHT 720
-# define NB_THREAD 16
+# define NB_THREAD 2
 
-# define PI 3.14159265
+# define MUSIC 0
+
+# ifdef __APPLE__
+	#  define MUSIC 1
+# endif
 
 typedef struct s_keyboard
 {
@@ -61,7 +67,6 @@ typedef struct s_update
 {
 	float			end_y;
 	float			start_y;
-	int				status;
 	struct s_img	*img;
 	struct s_game	*game;
 }				t_update;
