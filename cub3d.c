@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/10 11:42:18 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/10 12:21:46 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -406,27 +406,23 @@ void	*ft_updater(void	*data)
 	game = update->game;
 	x = 0;
 	y = 0;
-	while (update->status == -1)
-		usleep(1);
 	i = update->start_y;
 	while (i < update->end_y)
 	{
 		j = 0;
 		while (j < WIDTH)
 		{
-			rayon_tempp.x = game->rayon[i][j].x * 1; // save cos et sin
 			rayon_tempp.y = game->rayon[i][j].y * game->cos_x + game->rayon[i][j].z * -game->sin_x;
 			rayon_tempp.z = game->rayon[i][j].y * game->sin_x + game->rayon[i][j].z * game->cos_x;
-			rayon_temp.x = rayon_tempp.x * game->cos_z + rayon_tempp.y * -game->sin_z; //z
-			rayon_temp.y = rayon_tempp.x * game->sin_z + rayon_tempp.y * game->cos_z;
-			rayon_temp.z = rayon_tempp.z * 1;
+			rayon_temp.x = game->rayon[i][j].x  * game->cos_z + rayon_tempp.y * -game->sin_z;
+			rayon_temp.y = game->rayon[i][j].x  * game->sin_z + rayon_tempp.y * game->cos_z;
+			rayon_temp.z = game->rayon[i][j].y * game->sin_x + game->rayon[i][j].z * game->cos_x;
 			v = 0;
 			best_t = 0;
 			v_plan = 3;
 			u_plan = -7;
 			while (v < 2)
 			{
-				u = 0;
 				if (v == 0)
 				{
 					switch_plan = game->max_y;
@@ -546,7 +542,6 @@ void	*ft_updater(void	*data)
 		}
 		i++;
 	}
-	update->status = 1;
 }
 
 int	ft_update(t_game *game)
@@ -570,18 +565,13 @@ int	ft_update(t_game *game)
 		else
 			update[x].start_y = (x * HEIGHT) / NB_THREAD;
 		update[x].end_y = ((x + 1) * HEIGHT) / NB_THREAD;
-		update[x].status = 0;
 		update[x].game = game;
 		pthread_create(&thread[x], NULL, &ft_updater, &update[x]);
 		x++;
 	}
 	x = 0;
 	while (x < NB_THREAD)
-	{
-		update[x].status = 0;
-		pthread_join(thread[x], NULL);
-		x++;
-	}
+		pthread_join(thread[x++], NULL);
 	ft_map(game, img);
 	mlx_put_image_to_window(game->graphic->mlx, game->graphic->win, img.img_ptr, 0, 0);
 	mlx_string_put(game->graphic->mlx, game->graphic->win, (WIDTH * 0.5) - 2, (HEIGHT * 0.5) + 4, 0xFF0000, "+");
@@ -817,10 +807,35 @@ void ft_mouse(t_game *game)
 	mlx_mouse_move(game->graphic->mlx, game->graphic->win, WIDTH / 2, HEIGHT / 2);
 }
 
+void	*ft_music(void *data)
+{
+	t_game *game;
+
+	game = (t_game *)data;
+	while (42)
+		system("afplay music.mp3");
+}
+
+void	ft_start_music(t_game *game, pthread_t music)
+{
+	if (MUSIC)
+	{
+		pthread_create(&music, NULL, ft_music, game);
+		pthread_detach(music);
+	}
+}
+
+void	ft_stop_music(t_game *game, pthread_t music)
+{
+	if (MUSIC)
+		pthread_cancel(music);
+}
+
 int main(int argc, char *argv[])
 {
 	t_game		game;
 	t_graphic	graphic;
+	pthread_t	music;
 	t_rayon		**rayon;
 
 	game.keyboard.w = 0;
@@ -850,6 +865,7 @@ int main(int argc, char *argv[])
 	if (ft_check_arg(argc, argv, &game)
 		&& ft_create_image(&game) && ft_get_pos(&game))
 	{
+		ft_start_music(&game, music);
 		ft_create_vector(&game);
 		ft_create_plan(&game);
 		mlx_loop_hook(graphic.mlx, ft_update, &game);
@@ -862,6 +878,7 @@ int main(int argc, char *argv[])
 	}
 	else
 		ft_printf("Error\n");
+	ft_stop_music(&game, music);
 	ft_close(&game);
 	return (0);
 }
