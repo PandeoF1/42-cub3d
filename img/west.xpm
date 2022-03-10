@@ -1,5 +1,4 @@
 /* XPM */
-<<<<<<< HEAD
 static char *ec4f2aaba9124216aad2c4d71bf52324LiTHrSOSjIkMska7[] = {
 /* columns rows colors chars-per-pixel */
 "64 64 9 1 ",
@@ -12,29 +11,6 @@ static char *ec4f2aaba9124216aad2c4d71bf52324LiTHrSOSjIkMska7[] = {
 "@ c #DFDFDF",
 "# c #EFEFEF",
 "$ c white",
-=======
-static char *_8de72b6d1764ca8d0b7f8ec75110d3cuMQUZxROUa8KjaPC[] = {
-/* columns rows colors chars-per-pixel */
-"803 804 18 1 ",
-"  c #171D21",
-". c #232424",
-"X c gray14",
-"o c gray15",
-"O c #272727",
-"+ c #282828",
-"@ c #2C2D2D",
-"# c #322A22",
-"$ c #372D24",
-"% c #392E26",
-"& c #3E3229",
-"* c #2D3037",
-"= c #34373F",
-"- c #383C3F",
-"; c #42372E",
-": c #493C31",
-"> c #696468",
-", c gray46",
->>>>>>> master
 /* pixels */
 "                                                                ",
 "                                                                ",

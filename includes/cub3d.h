@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/10 08:25:20 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/10 09:37:30 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@
 # define EVENT_S 115
 # define EVENT_D 100
 # define EVENT_ESC 65307
-# define WIDTH 1024
-# define HEIGHT 512
-# define NB_THREAD 1
+# define WIDTH 1280
+# define HEIGHT 720
+# define NB_THREAD 16
 
 # define PI 3.14159265
 
