@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/10 17:49:38 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/11 16:48:02 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -448,6 +448,7 @@ void	*ft_updater(void	*data)
 	int		j;
 	int		u;
 	int		v;
+	float	r;
 	float	r_h;
 	float	best_t;
 	int		v_plan;
@@ -522,9 +523,9 @@ void	*ft_updater(void	*data)
 								point_x = rayon_temp.x * t;
 								point_y = rayon_temp.y * t;
 								point_z = 0.5 + rayon_temp.z * t;
-								if (point_z < 1 && point_z > 0 && (int)(game->player_x + point_x) >= 0 && (int)(game->player_y + point_y) >= 0 && (int)(game->player_x + point_x) < game->max_x && (int)(game->player_y + point_y) < game->max_y)
+								if (v != 2 && point_z < 1 && point_z > 0 && (int)(game->player_x + point_x) >= 0 && (int)(game->player_y + point_y) >= 0 && (int)(game->player_x + point_x) < game->max_x && (int)(game->player_y + point_y) < game->max_y)
 								{
-									if ((best_t == 0 || t < best_t) && ((v == 0 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v][u].d) < game->max_y && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(-game->plan[v][u].d - 1)][(int)(game->player_x + point_x)] == '1')
+									if ((best_t == 0 || t < best_t) && ((v == 0 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v][u].d - 1) < game->max_y && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(-game->plan[v][u].d - 1)][(int)(game->player_x + point_x)] == '1')
 									|| (v == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v][u].d - 1) < game->max_x && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d - 1)] == '1')
 									|| (v == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v][u].d - 1) < game->max_x && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d - 1)] == 'A') //Porte
 									|| (v == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v][u].d - 1) < game->max_x && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d - 1)] == 'B') //Porte
@@ -542,8 +543,21 @@ void	*ft_updater(void	*data)
 								}
 								else if (v == 2)
 								{
-									update->img->data[i * WIDTH + j] = 0xFFFFFF;
-									u = -8;
+									//dprintf(1, "a %f : %d\n", game->sprites[u].sy, v);
+									// dprintf(1, "a %f : %d\n", game->plan[v][u].a, v);
+									// dprintf(1, "b %f : %d\n", game->plan[v][u].b, v);
+									// dprintf(1, "c %f : %d\n", game->plan[v][u].c, v);
+									// dprintf(1, "d %f : %d\n", game->plan[v][u].d, v);
+									if (point_z < 1.0 && point_z > 0.0 && game->map[(int)(game->player_y + point_y)][(int)(game->player_x + point_x)] == 'T')
+									{
+										best_t = t;
+										v_plan = v;
+										r = (((point_x - game->sprites[u].sx) * (game->plan[v][u].b / sqrt(pow(game->plan[v][u].b, 2) + pow(-game->plan[v][u].a, 2)))) + ((point_y - game->sprites[u].sy) * (-game->plan[v][u].a / sqrt(pow(game->plan[v][u].b, 2) + pow(-game->plan[v][u].a, 2))) + 0.5));
+										//dprintf(1, "%f\n", r);
+										//dprintf(1, "%f ; %f\n", game->player_x + point_x, game->player_y + point_y);
+										update->img->data[i * WIDTH + j] = 0xFFFFFF;
+										u = -8;
+									}
 								}
 								else if (point_z > 1.0 || point_z < 0.0)
 								{
@@ -560,7 +574,7 @@ void	*ft_updater(void	*data)
 				}
 				v++;
 			}
-			if (best_t != 0 && v_plan != 4 && u_plan != - 7)
+			if (best_t != 0 && v_plan != 4 && v_plan != 2 && u_plan != - 7)
 			{
 				point_x = rayon_temp.x * best_t;
 				point_y = rayon_temp.y * best_t;
@@ -621,8 +635,6 @@ void	*ft_updater(void	*data)
 void	ft_set_sprites(t_game *game)
 {
 	int	x;
-	int	a;
-	int	b;
 
 	x = 0;
 	while (x < game->nb_sprites)
@@ -630,7 +642,7 @@ void	ft_set_sprites(t_game *game)
 		game->plan[2][x].a = game->sprites[x].sx - game->player_x;
 		game->plan[2][x].b = game->sprites[x].sy - game->player_y;
 		game->plan[2][x].c = 0;
-		game->plan[2][x].d = -(a * game->sprites[x].sx) - (b * game->sprites[x].sy);
+		game->plan[2][x].d = -(game->plan[2][x].a * game->sprites[x].sx) - (game->plan[2][x].b * game->sprites[x].sy);
 		x++;
 	}
 }
