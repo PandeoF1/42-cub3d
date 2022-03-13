@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/10 12:15:09 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/11 01:56:26 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 # define EVENT_ESC 65307
 # define WIDTH 1280
 # define HEIGHT 720
-# define NB_THREAD 2
+# define NB_THREAD 16
 
 # define MUSIC 0
 
@@ -104,6 +104,7 @@ typedef struct s_game
 	int					ceiling_color;
 	int					door_color[6];
 	char				**map;
+	int					nb_door;
 	float				angle_z;
 	float				angle_x;
 	float				cos_z;

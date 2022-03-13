@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/10 12:21:46 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/11 02:20:09 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,14 +126,63 @@ int	ft_is_double_x(char	**str, int x)
 	return (1);
 }
 
+int	ft_nb_of(t_game *game, char charset)
+{
+    int    x;
+    int    y;
+    int    total;
+
+    x = 0;
+    total = 0;
+    while (game->map[x])
+    {
+        y = 0;
+        while (game->map[x][y])
+        {
+            if (game->map[x][y] == charset)
+                total++;
+            y++;
+        }
+        x++;
+    }
+    return (total);
+}
+
+void	ft_create_door(t_game *game)
+{
+	int	x;
+	int	y;
+	int	i;
+
+	y = 0;
+	i = 0;
+	while (game->map[y])
+	{
+		x = 0;
+		while (game->map[y][x])
+		{
+			if (game->map[y][x] == 'P')
+			{
+				game->plan[3][i].a = 0;
+				game->plan[3][i].b = 1;
+				game->plan[3][i].c = 0;
+				game->plan[3][i].d = -y - 0.5;
+				i++;
+			}
+			x++;
+		}
+		y++;
+	}
+}
+
 int	ft_create_plan(t_game *game)
 {
 	int	x;
 	int	next;
 
-	x = 1;
+	game->nb_door = ft_nb_of(game, 'P');
 	next = 0;
-	game->plan = malloc(sizeof(t_plan *) * 2);
+	game->plan = malloc(sizeof(t_plan *) * 5);
 	if (!game->plan)
 		return (0);
 	game->plan[0] = malloc(sizeof(t_plan) * (game->max_y + 1));
@@ -142,6 +191,15 @@ int	ft_create_plan(t_game *game)
 	game->plan[1] = malloc(sizeof(t_plan) * (game->max_x + 1));
 	if (!game->plan[1])
 		return (0);
+	game->plan[3] = malloc(sizeof(t_plan) * game->nb_door);
+	if (!game->plan[3])
+		return (0);
+	//game->plan[4] = malloc(sizeof(t_plan) * game->nb_door);
+	//if (!game->plan[4])
+	//	return (0);
+	x = 0;
+	ft_create_door(game);
+	x = 1;
 	while (x < game->max_y - 1)
 	{
 		if ((!ft_is_double_y(game->map, x)))
@@ -172,7 +230,7 @@ int	ft_create_plan(t_game *game)
 		}
 		x++;
 	}
-	x = 0;
+	x = 1;
 	ft_printf("y :  ");
 	while (x < game->max_x - 1)
 	{
@@ -419,10 +477,12 @@ void	*ft_updater(void	*data)
 			rayon_temp.z = game->rayon[i][j].y * game->sin_x + game->rayon[i][j].z * game->cos_x;
 			v = 0;
 			best_t = 0;
-			v_plan = 3;
+			v_plan = 4;
 			u_plan = -7;
-			while (v < 2)
+			while (v < 4)
 			{
+				if (v == 2) //car ton plan existe pas
+					v++;
 				if (v == 0)
 				{
 					switch_plan = game->max_y;
@@ -432,6 +492,11 @@ void	*ft_updater(void	*data)
 				{
 					switch_plan = game->max_x;
 					u = game->player_x;
+				}
+				else if (v == 3)
+				{
+					switch_plan = game->nb_door;
+					u = 0;
 				}
 				add = 1;
 				if (v == 0 && rayon_temp.y < 0)
@@ -463,12 +528,29 @@ void	*ft_updater(void	*data)
 									|| (v == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v][u].d - 1) < game->max_x && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d - 1)] == 'D') //Porte
 									|| (v == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v][u].d - 1) < game->max_x && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d - 1)] == 'E') //Porte
 									|| (v == 0 && (game->player_y + point_y) > game->player_y && (int)(-game->plan[v][u].d) < game->max_y && (int)(-game->plan[v][u].d) >= 0 && game->map[(int)(-game->plan[v][u].d)][(int)(game->player_x + point_x)] == '1')
-									|| (v == 1 && (game->player_x + point_x) > game->player_x && (int)(-game->plan[v][u].d) < game->max_x && (int)(-game->plan[v][u].d) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d)] == '1')))
+									|| (v == 1 && (game->player_x + point_x) > game->player_x && (int)(-game->plan[v][u].d) < game->max_x && (int)(-game->plan[v][u].d) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d)] == '1')
+									|| (v == 3 && (game->player_y + point_y) > game->player_y && (int)(-game->plan[v][u].d) < game->max_y && (int)(-game->plan[v][u].d) >= 0 && game->map[(int)(-game->plan[v][u].d)][(int)(game->player_x + point_x)] == 'P') 
+									|| (v == 3 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v][u].d) < game->max_y && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(-game->plan[v][u].d - 1)][(int)(game->player_x + point_x)] == 'P')))// work pas lui
 									{
-										best_t = t;
-										v_plan = v;
-										u_plan = u;
-										u = -8;
+										if (v == 3)
+										{
+											x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->img_s.size_l * 0.25);
+											y = (int)((point_z - (int)(point_z)) * game->img_s.size_l * 0.25);
+											if (game->img_s.data[(int)(y * (game->img_s.size_l * 0.25) + x)] != -16777216)
+											{
+												best_t = t;
+												v_plan = v;
+												u_plan = u;
+												u = -8;
+											}
+										}
+										else
+										{
+											best_t = t;
+											v_plan = v;
+											u_plan = u;
+											u = -8;
+										}
 									}
 								}
 								else if (point_z > 1.0 || point_z < 0.0)
@@ -486,12 +568,26 @@ void	*ft_updater(void	*data)
 				}
 				v++;
 			}
-			if (best_t != 0 && v_plan != 3 && u_plan != - 7)
+			if (best_t != 0 && v_plan != 5 && u_plan != - 7)
 			{
 				point_x = rayon_temp.x * best_t;
 				point_y = rayon_temp.y * best_t;
 				point_z = 0.5 + rayon_temp.z * best_t; // Si pas besoin de le stocker le mettre directement dans le if
-				if (v_plan == 0 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_y && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(-game->plan[v_plan][u_plan].d - 1)][(int)(game->player_x + point_x)] == '1')
+				if (v_plan == 3 && (game->player_y + point_y) > game->player_y && (int)(-game->plan[v_plan][u_plan].d) < game->max_y && (int)(-game->plan[v_plan][u_plan].d) >= 0 && game->map[(int)(-game->plan[v_plan][u_plan].d)][(int)(game->player_x + point_x)] == 'P')
+				{
+					//-16777216
+					x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->img_s.size_l * 0.25);
+					y = (int)((point_z - (int)(point_z)) * game->img_s.size_l * 0.25);
+					update->img->data[i * WIDTH + j] = game->img_s.data[(int)(y * (game->img_s.size_l * 0.25) + x)];
+				}
+				else if (v_plan == 3 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_y && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(-game->plan[v_plan][u_plan].d - 1)][(int)(game->player_x + point_x)] == 'P')
+				{
+					//-16777216
+					x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->img_s.size_l * 0.25);
+					y = (int)((point_z - (int)(point_z)) * game->img_s.size_l * 0.25);
+					update->img->data[i * WIDTH + j] = game->img_s.data[(int)(y * (game->img_s.size_l * 0.25) + x)];
+				}
+				else if (v_plan == 0 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_y && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(-game->plan[v_plan][u_plan].d - 1)][(int)(game->player_x + point_x)] == '1')
 				{
 					x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->img_n.size_l * 0.25);
 					y = (int)((point_z - (int)(point_z)) * game->img_n.size_l * 0.25);
@@ -529,7 +625,7 @@ void	*ft_updater(void	*data)
 					y = (int)((point_z - (int)(point_z)) * game->img_s.size_l * 0.25);
 					update->img->data[i * WIDTH + j] = game->img_s.data[(int)(y * (game->img_s.size_l * 0.25) + x)];
 				}
-				else
+				else if (v_plan == 0 || v_plan == 1)
 				{
 					x = (int)(((game->player_y + point_y) - (int)(game->player_y + point_y)) * game->img_w.size_l * 0.25);
 					y = (int)((point_z - (int)(point_z)) * game->img_w.size_l * 0.25);
@@ -846,6 +942,7 @@ int main(int argc, char *argv[])
 	game.keyboard.down = 0;
 	game.keyboard.left = 0;
 	game.keyboard.right = 0;
+	dprintf(1, "Welcome to the game\n");
 	game.door_color[0] = 0xFF0000;
 	game.door_color[1] = 0x00FF00;
 	game.door_color[2] = 0x0000FF;
