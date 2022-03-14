@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/14 10:55:37 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/14 12:52:58 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@
 # define WIDTH 1280
 # define HEIGHT 720
 # define NB_THREAD 16
-# define DOOR_CHAR "VBNM"
+# define DOOR_CHAR "ZBNM"
+# define DOOR_LEN 4
 
 # define MUSIC 0
 

@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/14 11:22:40 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/14 12:57:39 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	ft_is_door(char c)
 	int	x;
 
 	x = 0;
-	while (x < ft_strlen(DOOR_CHAR))
+	while (x < DOOR_LEN)
 	{
 		if (c == DOOR_CHAR[x])
 			return (x + 1);
@@ -142,24 +142,24 @@ int	ft_is_double_x(char	**str, int x)
 
 int	ft_nb_of(t_game *game, char charset)
 {
-    int    x;
-    int    y;
-    int    total;
+	int		x;
+	int		y;
+	int		total;
 
-    x = 0;
-    total = 0;
-    while (game->map[x])
-    {
-        y = 0;
-        while (game->map[x][y])
-        {
-            if (game->map[x][y] == charset)
-                total++;
-            y++;
-        }
-        x++;
-    }
-    return (total);
+	x = 0;
+	total = 0;
+	while (game->map[x])
+	{
+		y = 0;
+		while (game->map[x][y])
+		{
+			if (game->map[x][y] == charset)
+				total++;
+			y++;
+		}
+		x++;
+	}
+	return (total);
 }
 
 void	ft_create_door(t_game *game)
@@ -180,8 +180,10 @@ void	ft_create_door(t_game *game)
 				game->plan[3][i].a = 0;
 				game->plan[3][i].b = 1;
 				game->plan[3][i].c = 0;
-				game->plan[3][i].d = -y - 0.5;
+				game->plan[3][i].d = -y - 0.75;
+				printf("plan created %d\n", i);
 				i++;
+				break ;
 			}
 			x++;
 		}
@@ -189,12 +191,38 @@ void	ft_create_door(t_game *game)
 	}
 }
 
+int	ft_door_count(t_game *game)
+{
+	int		x;
+	int		y;
+	int		total;
+
+	x = 0;
+	total = 0;
+	while (game->map[x])
+	{
+		y = 0;
+		while (game->map[x][y])
+		{
+			if (ft_is_door(game->map[x][y]) != 0)
+			{
+				total++;
+				break;
+			}
+			y++;
+		}
+		x++;
+	}
+	return (total);
+}
+
 int	ft_create_plan(t_game *game)
 {
 	int	x;
 	int	next;
 
-	game->nb_door = ft_nb_of(game, 'P');
+	game->nb_door = ft_door_count(game);
+	printf("nb_door : %d\n", game->nb_door);
 	next = 0;
 	game->plan = malloc(sizeof(t_plan *) * 5);
 	if (!game->plan)
@@ -409,10 +437,10 @@ void ft_map(t_game *game, t_img img)
 			}
 			else if (game->map[(int)(j * 0.25)][(int)(i * 0.25)] == '1')
 				ft_draw_square(img, x + (WIDTH - (25 * 9)), y + 25, 4, 0x9000ff);
-			else if (game->map[(int)(j * 0.25)][(int)(i * 0.25)] == '0')
+			else if (game->map[(int)(j * 0.25)][(int)(i * 0.25)] == '0' || game->map[(int)(j * 0.25)][(int)(i * 0.25)] == 'X')
 				ft_draw_square(img, x + (WIDTH - (25 * 9)), y + 25, 4, 0x2205ff);
-			//else
-			//	ft_draw_square(img, x + (WIDTH - (25 * 9)), y + 25, 4, 0x5e5e5e);
+			else if (ft_is_door(game->map[(int)(j * 0.25)][(int)(i * 0.25)]) != 0)
+				ft_draw_square(img, x + (WIDTH - (25 * 9)), y + 25, 4, 0xFF20500);
 			j++;
 			y++;
 		}
@@ -429,7 +457,7 @@ void	ft_door(t_game *game)
 	float			t_x;
 	float			t_y;
 
-	if (timer == 0 || get_time() - timer > 250)
+	if (timer == 0 || get_time() - timer > 150)
 		timer = get_time();
 	else
 		return ;
@@ -445,27 +473,27 @@ void	ft_door(t_game *game)
 				t_x = -t_x;
 			if (t_y < 0)
 				t_y = -t_y;
-			if (t_x < 3.5 && t_y < 3.5)
+			if (t_x < 2.5 && t_y < 2.5)
 			{
-				if (game->map[y][x] == 'V')
-					game->map[y][x] = 'B';
-				else if (game->map[y][x] == 'B')
-					game->map[y][x] = 'N';
-				else if (game->map[y][x] == 'N')
-					game->map[y][x] = 'M';
-				else if (game->map[y][x] == 'M')
+				if (game->map[y][x] == DOOR_CHAR[0])
+					game->map[y][x] = DOOR_CHAR[1];
+				else if (game->map[y][x] == DOOR_CHAR[1])
+					game->map[y][x] = DOOR_CHAR[2];
+				else if (game->map[y][x] == DOOR_CHAR[2])
+					game->map[y][x] = DOOR_CHAR[3];
+				else if (game->map[y][x] == DOOR_CHAR[3])
 					game->map[y][x] = 'X';
 			}
 			else
 			{
-				if (game->map[y][x] == 'B')
-					game->map[y][x] = 'V';
-				else if (game->map[y][x] == 'N')
-					game->map[y][x] = 'B';
-				else if (game->map[y][x] == 'M')
-					game->map[y][x] = 'N';
+				if (game->map[y][x] == DOOR_CHAR[1])
+					game->map[y][x] = DOOR_CHAR[0];
+				else if (game->map[y][x] == DOOR_CHAR[2])
+					game->map[y][x] = DOOR_CHAR[1];
+				else if (game->map[y][x] == DOOR_CHAR[3])
+					game->map[y][x] = DOOR_CHAR[2];
 				else if (game->map[y][x] == 'X')
-					game->map[y][x] = 'M';
+					game->map[y][x] = DOOR_CHAR[3];
 				
 			}
 			x++;
@@ -544,6 +572,11 @@ void	*ft_updater(void	*data)
 					add = -1;
 				else if (v == 1 && rayon_temp.x < 0)
 					add = -1;
+				else if (v == 3 && rayon_temp.y < 0)
+				{
+					add = -1;
+					u = game->nb_door;
+				}
 				while (u <= switch_plan && u >= 0)
 				{
 					if (game->plan[v][u].a == 1 || game->plan[v][u].b == 1)
