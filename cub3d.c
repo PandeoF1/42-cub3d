@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/11 16:48:02 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/14 11:24:10 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -488,7 +488,7 @@ void	*ft_updater(void	*data)
 			best_t = 0;
 			v_plan = 4;
 			u_plan = -7;
-			while (v < 2)
+			while (v < 3)
 			{
 				if (v == 0)
 				{
@@ -552,11 +552,18 @@ void	*ft_updater(void	*data)
 									{
 										best_t = t;
 										v_plan = v;
-										r = (((point_x - game->sprites[u].sx) * (game->plan[v][u].b / sqrt(pow(game->plan[v][u].b, 2) + pow(-game->plan[v][u].a, 2)))) + ((point_y - game->sprites[u].sy) * (-game->plan[v][u].a / sqrt(pow(game->plan[v][u].b, 2) + pow(-game->plan[v][u].a, 2))) + 0.5));
+										float	ux, uy, sqrt1;
+										ux = (point_x - game->sprites[u].sx);
+										uy = (point_y - game->sprites[u].sy);
+										sqrt1 = sqrt(pow(game->plan[v][u].b, 2) + pow(-game->plan[v][u].a, 2));
+										dprintf(1, "%f : %f : %f : %f\n", sqrt1, ux, uy, game->plan[v][u]);
+										r = ((ux * (game->plan[v][u].b / sqrt1)) + (uy * (-game->plan[v][u].a / sqrt1)) + 0.5);
 										//dprintf(1, "%f\n", r);
-										//dprintf(1, "%f ; %f\n", game->player_x + point_x, game->player_y + point_y);
-										update->img->data[i * WIDTH + j] = 0xFFFFFF;
-										u = -8;
+										//if (r >= 0 && r < 1)
+										{
+											update->img->data[i * WIDTH + j] = 0xFFFFFF;
+											u = -8;
+										}
 									}
 								}
 								else if (point_z > 1.0 || point_z < 0.0)
