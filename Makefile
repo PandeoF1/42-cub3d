@@ -6,7 +6,7 @@
 #    By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/09 13:04:45 by tnard             #+#    #+#              #
-#    Updated: 2022/03/14 13:27:02 by tnard            ###   ########lyon.fr    #
+#    Updated: 2022/03/14 13:35:01 by tnard            ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ SRCS		= cub3d.c srcs/check/ft_check_arg.c srcs/check/ft_check_map.c \
 				srcs/event/ft_key_event.c srcs/event/ft_move.c 
 
 NAME		= cub3d
-
+OS			= $(shell uname -s)
 ifeq ($(OS),Darwin)
 	minilibx	= mlbx-macos/libmlx.a
 	MLB_FLAGS	= -Lincludes -framework OpenGL -framework AppKit -framework OpenAL libft/libft.a ft_printf/libftprintf.a 
@@ -36,7 +36,7 @@ OBJS_DIR	= objs/
 OBJS		= $(SRCS:.c=.o)
 OBJECTS_PREFIXED = $(addprefix $(OBJS_DIR), $(OBJS))
 CC			= gcc
-CC_FLAGS	= -O3 -Ofast -flto -march=native -ffast-math #-g3 -fsanitize=address #-Wall -Werror -Wextra -g3
+CC_FLAGS	= -O3 -Ofast -flto -march=native -ffast-math#-g3 -fsanitize=address #-Wall -Werror -Wextra -g3
 
 $(OBJS_DIR)%.o : %.c includes/cub3d.h
 	@mkdir -p $(OBJS_DIR)
