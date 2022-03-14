@@ -6,7 +6,7 @@
 #    By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/09 13:04:45 by tnard             #+#    #+#              #
-#    Updated: 2022/03/14 13:22:08 by tnard            ###   ########lyon.fr    #
+#    Updated: 2022/03/14 13:27:02 by tnard            ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ NAME		= cub3d
 
 ifeq ($(OS),Darwin)
 	minilibx	= mlbx-macos/libmlx.a
-	MLB_FLAGS	= -framework OpenGL -framework AppKit -framework OpenAL libft/libft.a ft_printf/libftprintf.a 
+	MLB_FLAGS	= -Lincludes -framework OpenGL -framework AppKit -framework OpenAL libft/libft.a ft_printf/libftprintf.a 
 else
 	minilibx	= mlbx-linux/libmlx.a
 	MLB_FLAGS	= -lpthread -I -g -L /usr/X11/lib -Lincludes -L./mlbx-linux -lmlx -Imlx -lXext -lX11 -lz -lm libft/libft.a ft_printf/libftprintf.a 
