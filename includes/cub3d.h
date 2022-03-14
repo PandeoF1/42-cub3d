@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/14 09:04:57 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/14 14:11:38 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 # define EVENT_ESC 65307
 # define WIDTH 1280
 # define HEIGHT 720
-# define NB_THREAD 1
+# define NB_THREAD 16
 
 # define MUSIC 0
 

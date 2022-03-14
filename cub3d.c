@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/14 11:24:10 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/14 16:21:35 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -550,19 +550,25 @@ void	*ft_updater(void	*data)
 									// dprintf(1, "d %f : %d\n", game->plan[v][u].d, v);
 									if (point_z < 1.0 && point_z > 0.0 && game->map[(int)(game->player_y + point_y)][(int)(game->player_x + point_x)] == 'T')
 									{
-										best_t = t;
-										v_plan = v;
 										float	ux, uy, sqrt1;
-										ux = (point_x - game->sprites[u].sx);
-										uy = (point_y - game->sprites[u].sy);
+										ux = ((game->player_x + point_x) - game->sprites[u].sx);
+										uy = ((game->player_y + point_y) - game->sprites[u].sy);
 										sqrt1 = sqrt(pow(game->plan[v][u].b, 2) + pow(-game->plan[v][u].a, 2));
-										dprintf(1, "%f : %f : %f : %f\n", sqrt1, ux, uy, game->plan[v][u]);
+										//dprintf(1, "%f : %f : %f : %f\n", sqrt1, ux, uy, game->plan[v][u]);
 										r = ((ux * (game->plan[v][u].b / sqrt1)) + (uy * (-game->plan[v][u].a / sqrt1)) + 0.5);
 										//dprintf(1, "%f\n", r);
-										//if (r >= 0 && r < 1)
+										if (r >= 0 && r < 1)
 										{
-											update->img->data[i * WIDTH + j] = 0xFFFFFF;
-											u = -8;
+											x = r * game->img_s.size_l * 0.25;
+											y = (int)((point_z - (int)(point_z)) * game->img_s.size_l * 0.25);
+											if (game->img_s.data[(int)(y * (game->img_s.size_l * 0.25) + x)] != -16777216)
+											{
+												update->img->data[i * WIDTH + j] = game->img_s.data[(int)(y * (game->img_s.size_l * 0.25) + x)];
+												//update->img->data[i * WIDTH + j] = 0xFFFFFF;
+												best_t = t;
+												v_plan = v;
+												u = -8;
+											}
 										}
 									}
 								}
@@ -594,9 +600,9 @@ void	*ft_updater(void	*data)
 				}
 				else if (v_plan == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_x && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v_plan][u_plan].d - 1)] == '1')
 				{
-					x = (int)(((game->player_y + point_y) - (int)(game->player_y + point_y)) * game->img_e.size_l * 0.25);
-					y = (int)((point_z - (int)(point_z)) * game->img_e.size_l * 0.25);
-					update->img->data[i * WIDTH + j] = game->img_e.data[(int)(y * (game->img_e.size_l * 0.25) + x)];
+					x = (int)(((game->player_y + point_y) - (int)(game->player_y + point_y)) * game->img_w.size_l * 0.25);
+					y = (int)((point_z - (int)(point_z)) * game->img_w.size_l * 0.25);
+					update->img->data[i * WIDTH + j] = game->img_w.data[(int)(y * (game->img_w.size_l * 0.25) + x)];
 				}
 				else if (v_plan == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_x && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v_plan][u_plan].d - 1)] == 'A')
 				{
@@ -626,9 +632,9 @@ void	*ft_updater(void	*data)
 				}
 				else
 				{
-					x = (int)(((game->player_y + point_y) - (int)(game->player_y + point_y)) * game->img_w.size_l * 0.25);
-					y = (int)((point_z - (int)(point_z)) * game->img_w.size_l * 0.25);
-					update->img->data[i * WIDTH + j] = game->img_w.data[(int)(y * (game->img_w.size_l * 0.25) + x)];
+					x = (int)(((game->player_y + point_y) - (int)(game->player_y + point_y)) * game->img_e.size_l * 0.25);
+					y = (int)((point_z - (int)(point_z)) * game->img_e.size_l * 0.25);
+					update->img->data[i * WIDTH + j] = game->img_e.data[(int)(y * (game->img_e.size_l * 0.25) + x)];
 				}
 			}
 			y = 0;
@@ -808,9 +814,9 @@ int	ft_data_image(t_game *game)
 	x = 0;
 	t = 0;
 	value = game->img_n.size_l * 0.25;
-	while (x < (game->img_n.size_l * 0.25 *  game->img_n.size_l * 0.25))
+	while (x < (game->img_n.size_l * 0.25 * game->img_n.size_l * 0.25 - (game->img_n.size_l * 0.25 / 2)))
 	{
-		if (x == value)
+		if (x >= value - game->img_n.size_l * 0.25 / 2)
 		{
 			x = value;
 			t = 0;
@@ -843,6 +849,23 @@ int	ft_data_image(t_game *game)
 		x++;
 	}
 	x = 0;
+	t = 0;
+	value = game->img_e.size_l * 0.25;
+	while (x < (game->img_e.size_l * 0.25 * game->img_e.size_l * 0.25 - (game->img_e.size_l * 0.25 / 2)))
+	{
+		if (x >= value - game->img_e.size_l * 0.25 / 2)
+		{
+			x = value;
+			t = 0;
+			value += game->img_e.size_l * 0.25;
+		}
+		temp = game->img_e.data[x];
+		game->img_e.data[x] = game->img_e.data[value - 1 - t];
+		game->img_e.data[value - 1 - t] = temp;
+		t++;
+		x++;
+	}
+	x = 0;
 	game->img_w.data = (int *)mlx_get_data_addr(game->img_w.img_ptr, &game->img_w.bpp, &game->img_w.size_l, &game->img_w.endian);
 	value = game->img_w.size_l * 0.25 * game->img_w.size_l * 0.25;
 	while (x < value / 2)
@@ -853,22 +876,22 @@ int	ft_data_image(t_game *game)
 		x++;
 	}
 	x = 0;
-	t = 0;
-	value = game->img_w.size_l * 0.25;
-	while (x < (game->img_w.size_l * 0.25 *  game->img_w.size_l * 0.25))
-	{
-		if (x == value)
-		{
-			x = value;
-			t = 0;
-			value += game->img_w.size_l * 0.25;
-		}
-		temp = game->img_w.data[x];
-		game->img_w.data[x] = game->img_w.data[value - 1 - t];
-		game->img_w.data[value - 1 - t] = temp;
-		t++;
-		x++;
-	}
+	// t = 0;
+	// value = game->img_w.size_l * 0.25;
+	// while (x < (game->img_w.size_l * 0.25 * game->img_w.size_l * 0.25 - (game->img_w.size_l * 0.25 / 2)))
+	// {
+	// 	if (x >= value - game->img_w.size_l * 0.25 / 2)
+	// 	{
+	// 		x = value;
+	// 		t = 0;
+	// 		value += game->img_w.size_l * 0.25;
+	// 	}
+	// 	temp = game->img_w.data[x];
+	// 	game->img_w.data[x] = game->img_w.data[value - 1 - t];
+	// 	game->img_w.data[value - 1 - t] = temp;
+	// 	t++;
+	// 	x++;
+	// }
 	return (1);
 }
 int	ft_create_image(t_game *game)
