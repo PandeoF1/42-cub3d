@@ -6,16 +6,17 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/14 13:32:50 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/14 13:38:26 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include "../mlbx-linux/mlx.h"
 # ifdef __APPLE__
 	# include "../mlbx-macos/mlx.h"
+# else
+	# include "../mlbx-linux/mlx.h"
 # endif
 # include "../libft/libft.h"
 # include "../ft_printf/ft_printf.h"
