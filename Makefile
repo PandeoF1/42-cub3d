@@ -6,7 +6,7 @@
 #    By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/09 13:04:45 by tnard             #+#    #+#              #
-#    Updated: 2022/03/10 14:40:57 by tnard            ###   ########lyon.fr    #
+#    Updated: 2022/03/14 13:22:08 by tnard            ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,13 +23,20 @@ SRCS		= cub3d.c srcs/check/ft_check_arg.c srcs/check/ft_check_map.c \
 				srcs/event/ft_key_event.c srcs/event/ft_move.c 
 
 NAME		= cub3d
-minilibx	= mlbx/libmlx.a
+
+ifeq ($(OS),Darwin)
+	minilibx	= mlbx-macos/libmlx.a
+	MLB_FLAGS	= -framework OpenGL -framework AppKit -framework OpenAL libft/libft.a ft_printf/libftprintf.a 
+else
+	minilibx	= mlbx-linux/libmlx.a
+	MLB_FLAGS	= -lpthread -I -g -L /usr/X11/lib -Lincludes -L./mlbx-linux -lmlx -Imlx -lXext -lX11 -lz -lm libft/libft.a ft_printf/libftprintf.a 
+endif
+
 OBJS_DIR	= objs/
 OBJS		= $(SRCS:.c=.o)
 OBJECTS_PREFIXED = $(addprefix $(OBJS_DIR), $(OBJS))
 CC			= gcc
-CC_FLAGS	= -O3 -Ofast -flto -march=native -ffast-math -lpthread #-g3 -fsanitize=address #-Wall -Werror -Wextra -g3  
-MLB_FLAGS	= -I -g -L /usr/X11/lib -Lincludes -L./mlbx -lmlx -Imlx -lXext -lX11 -lz -lm libft/libft.a ft_printf/libftprintf.a
+CC_FLAGS	= -O3 -Ofast -flto -march=native -ffast-math #-g3 -fsanitize=address #-Wall -Werror -Wextra -g3
 
 $(OBJS_DIR)%.o : %.c includes/cub3d.h
 	@mkdir -p $(OBJS_DIR)
@@ -47,9 +54,13 @@ $(NAME): $(OBJECTS_PREFIXED) maker
 all: $(NAME)
 
 maker:
-	@make -C mlbx
 	@make -C libft
 	@make -C ft_printf
+ifeq ($(OS),Darwin)
+	@make -C mlbx-macos
+else
+	@make -C mlbx-linux
+endif
 
 clean:
 	@rm -rf $(OBJS_DIR)
@@ -58,12 +69,15 @@ clean:
 	@echo "${GRN}[CLEAN]${RST} done"
 
 fclean: clean
-	@make clean -C mlbx
-	@make fclean -C libft
 	@make fclean -C ft_printf
+ifeq ($(OS),Darwin)
+	@make clean -C mlbx-macos
+else
+	@make clean -C mlbx-linux
+endif
+	@make fclean -C libft
 	@rm -f $(NAME)
 	@echo "${GRN}[FCLEAN]${RST} done"
 
 re: fclean all
-
 .PHONY:		all clean fclean re
