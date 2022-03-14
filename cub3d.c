@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/11 02:20:09 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/14 11:22:40 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,20 @@ int	ft_get_pos(t_game *game)
 	return (1);
 }
 
+int	ft_is_door(char c)
+{
+	int	x;
+
+	x = 0;
+	while (x < ft_strlen(DOOR_CHAR))
+	{
+		if (c == DOOR_CHAR[x])
+			return (x + 1);
+		x++;
+	}
+	return (0);
+}
+
 int	ft_is_double_y(char	**str, int y)
 {
 	int	x;
@@ -161,7 +175,7 @@ void	ft_create_door(t_game *game)
 		x = 0;
 		while (game->map[y][x])
 		{
-			if (game->map[y][x] == 'P')
+			if (ft_is_door(game->map[y][x]) != 0)
 			{
 				game->plan[3][i].a = 0;
 				game->plan[3][i].b = 1;
@@ -409,25 +423,51 @@ void ft_map(t_game *game, t_img img)
 
 void	ft_door(t_game *game)
 {
-	int	x;
-	int	y;
+	static int64_t	timer = 0;
+	int				x;
+	int				y;
+	float			t_x;
+	float			t_y;
 
+	if (timer == 0 || get_time() - timer > 250)
+		timer = get_time();
+	else
+		return ;
 	y = 0;
 	while (y < game->max_y)
 	{
 		x = 0;
 		while (x < game->max_x)
 		{
-			if (game->map[y][x] == 'A')
-				game->map[y][x] = 'B';
-			else if (game->map[y][x] == 'B')
-				game->map[y][x] = 'C';
-			else if (game->map[y][x] == 'C')
-				game->map[y][x] = 'D';
-			else if (game->map[y][x] == 'D')
-				game->map[y][x] = 'E';
-			else if (game->map[y][x] == 'E')
-				game->map[y][x] = 'A';
+			t_x = x - game->player_x;
+			t_y = y - game->player_y;
+			if (t_x < 0)
+				t_x = -t_x;
+			if (t_y < 0)
+				t_y = -t_y;
+			if (t_x < 3.5 && t_y < 3.5)
+			{
+				if (game->map[y][x] == 'V')
+					game->map[y][x] = 'B';
+				else if (game->map[y][x] == 'B')
+					game->map[y][x] = 'N';
+				else if (game->map[y][x] == 'N')
+					game->map[y][x] = 'M';
+				else if (game->map[y][x] == 'M')
+					game->map[y][x] = 'X';
+			}
+			else
+			{
+				if (game->map[y][x] == 'B')
+					game->map[y][x] = 'V';
+				else if (game->map[y][x] == 'N')
+					game->map[y][x] = 'B';
+				else if (game->map[y][x] == 'M')
+					game->map[y][x] = 'N';
+				else if (game->map[y][x] == 'X')
+					game->map[y][x] = 'M';
+				
+			}
 			x++;
 		}
 		y++;
@@ -453,6 +493,7 @@ void	*ft_updater(void	*data)
 	float	point_x;
 	float	point_y;
 	float	point_z;
+	int		door;
 	
 	t_rayon	rayon_temp;
 	t_rayon	rayon_tempp;
@@ -522,26 +563,29 @@ void	*ft_updater(void	*data)
 								{
 									if ((best_t == 0 || t < best_t) && ((v == 0 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v][u].d) < game->max_y && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(-game->plan[v][u].d - 1)][(int)(game->player_x + point_x)] == '1')
 									|| (v == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v][u].d - 1) < game->max_x && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d - 1)] == '1')
-									|| (v == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v][u].d - 1) < game->max_x && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d - 1)] == 'A') //Porte
-									|| (v == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v][u].d - 1) < game->max_x && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d - 1)] == 'B') //Porte
-									|| (v == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v][u].d - 1) < game->max_x && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d - 1)] == 'C') //Porte
-									|| (v == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v][u].d - 1) < game->max_x && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d - 1)] == 'D') //Porte
-									|| (v == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v][u].d - 1) < game->max_x && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d - 1)] == 'E') //Porte
 									|| (v == 0 && (game->player_y + point_y) > game->player_y && (int)(-game->plan[v][u].d) < game->max_y && (int)(-game->plan[v][u].d) >= 0 && game->map[(int)(-game->plan[v][u].d)][(int)(game->player_x + point_x)] == '1')
 									|| (v == 1 && (game->player_x + point_x) > game->player_x && (int)(-game->plan[v][u].d) < game->max_x && (int)(-game->plan[v][u].d) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d)] == '1')
-									|| (v == 3 && (game->player_y + point_y) > game->player_y && (int)(-game->plan[v][u].d) < game->max_y && (int)(-game->plan[v][u].d) >= 0 && game->map[(int)(-game->plan[v][u].d)][(int)(game->player_x + point_x)] == 'P') 
-									|| (v == 3 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v][u].d) < game->max_y && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(-game->plan[v][u].d - 1)][(int)(game->player_x + point_x)] == 'P')))// work pas lui
+									|| (v == 3 && (game->player_y + point_y) > game->player_y && (int)(-game->plan[v][u].d) < game->max_y && (int)(-game->plan[v][u].d) >= 0 && ft_is_door(game->map[(int)(-game->plan[v][u].d)][(int)(game->player_x + point_x)]) != 0)
+									|| (v == 3 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v][u].d) < game->max_y && (int)(-game->plan[v][u].d - 0.5) >= 0 && ft_is_door(game->map[(int)(-game->plan[v][u].d - 0.5)][(int)(game->player_x + point_x)]) != 0)))
 									{
 										if (v == 3)
 										{
-											x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->img_s.size_l * 0.25);
-											y = (int)((point_z - (int)(point_z)) * game->img_s.size_l * 0.25);
-											if (game->img_s.data[(int)(y * (game->img_s.size_l * 0.25) + x)] != -16777216)
+											door = 0;
+											if ((game->player_y + point_y) > game->player_y && (int)(-game->plan[v][u].d) < game->max_y && (int)(-game->plan[v][u].d) >= 0 && ft_is_door(game->map[(int)(-game->plan[v][u].d)][(int)(game->player_x + point_x)]) != 0)
+												door = ft_is_door(game->map[(int)(-game->plan[v][u].d)][(int)(game->player_x + point_x)]) - 1;
+											else if ((game->player_y + point_y) < game->player_y && (int)(-game->plan[v][u].d) < game->max_y && (int)(-game->plan[v][u].d - 0.5) >= 0 && ft_is_door(game->map[(int)(-game->plan[v][u].d - 0.5)][(int)(game->player_x + point_x)]) != 0)
+												door = ft_is_door(game->map[(int)(-game->plan[v][u].d - 0.5)][(int)(game->player_x + point_x)]) - 1;
+											if (door != 4)
 											{
-												best_t = t;
-												v_plan = v;
-												u_plan = u;
-												u = -8;
+												x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->door_color[door].size_l * 0.25);
+												y = (int)((point_z - (int)(point_z)) * game->door_color[door].size_l * 0.25);
+												if (game->door_color[door].data[(int)(y * (game->door_color[door].size_l * 0.25) + x)] != -16777216)
+												{
+													best_t = t;
+													v_plan = v;
+													u_plan = u;
+													u = -8;
+												}
 											}
 										}
 										else
@@ -573,19 +617,25 @@ void	*ft_updater(void	*data)
 				point_x = rayon_temp.x * best_t;
 				point_y = rayon_temp.y * best_t;
 				point_z = 0.5 + rayon_temp.z * best_t; // Si pas besoin de le stocker le mettre directement dans le if
-				if (v_plan == 3 && (game->player_y + point_y) > game->player_y && (int)(-game->plan[v_plan][u_plan].d) < game->max_y && (int)(-game->plan[v_plan][u_plan].d) >= 0 && game->map[(int)(-game->plan[v_plan][u_plan].d)][(int)(game->player_x + point_x)] == 'P')
+				if (v_plan == 3 && (game->player_y + point_y) > game->player_y && (int)(-game->plan[v_plan][u_plan].d) < game->max_y && (int)(-game->plan[v_plan][u_plan].d) >= 0 && ft_is_door(game->map[(int)(-game->plan[v_plan][u_plan].d)][(int)(game->player_x + point_x)]) != 0)
 				{
-					//-16777216
-					x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->img_s.size_l * 0.25);
-					y = (int)((point_z - (int)(point_z)) * game->img_s.size_l * 0.25);
-					update->img->data[i * WIDTH + j] = game->img_s.data[(int)(y * (game->img_s.size_l * 0.25) + x)];
+					door = ft_is_door(game->map[(int)(-game->plan[v_plan][u_plan].d)][(int)(game->player_x + point_x)]) - 1;
+					if (door != 4)
+					{
+						x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->door_color[door].size_l * 0.25);
+						y = (int)((point_z - (int)(point_z)) * game->door_color[door].size_l * 0.25);
+						update->img->data[i * WIDTH + j] = game->door_color[door].data[(int)(y * (game->door_color[door].size_l * 0.25) + x)];
+					}
 				}
-				else if (v_plan == 3 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_y && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(-game->plan[v_plan][u_plan].d - 1)][(int)(game->player_x + point_x)] == 'P')
+				else if (v_plan == 3 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v_plan][u_plan].d - 0.5) < game->max_y && (int)(-game->plan[v_plan][u_plan].d - 0.5) >= 0 && ft_is_door(game->map[(int)(-game->plan[v_plan][u_plan].d - 0.5)][(int)(game->player_x + point_x)]) != 0)
 				{
-					//-16777216
-					x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->img_s.size_l * 0.25);
-					y = (int)((point_z - (int)(point_z)) * game->img_s.size_l * 0.25);
-					update->img->data[i * WIDTH + j] = game->img_s.data[(int)(y * (game->img_s.size_l * 0.25) + x)];
+					door = ft_is_door(game->map[(int)(-game->plan[v_plan][u_plan].d)][(int)(game->player_x + point_x)]) - 1;
+					if (door != 4)
+					{
+						x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->door_color[door].size_l * 0.25);
+						y = (int)((point_z - (int)(point_z)) * game->door_color[door].size_l * 0.25);
+						update->img->data[i * WIDTH + j] = game->door_color[door].data[(int)(y * (game->door_color[door].size_l * 0.25) + x)];
+					}
 				}
 				else if (v_plan == 0 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_y && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(-game->plan[v_plan][u_plan].d - 1)][(int)(game->player_x + point_x)] == '1')
 				{
@@ -598,26 +648,6 @@ void	*ft_updater(void	*data)
 					x = (int)(((game->player_y + point_y) - (int)(game->player_y + point_y)) * game->img_e.size_l * 0.25);
 					y = (int)((point_z - (int)(point_z)) * game->img_e.size_l * 0.25);
 					update->img->data[i * WIDTH + j] = game->img_e.data[(int)(y * (game->img_e.size_l * 0.25) + x)];
-				}
-				else if (v_plan == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_x && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v_plan][u_plan].d - 1)] == 'A')
-				{
-					update->img->data[i * WIDTH + j] = game->door_color[0];
-				}
-				else if (v_plan == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_x && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v_plan][u_plan].d - 1)] == 'B')
-				{
-					update->img->data[i * WIDTH + j] = game->door_color[1];
-				}
-				else if (v_plan == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_x && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v_plan][u_plan].d - 1)] == 'C')
-				{
-					update->img->data[i * WIDTH + j] = game->door_color[2];
-				}
-				else if (v_plan == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_x && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v_plan][u_plan].d - 1)] == 'D')
-				{
-					update->img->data[i * WIDTH + j] = game->door_color[3];
-				}
-				else if (v_plan == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_x && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v_plan][u_plan].d - 1)] == 'E')
-				{
-					update->img->data[i * WIDTH + j] = game->door_color[4];
 				}
 				else if (v_plan == 0 && (game->player_y + point_y) > game->player_y && (int)(-game->plan[v_plan][u_plan].d) < game->max_y && (int)(-game->plan[v_plan][u_plan].d) >= 0 && game->map[(int)(-game->plan[v_plan][u_plan].d)][(int)(game->player_x + point_x)] == '1')
 				{
@@ -854,6 +884,15 @@ int	ft_data_image(t_game *game)
 		t++;
 		x++;
 	}
+	game->door_color[0].img_ptr = ft_open_xpm(game, "./img/door/door1.xpm", game->door_color[0].size_l);
+	game->door_color[1].img_ptr = ft_open_xpm(game, "./img/door/door2.xpm", game->door_color[1].size_l);
+	game->door_color[2].img_ptr = ft_open_xpm(game, "./img/door/door3.xpm", game->door_color[2].size_l);
+	game->door_color[3].img_ptr = ft_open_xpm(game, "./img/door/door4.xpm", game->door_color[3].size_l);
+	game->door_color[0].data = (int *)mlx_get_data_addr(game->door_color[0].img_ptr, &game->door_color[0].bpp, &game->door_color[0].size_l, &game->door_color[0].endian);
+	game->door_color[1].data = (int *)mlx_get_data_addr(game->door_color[1].img_ptr, &game->door_color[1].bpp, &game->door_color[1].size_l, &game->door_color[1].endian);
+	game->door_color[2].data = (int *)mlx_get_data_addr(game->door_color[2].img_ptr, &game->door_color[2].bpp, &game->door_color[2].size_l, &game->door_color[2].endian);
+	game->door_color[3].data = (int *)mlx_get_data_addr(game->door_color[3].img_ptr, &game->door_color[3].bpp, &game->door_color[3].size_l, &game->door_color[3].endian);
+	
 	return (1);
 }
 int	ft_create_image(t_game *game)
@@ -943,12 +982,6 @@ int main(int argc, char *argv[])
 	game.keyboard.left = 0;
 	game.keyboard.right = 0;
 	dprintf(1, "Welcome to the game\n");
-	game.door_color[0] = 0xFF0000;
-	game.door_color[1] = 0x00FF00;
-	game.door_color[2] = 0x0000FF;
-	game.door_color[3] = 0xFFFF00;
-	game.door_color[4] = 0x00FFFF;
-	game.door_color[5] = 0xFF00FF;
 	rayon = ft_malloc_rayon();
 	game.rayon = rayon;
 	game.angle_x = 0;

@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/11 01:56:26 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/14 10:55:37 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 # define WIDTH 1280
 # define HEIGHT 720
 # define NB_THREAD 16
+# define DOOR_CHAR "VBNM"
 
 # define MUSIC 0
 
@@ -102,7 +103,7 @@ typedef struct s_game
 	struct s_img		img_e;
 	int					floor_color;
 	int					ceiling_color;
-	int					door_color[6];
+	struct s_img		door_color[4];
 	char				**map;
 	int					nb_door;
 	float				angle_z;
