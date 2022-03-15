@@ -14,7 +14,7 @@
 
 int	ft_add_texture(char *split, t_game *game, int x, int y)
 {
-	if (split[0] == 'N' && !game->n)
+	if (split[0] == 'N' && !game->n) //check du deuxieme char de NO
 		game->n = ft_strdup(split);
 	else if (split[0] == 'S' && !game->s)
 		game->s = ft_strdup(split);
@@ -27,7 +27,11 @@ int	ft_add_texture(char *split, t_game *game, int x, int y)
 	else if (split[0] == 'C' && !game->c)
 		game->c = ft_strdup(split);
 	else
+	{
+		//dprintf(1, "%s %d %d %d\n", split, ft_strlen(split), x, y);
 		return (0);
+	}
+	//dprintf(1, "%s\n", split);
 	return (1);
 }
 
@@ -67,6 +71,7 @@ int	ft_check_texture(char *str, t_game *game)
 	split = ft_split(str, '\n');
 	while (split[++x])
 	{
+		printf("Line : %s", split[x]);
 		if (!ft_add_texture(split[x], game, x, y))
 			return (0);
 		if (game->n && game->s && game->w

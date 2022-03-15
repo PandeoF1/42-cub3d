@@ -925,7 +925,6 @@ int	ft_data_image(t_game *game)
 	game->door_color[1].data = (int *)mlx_get_data_addr(game->door_color[1].img_ptr, &game->door_color[1].bpp, &game->door_color[1].size_l, &game->door_color[1].endian);
 	game->door_color[2].data = (int *)mlx_get_data_addr(game->door_color[2].img_ptr, &game->door_color[2].bpp, &game->door_color[2].size_l, &game->door_color[2].endian);
 	game->door_color[3].data = (int *)mlx_get_data_addr(game->door_color[3].img_ptr, &game->door_color[3].bpp, &game->door_color[3].size_l, &game->door_color[3].endian);
-	
 	return (1);
 }
 int	ft_create_image(t_game *game)
