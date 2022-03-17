@@ -36,6 +36,8 @@
 # define WIDTH 1280
 # define HEIGHT 720
 # define NB_THREAD 16
+# define DOOR_CHAR "ZBNM"
+# define DOOR_LEN 4
 
 # define MUSIC 0
 
@@ -108,7 +110,8 @@ typedef struct s_game
 	struct s_img		img_e;
 	int					floor_color;
 	int					ceiling_color;
-	int					door_color[6];
+	struct s_img		door_color[4];
+	int					nb_door;
 	char				**map;
 	float				angle_z;
 	float				angle_x;
