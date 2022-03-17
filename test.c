@@ -5,7 +5,7 @@ void	ft_free_rayon(t_rayon **rayon)
 	int			x;
 
 	x = 0;
-	while (x < HEIGHT)
+	while (x < game->theight)
 	{
 		free(rayon[x]);
 		x++;
@@ -124,16 +124,16 @@ void	ft_create_vector(t_game *game)
 	float	r_v;
 
 	i = 0;
-	while (i < HEIGHT)
+	while (i < game->theight)
 	{
 		j = 0;
-		while (j < WIDTH)
+		while (j < game->twidth)
 		{
-			r_h = 2 * tan((60 * PI / 180) * 0.5) / WIDTH;
-			r_v = 2 * tan((60 * PI / 180) * HEIGHT / (WIDTH * 2)) / HEIGHT;
-			game->rayon[i][j].x = ((j - WIDTH * 0.5) * r_h);
+			r_h = 2 * tan((60 * PI / 180) * 0.5) / game->twidth;
+			r_v = 2 * tan((60 * PI / 180) * game->theight / (game->twidth * 2)) / game->theight;
+			game->rayon[i][j].x = ((j - game->twidth * 0.5) * r_h);
 			game->rayon[i][j].y = -1.0;
-			game->rayon[i][j].z = ((HEIGHT * 0.5 - i) * r_v);
+			game->rayon[i][j].z = ((game->theight * 0.5 - i) * r_v);
 			j++;
 		}
 		i++;
@@ -171,7 +171,7 @@ void ft_fps(t_game *game)
 	free(test);
 }
 
-void ft_draw_square(t_img img, int y, int x, int max_y, int color)
+void ft_draw_square(t_img img, int y, int x, int max_y, int color, t_game *game)
 {
 	int		i;
 	int		j;
@@ -182,7 +182,7 @@ void ft_draw_square(t_img img, int y, int x, int max_y, int color)
 		j = 0;
 		while (j < 4)
 		{
-			img.data[(i + x) * (WIDTH) + (j + y)] = color;
+			img.data[(i + x) * (game->twidth) + (j + y)] = color;
 			j++;
 		}
 		i++;
@@ -202,15 +202,15 @@ void ft_map(t_game *game, t_img img)
 		{
 			if ((int)(i * 0.25) == (int)game->player_x && j * 0.25 == (int)game->player_y)
 			{
-				ft_draw_square(img, i + (WIDTH - game->max_x * 4 - 3) , j, game->max_x, 0xffffff);
+				ft_draw_square(img, i + (game->twidth - game->max_x * 4 - 3) , j, game->max_x, 0xffffff, game);
 				j += 3;
 			}
 			else if (game->map[(int)(j * 0.25)][(int)(i * 0.25)] == '1')
-				ft_draw_square(img, i + (WIDTH - game->max_x * 4 - 3) , j, game->max_x, 0x9000ff);
+				ft_draw_square(img, i + (game->twidth - game->max_x * 4 - 3) , j, game->max_x, 0x9000ff, game);
 			else if (game->map[(int)(j * 0.25)][(int)(i * 0.25)] == '0' || game->map[(int)(j * 0.25)][(int)(i * 0.25)] == 'N')
-				ft_draw_square(img, i + (WIDTH - game->max_x * 4 - 3), j, game->max_x, 0x2205ff);
+				ft_draw_square(img, i + (game->twidth - game->max_x * 4 - 3), j, game->max_x, 0x2205ff, game);
 			else
-				ft_draw_square(img, i + (WIDTH - game->max_x * 4 - 3), j, game->max_x, 0x5e5e5e);
+				ft_draw_square(img, i + (game->twidth - game->max_x * 4 - 3), j, game->max_x, 0x5e5e5e, game);
 			j++;
 		}
 		i++;
@@ -279,7 +279,7 @@ void	*ft_updater(void	*data)
 	while (i < update->end_y)
 	{
 		j = 0;
-		while (j < WIDTH)
+		while (j < game->twidth)
 		{
 			rayon_temp.x = game->rayon[i][j].x * cos(game->angle_z) + game->rayon[i][j].y * -sin(game->angle_z); //z
 			rayon_temp.y = game->rayon[i][j].x * sin(game->angle_z) + game->rayon[i][j].y * cos(game->angle_z);
@@ -342,11 +342,11 @@ void	*ft_updater(void	*data)
 									// int x, y;
 									// x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->img_n.size_l * 0.25);
 									// y = (int)((point_z - (int)(point_z)) * game->img_n.size_l * 0.25);
-									// update->img->data[i * WIDTH + j] = game->img_n.data[(int)(y * (game->img_n.size_l * 0.25) + x)];
-									update->img->data[i * WIDTH + j] = game->ceiling_color;
+									// update->img->data[i * game->twidth + j] = game->img_n.data[(int)(y * (game->img_n.size_l * 0.25) + x)];
+									update->img->data[i * game->twidth + j] = game->ceiling_color;
 								}
 								else
-									update->img->data[i * WIDTH + j] = game->floor_color;
+									update->img->data[i * game->twidth + j] = game->floor_color;
 								u = -8;
 							}
 						}
@@ -365,45 +365,45 @@ void	*ft_updater(void	*data)
 				{
 					x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->img_n.size_l * 0.25);
 					y = (int)((point_z - (int)(point_z)) * game->img_n.size_l * 0.25);
-					update->img->data[i * WIDTH + j] = game->img_n.data[(int)(y * (game->img_n.size_l * 0.25) + x)];
+					update->img->data[i * game->twidth + j] = game->img_n.data[(int)(y * (game->img_n.size_l * 0.25) + x)];
 				}
 				else if (v_plan == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_x && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v_plan][u_plan].d - 1)] == '1')
 				{
 					x = (int)(((game->player_y + point_y) - (int)(game->player_y + point_y)) * game->img_e.size_l * 0.25);
 					y = (int)((point_z - (int)(point_z)) * game->img_e.size_l * 0.25);
-					update->img->data[i * WIDTH + j] = game->img_e.data[(int)(y * (game->img_e.size_l * 0.25) + x)];
+					update->img->data[i * game->twidth + j] = game->img_e.data[(int)(y * (game->img_e.size_l * 0.25) + x)];
 				}
 				//else if (v_plan == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_x && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v_plan][u_plan].d - 1)] == 'A')
 				//{
-				//	update->img->data[i * WIDTH + j] = game->door_color[0];
+				//	update->img->data[i * game->twidth + j] = game->door_color[0];
 				//}
 				//else if (v_plan == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_x && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v_plan][u_plan].d - 1)] == 'B')
 				//{
-				//	update->img->data[i * WIDTH + j] = game->door_color[1];
+				//	update->img->data[i * game->twidth + j] = game->door_color[1];
 				//}
 				//else if (v_plan == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_x && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v_plan][u_plan].d - 1)] == 'C')
 				//{
-				//	update->img->data[i * WIDTH + j] = game->door_color[2];
+				//	update->img->data[i * game->twidth + j] = game->door_color[2];
 				//}
 				//else if (v_plan == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_x && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v_plan][u_plan].d - 1)] == 'D')
 				//{
-				//	update->img->data[i * WIDTH + j] = game->door_color[3];
+				//	update->img->data[i * game->twidth + j] = game->door_color[3];
 				//}
 				//else if (v_plan == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_x && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v_plan][u_plan].d - 1)] == 'E')
 				//{
-				//	update->img->data[i * WIDTH + j] = game->door_color[4];
+				//	update->img->data[i * game->twidth + j] = game->door_color[4];
 				//}
 				else if (v_plan == 0 && (game->player_y + point_y) > game->player_y && (int)(-game->plan[v_plan][u_plan].d) < game->max_y && (int)(-game->plan[v_plan][u_plan].d) >= 0 && game->map[(int)(-game->plan[v_plan][u_plan].d)][(int)(game->player_x + point_x)] == '1')
 				{
 					x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->img_s.size_l * 0.25);
 					y = (int)((point_z - (int)(point_z)) * game->img_s.size_l * 0.25);
-					update->img->data[i * WIDTH + j] = game->img_s.data[(int)(y * (game->img_s.size_l * 0.25) + x)];
+					update->img->data[i * game->twidth + j] = game->img_s.data[(int)(y * (game->img_s.size_l * 0.25) + x)];
 				}
 				else
 				{
 					x = (int)(((game->player_y + point_y) - (int)(game->player_y + point_y)) * game->img_w.size_l * 0.25);
 					y = (int)((point_z - (int)(point_z)) * game->img_w.size_l * 0.25);
-					update->img->data[i * WIDTH + j] = game->img_w.data[(int)(y * (game->img_w.size_l * 0.25) + x)];
+					update->img->data[i * game->twidth + j] = game->img_w.data[(int)(y * (game->img_w.size_l * 0.25) + x)];
 				}
 			}
 			y = 0;
@@ -433,8 +433,8 @@ int	ft_update(t_game *game)
 		if (x == 0)
 			update[x].start_y = 0;
 		else
-			update[x].start_y = (x * HEIGHT) / NB_THREAD;
-		update[x].end_y = ((x + 1) * HEIGHT) / NB_THREAD;
+			update[x].start_y = (x * game->theight) / NB_THREAD;
+		update[x].end_y = ((x + 1) * game->theight) / NB_THREAD;
 		update[x].status = 0;
 		update[x].game = game;
 		pthread_create(&thread[x], NULL, &ft_updater, &update[x]);
@@ -449,7 +449,7 @@ int	ft_update(t_game *game)
 	}
 	ft_map(game, img);
 	mlx_put_image_to_window(game->graphic->mlx, game->graphic->win, img.img_ptr, 0, 0);
-	mlx_string_put(game->graphic->mlx, game->graphic->win, (WIDTH * 0.5) - 2, (HEIGHT * 0.5) + 4, 0xFF0000, "+");
+	mlx_string_put(game->graphic->mlx, game->graphic->win, (game->twidth * 0.5) - 2, (game->theight * 0.5) + 4, 0xFF0000, "+");
 	ft_fps(game);
 	mlx_destroy_image(game->graphic->mlx, img.img_ptr);
 	return (0);
@@ -461,10 +461,10 @@ t_rayon **ft_malloc_rayon(void)
 	int			x;
 
 	x = 0;
-	rayon = malloc(sizeof(t_rayon *) * HEIGHT + 1);
-	while (x < HEIGHT)
+	rayon = malloc(sizeof(t_rayon *) * game->theight + 1);
+	while (x < game->theight)
 	{
-		rayon[x] = malloc(sizeof(t_rayon) * WIDTH + 1);
+		rayon[x] = malloc(sizeof(t_rayon) * game->twidth + 1);
 		x++;
 	}
 	return (rayon);
@@ -672,13 +672,13 @@ void ft_mouse(t_game *game)
 
 	mlx_mouse_get_pos(game->graphic->mlx, game->graphic->win, &x, &y);
 	mlx_mouse_hide(game->graphic->mlx, game->graphic->win);
-	if (x == WIDTH / 2)
+	if (x == game->twidth / 2)
 		game->angle_z += 0;
-	else if (x > WIDTH / 2)
+	else if (x > game->twidth / 2)
 		game->angle_z += 0.025;
 	else
 		game->angle_z -= 0.025;
-	mlx_mouse_move(game->graphic->mlx, game->graphic->win, WIDTH / 2, HEIGHT / 2);
+	mlx_mouse_move(game->graphic->mlx, game->graphic->win, game->twidth / 2, game->theight / 2);
 }
 
 int main(int argc, char *argv[])

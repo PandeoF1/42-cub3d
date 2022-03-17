@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/14 14:11:38 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/17 13:25:20 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,8 @@ typedef struct s_game
 	int					max_y;
 	int					max_x;
 	int					nb_sprites;
+	int					twidth;
+	int					theight;
 	struct s_plan		**plan;
 	struct s_sprite		*sprites;
 	struct s_rayon		**rayon;
