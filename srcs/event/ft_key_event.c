@@ -16,6 +16,8 @@ int	ft_win_event(int keycode, t_game *game)
 {
 	if (keycode == EVENT_ESC)
 		mlx_loop_end(game->graphic->mlx);
+	if (keycode == EVENT_SPACE)
+		game->keyboard.space = 1;
 	if (keycode == EVENT_W)
 		game->keyboard.w = 1;
 	if (keycode == EVENT_S)
@@ -37,6 +39,8 @@ int	ft_win_event(int keycode, t_game *game)
 
 int	ft_unpress(int keycode, t_game *game)
 {
+	if (keycode == EVENT_SPACE)
+		game->keyboard.space = 0;
 	if (keycode == EVENT_W)
 		game->keyboard.w = 0;
 	if (keycode == EVENT_S)

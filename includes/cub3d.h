@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/17 13:25:20 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/17 13:12:11 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,16 @@
 # define EVENT_A 97
 # define EVENT_S 115
 # define EVENT_D 100
+# define EVENT_SPACE 32
 # define EVENT_ESC 65307
-# define WIDTH 1280
-# define HEIGHT 720
+# define WIDTH 1920
+# define HEIGHT 1080
 # define NB_THREAD 16
 # define DOOR_CHAR "ZBNM"
 # define DOOR_LEN 4
+# define SPRITE_CHAR "TUVW"
+# define SPRITE_LEN 4
+# define PERF 2
 
 # define MUSIC 0
 
@@ -51,6 +55,7 @@ typedef struct s_keyboard
 	int	a;
 	int	s;
 	int	d;
+	int	space;
 	int	up;
 	int	down;
 	int	right;

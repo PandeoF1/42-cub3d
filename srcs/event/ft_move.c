@@ -39,7 +39,9 @@ void	ft_move_next(t_game *game)
 	if (game->keyboard.a)
 	{
 		if (game->map[(int)(game->player_y - sin(game->angle_z) * 0.30)]
-			[(int)(game->player_x - cos(game->angle_z) * 0.30)] != '1')
+			[(int)(game->player_x - cos(game->angle_z) * 0.30)] == '0'
+			|| game->map[(int)(game->player_y - sin(game->angle_z) * 0.30)]
+			[(int)(game->player_x - cos(game->angle_z) * 0.30)] == 'X')
 		{
 			game->player_x -= cos(game->angle_z) * 0.05;
 			game->player_y -= sin(game->angle_z) * 0.05;
@@ -48,7 +50,9 @@ void	ft_move_next(t_game *game)
 	if (game->keyboard.d)
 	{
 		if (game->map[(int)(game->player_y + sin(game->angle_z) * 0.30)]
-			[(int)(game->player_x + cos(game->angle_z) * 0.30)] != '1')
+			[(int)(game->player_x + cos(game->angle_z) * 0.30)] == '0'
+			|| game->map[(int)(game->player_y + sin(game->angle_z) * 0.30)]
+			[(int)(game->player_x + cos(game->angle_z) * 0.30)] == 'X')
 		{
 			game->player_x += cos(game->angle_z) * 0.05;
 			game->player_y += sin(game->angle_z) * 0.05;
@@ -62,7 +66,9 @@ void	ft_move(t_game *game)
 	if (game->keyboard.w)
 	{
 		if (game->map[(int)(game->player_y - cos(game->angle_z) * 0.30)]
-			[(int)(game->player_x + sin(game->angle_z) * 0.30)] != '1')
+			[(int)(game->player_x + sin(game->angle_z) * 0.30)] == '0'
+			|| game->map[(int)(game->player_y - cos(game->angle_z) * 0.30)]
+			[(int)(game->player_x + sin(game->angle_z) * 0.30)] == 'X')
 		{
 			game->player_x += sin(game->angle_z) * 0.075;
 			game->player_y -= cos(game->angle_z) * 0.075;
@@ -71,7 +77,9 @@ void	ft_move(t_game *game)
 	if (game->keyboard.s)
 	{
 		if (game->map[(int)(game->player_y + cos(game->angle_z) * 0.30)]
-			[(int)(game->player_x - sin(game->angle_z) * 0.30)] != '1')
+			[(int)(game->player_x - sin(game->angle_z) * 0.30)] == '0'
+			|| game->map[(int)(game->player_y + cos(game->angle_z) * 0.30)]
+			[(int)(game->player_x - sin(game->angle_z) * 0.30)] == 'X')
 		{
 			game->player_x -= sin(game->angle_z) * 0.075;
 			game->player_y += cos(game->angle_z) * 0.075;

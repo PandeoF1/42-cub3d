@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/17 16:00:01 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/17 13:12:22 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,20 @@ int	ft_is_door(char c)
 	{
 		if (c == DOOR_CHAR[x])
 			return (x + 1);
+		x++;
+	}
+	return (0);
+}
+
+int	ft_is_sprite(char c)
+{
+	int	x;
+
+	x = 0;
+	while (x < SPRITE_LEN)
+	{
+		if (c == SPRITE_CHAR[x])
+			return (1);
 		x++;
 	}
 	return (0);
@@ -215,8 +229,7 @@ void	ft_create_door(t_game *game)
 				game->plan[3][i].a = 0;
 				game->plan[3][i].b = 1;
 				game->plan[3][i].c = 0;
-				game->plan[3][i].d = -y - 0.75;
-				printf("plan created %d\n", i);
+				game->plan[3][i].d = -y - 0.5;
 				i++;
 				break ;
 			}
@@ -256,8 +269,8 @@ int	ft_create_plan(t_game *game)
 	int	x;
 	int	next;
 
-	x = 1;
 	next = 0;
+	game->nb_door = ft_door_count(game);
 	game->plan = malloc(sizeof(t_plan *) * 5);
 	if (!game->plan)
 		return (0);
@@ -267,7 +280,11 @@ int	ft_create_plan(t_game *game)
 	game->plan[1] = malloc(sizeof(t_plan) * (game->max_x + 1));
 	if (!game->plan[1])
 		return (0);
-	game->nb_sprites = ft_nb_of(game, 'W') + ft_nb_of(game, 'T') + ft_nb_of(game, 'U') + ft_nb_of(game, 'V');
+	x = 0;
+	game->nb_sprites = 0;
+	while (x < SPRITE_LEN)
+		game->nb_sprites += ft_nb_of(game, SPRITE_CHAR[x++]);
+	x = 1;
 	if (game->nb_sprites != 0)
 	{
 		game->plan[2] = malloc(sizeof(t_plan) * game->nb_sprites);
@@ -276,7 +293,7 @@ int	ft_create_plan(t_game *game)
 		game->sprites = malloc(sizeof(t_sprite) * game->nb_sprites);
 		if (!game->sprites)
 			return (0);
-		ft_create_sprite(game, "TUVW");
+		ft_create_sprite(game, SPRITE_CHAR);
 	}
 	game->plan[3] = malloc(sizeof(t_plan) * game->nb_door);
 	if (!game->plan[3])
@@ -419,7 +436,7 @@ void ft_map(t_game *game, t_img img)
 	int		x;
 	int		y;
 
-	//ft_draw_square(img, game->twidth - 25 * 10, 0, 25 * 10, 0x5e5e5e);
+	ft_draw_square(img, x + (game->twidth - (25 * 9)), y + 25, 25*10, 0x5e5e5e, game);
 	i = (game->player_x * 4) - 25 * 4;
 	if (i < 0)
 		i = 0;
@@ -440,10 +457,8 @@ void ft_map(t_game *game, t_img img)
 			}
 			else if (game->map[(int)(j * 0.25)][(int)(i * 0.25)] == '1')
 				ft_draw_square(img, x + (game->twidth - (25 * 9)), y + 25, 4, 0x9000ff, game);
-			else if (game->map[(int)(j * 0.25)][(int)(i * 0.25)] == '0')
+			else if (game->map[(int)(j * 0.25)][(int)(i * 0.25)] == '0' || ft_is_door(game->map[(int)(j * 0.25)][(int)(i * 0.25)]) || game->map[(int)(j * 0.25)][(int)(i * 0.25)] == 'X')
 				ft_draw_square(img, x + (game->twidth - (25 * 9)), y + 25, 4, 0x2205ff, game);
-			//else
-			//	ft_draw_square(img, x + (game->twidth - (25 * 9)), y + 25, 4, 0x5e5e5e);
 			j++;
 			y++;
 		}
@@ -454,25 +469,51 @@ void ft_map(t_game *game, t_img img)
 
 void	ft_door(t_game *game)
 {
-	int	x;
-	int	y;
+	static int64_t	timer = 0;
+	int				x;
+	int				y;
+	float			t_x;
+	float			t_y;
 
+	if ((timer == 0 || get_time() - timer > 150))
+		timer = get_time();
+	else
+		return ;
 	y = 0;
 	while (y < game->max_y)
 	{
 		x = 0;
 		while (x < game->max_x)
 		{
-			if (game->map[y][x] == 'A')
-				game->map[y][x] = 'B';
-			else if (game->map[y][x] == 'B')
-				game->map[y][x] = 'C';
-			else if (game->map[y][x] == 'C')
-				game->map[y][x] = 'D';
-			else if (game->map[y][x] == 'D')
-				game->map[y][x] = 'E';
-			else if (game->map[y][x] == 'E')
-				game->map[y][x] = 'A';
+			t_x = x - game->player_x;
+			t_y = y - game->player_y;
+			if (t_x < 0)
+				t_x = -t_x;
+			if (t_y < 0)
+				t_y = -t_y;
+			if (t_x < 2.5 && t_y < 2.5 && game->keyboard.space)
+			{
+				if (game->map[y][x] == DOOR_CHAR[0])
+					game->map[y][x] = DOOR_CHAR[1];
+				else if (game->map[y][x] == DOOR_CHAR[1])
+					game->map[y][x] = DOOR_CHAR[2];
+				else if (game->map[y][x] == DOOR_CHAR[2])
+					game->map[y][x] = DOOR_CHAR[3];
+				else if (game->map[y][x] == DOOR_CHAR[3])
+					game->map[y][x] = 'X';
+			}
+			else
+			{
+				if (game->map[y][x] == DOOR_CHAR[1])
+					game->map[y][x] = DOOR_CHAR[0];
+				else if (game->map[y][x] == DOOR_CHAR[2])
+					game->map[y][x] = DOOR_CHAR[1];
+				else if (game->map[y][x] == DOOR_CHAR[3])
+					game->map[y][x] = DOOR_CHAR[2];
+				else if (game->map[y][x] == 'X')
+					game->map[y][x] = DOOR_CHAR[3];
+				
+			}
 			x++;
 		}
 		y++;
@@ -532,6 +573,7 @@ void	*ft_updater(void	*data)
 			best_y = -7;
 			while (v < 4)
 			{
+				u = 0;
 				if (v == 0)
 				{
 					switch_plan = game->max_y;
@@ -543,15 +585,9 @@ void	*ft_updater(void	*data)
 					u = game->player_x;
 				}
 				else if (v == 2)
-				{
 					switch_plan = game->nb_sprites - 1;
-					u = 0;
-				}
 				else if (v == 3)
-				{
 					switch_plan = game->nb_door;
-					u = 0;
-				}
 				add = 1;
 				if ((v == 0 && rayon_temp.y < 0) || (v == 1 && rayon_temp.x < 0))
 					add = -1;
@@ -577,13 +613,10 @@ void	*ft_updater(void	*data)
 								{
 									if ((best_t == 0 || t < best_t) && ((v == 0 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v][u].d - 1) < game->max_y && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(-game->plan[v][u].d - 1)][(int)(game->player_x + point_x)] == '1')
 									|| (v == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v][u].d - 1) < game->max_x && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d - 1)] == '1')
-									|| (v == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v][u].d - 1) < game->max_x && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d - 1)] == 'A') //Porte
-									|| (v == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v][u].d - 1) < game->max_x && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d - 1)] == 'B') //Porte
-									|| (v == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v][u].d - 1) < game->max_x && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d - 1)] == 'C') //Porte
-									|| (v == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v][u].d - 1) < game->max_x && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d - 1)] == 'D') //Porte
-									|| (v == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v][u].d - 1) < game->max_x && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d - 1)] == 'E') //Porte
 									|| (v == 0 && (game->player_y + point_y) > game->player_y && (int)(-game->plan[v][u].d) < game->max_y && (int)(-game->plan[v][u].d) >= 0 && game->map[(int)(-game->plan[v][u].d)][(int)(game->player_x + point_x)] == '1')
-									|| (v == 1 && (game->player_x + point_x) > game->player_x && (int)(-game->plan[v][u].d) < game->max_x && (int)(-game->plan[v][u].d) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d)] == '1')))
+									|| (v == 1 && (game->player_x + point_x) > game->player_x && (int)(-game->plan[v][u].d) < game->max_x && (int)(-game->plan[v][u].d) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d)] == '1')
+									|| (v == 3 && (game->player_y + point_y) > game->player_y && (int)(-game->plan[v][u].d) < game->max_y && (int)(-game->plan[v][u].d) >= 0 && ft_is_door(game->map[(int)(-game->plan[v][u].d)][(int)(game->player_x + point_x)]) != 0)
+									|| (v == 3 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v][u].d) < game->max_y && (int)(-game->plan[v][u].d - 0.5) >= 0 && ft_is_door(game->map[(int)(-game->plan[v][u].d - 0.5)][(int)(game->player_x + point_x)]) != 0)))
 									{
 										if (v == 3)
 										{
@@ -665,7 +698,7 @@ void	*ft_updater(void	*data)
 					{
 						x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->door_color[door].size_l * 0.25);
 						y = (int)((point_z - (int)(point_z)) * game->door_color[door].size_l * 0.25);
-						update->img->data[i * WIDTH + j] = game->door_color[door].data[(int)(y * (game->door_color[door].size_l * 0.25) + x)];
+						update->img->data[i * game->twidth + j] = game->door_color[door].data[(int)(y * (game->door_color[door].size_l * 0.25) + x)];
 					}
 				}
 				else if (v_plan == 3 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v_plan][u_plan].d - 0.5) < game->max_y && (int)(-game->plan[v_plan][u_plan].d - 0.5) >= 0 && ft_is_door(game->map[(int)(-game->plan[v_plan][u_plan].d - 0.5)][(int)(game->player_x + point_x)]) != 0)
@@ -675,7 +708,7 @@ void	*ft_updater(void	*data)
 					{
 						x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->door_color[door].size_l * 0.25);
 						y = (int)((point_z - (int)(point_z)) * game->door_color[door].size_l * 0.25);
-						update->img->data[i * WIDTH + j] = game->door_color[door].data[(int)(y * (game->door_color[door].size_l * 0.25) + x)];
+						update->img->data[i * game->twidth + j] = game->door_color[door].data[(int)(y * (game->door_color[door].size_l * 0.25) + x)];
 					}
 				}
 				else if (v_plan == 2 && best_x != - 7 && best_x != -7)
@@ -734,24 +767,21 @@ void	ft_set_sprites(t_game *game)
 
 void ft_put_image(t_game *game, t_img img2)
 {
-    int    i;
-    int    j;
-    t_img        img;
+    int		i;
+    int		j;
+    t_img	img;
 
     img.img_ptr = mlx_new_image(game->graphic->mlx, WIDTH, HEIGHT);
     img.data = (int *)mlx_get_data_addr(img.img_ptr, &img.bpp, &img.size_l, &img.endian);
 	i = 0;
-    while (i < game->theight)
+	while (i < HEIGHT)
     {
         j = 0;
-        while (j < game->twidth)
+        while (j < WIDTH)
         {
-            img.data[(i * 2) * WIDTH + (j * 2)] = img2.data[i * game->twidth + j];
-			img.data[(i * 2) * WIDTH + (j * 2 + 1)] = img2.data[i * game->twidth + j];
-			img.data[(i * 2 + 1) * WIDTH + (j * 2)] = img2.data[i * game->twidth + j];
-			img.data[(i * 2 + 1) * WIDTH + (j * 2 + 1)] = img2.data[i * game->twidth + j];
+			img.data[(i) * WIDTH + (j)] = img2.data[((i / PERF) * game->twidth + (j / PERF))];
 			j++;
-        }
+		}
 		i++;
     }
     mlx_put_image_to_window(game->graphic->mlx, game->graphic->win, img.img_ptr, 0, 0);
@@ -787,9 +817,8 @@ int	ft_update(t_game *game)
 	x = 0;
 	while (x < NB_THREAD)
 		pthread_join(thread[x++], NULL);
-	ft_map(game, img);
+	//ft_map(game, img);
 	ft_put_image(game, img);
-	//mlx_put_image_to_window(game->graphic->mlx, game->graphic->win, img.img_ptr, 0, 0);
 	mlx_string_put(game->graphic->mlx, game->graphic->win, (WIDTH * 0.5) - 2, (HEIGHT * 0.5) + 4, 0xFF0000, "+");
 	ft_fps(game);
 	mlx_destroy_image(game->graphic->mlx, img.img_ptr);
@@ -1064,12 +1093,13 @@ int main(int argc, char *argv[])
 	pthread_t	music;
 	t_rayon		**rayon;
 
-	game.twidth = WIDTH / 2;
-	game.theight = HEIGHT / 2;
+	game.twidth = WIDTH / PERF;
+	game.theight = HEIGHT / PERF;
 	game.keyboard.w = 0;
 	game.keyboard.a = 0;
 	game.keyboard.s = 0;
 	game.keyboard.d = 0;
+	game.keyboard.space = 0;
 	game.keyboard.up = 0;
 	game.keyboard.down = 0;
 	game.keyboard.left = 0;
