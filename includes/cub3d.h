@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/18 09:30:37 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/18 09:54:10 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@
 # define MUSIC 0
 
 # ifdef __APPLE__
-	#  define MUSIC 0
+#  define MUSIC 0
 # endif
 
 typedef struct s_keyboard
@@ -88,7 +88,7 @@ typedef struct s_graphic
 {
 	void				*mlx;
 	void				*win;
-	struct s_game	*map_check;
+	struct s_game		*map_check;
 }				t_graphic;
 
 typedef struct s_img
@@ -166,6 +166,6 @@ int		ft_unpress(int keycode, t_game *game);
 void	ft_move_next(t_game *game);
 void	ft_move(t_game *game);
 int		ft_exit_hook(t_game *game);
-void 	ft_mouse(t_game *game);
+void	ft_mouse(t_game *game);
 
 #endif

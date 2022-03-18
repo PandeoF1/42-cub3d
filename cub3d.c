@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/18 09:30:01 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/18 09:56:46 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,13 +260,82 @@ int	ft_door_count(t_game *game)
 			if (ft_is_door(game->map[x][y]) != 0)
 			{
 				total++;
-				break;
+				break ;
 			}
 			y++;
 		}
 		x++;
 	}
 	return (total);
+}
+
+int	ft_create_plan_sprite_door(t_game *game)
+{
+	if (game->nb_sprites != 0)
+	{
+		game->plan[2] = malloc(sizeof(t_plan) * game->nb_sprites);
+		if (!game->plan[2])
+			return (0);
+		game->sprites = malloc(sizeof(t_sprite) * game->nb_sprites);
+		if (!game->sprites)
+			return (0);
+		ft_create_sprite(game, SPRITE_CHAR);
+	}
+	game->plan[3] = malloc(sizeof(t_plan) * game->nb_door);
+	if (!game->plan[3])
+		return (0);
+	ft_create_door(game);
+	return (1);
+}
+
+void	ft_create_plan_n_s(t_game *game, int x)
+{
+	while (x < game->max_y - 1)
+	{
+		if ((!ft_is_double_y(game->map, x)))
+		{
+			dprintf(1, "x : \033[0;32m%s - %d\e[0m\n", game->map[x], x);
+			game->plan[0][x].a = 0;
+			game->plan[0][x].b = 1;
+			game->plan[0][x].c = 0;
+			game->plan[0][x].d = -x;
+		}
+		else
+		{
+			dprintf(1, "x : \033[0;31m%s - %d\e[0m\n", game->map[x], x);
+			game->plan[0][x].a = 0;
+			game->plan[0][x].b = 0;
+			game->plan[0][x].c = 0;
+			game->plan[0][x].d = 0;
+		}
+		x++;
+	}
+}
+
+void	ft_create_plan_e_w(t_game *game, int x)
+{
+	dprintf(1, "y :  ");
+	while (x < game->max_x - 1)
+	{
+		if ((!ft_is_double_x(game->map, x)))
+		{
+			dprintf(1, "+");
+			game->plan[1][x].a = 1;
+			game->plan[1][x].b = 0;
+			game->plan[1][x].c = 0;
+			game->plan[1][x].d = -x;
+		}
+		else
+		{
+			dprintf(1, "-");
+			game->plan[1][x].a = 0;
+			game->plan[1][x].b = 0;
+			game->plan[1][x].c = 0;
+			game->plan[1][x].d = 0;
+		}
+		x++;
+	}
+	dprintf(1, "\n");
 }
 
 int	ft_create_plan(t_game *game)
@@ -289,64 +358,10 @@ int	ft_create_plan(t_game *game)
 	game->nb_sprites = 0;
 	while (x < SPRITE_LEN)
 		game->nb_sprites += ft_nb_of(game, SPRITE_CHAR[x++]);
-	x = 1;
-	if (game->nb_sprites != 0)
-	{
-		game->plan[2] = malloc(sizeof(t_plan) * game->nb_sprites);
-		if (!game->plan[2])
-			return (0);
-		game->sprites = malloc(sizeof(t_sprite) * game->nb_sprites);
-		if (!game->sprites)
-			return (0);
-		ft_create_sprite(game, SPRITE_CHAR);
-	}
-	game->plan[3] = malloc(sizeof(t_plan) * game->nb_door);
-	if (!game->plan[3])
+	if (ft_create_plan_sprite_door(game) != 1)
 		return (0);
-	ft_create_door(game);
-	while (x < game->max_y - 1)
-	{
-		if ((!ft_is_double_y(game->map, x)))
-		{
-			dprintf(1, "x : \033[0;32m%s - %d\e[0m\n", game->map[x], x);
-			game->plan[0][x].a = 0;
-			game->plan[0][x].b = 1;
-			game->plan[0][x].c = 0;
-			game->plan[0][x].d = -x;
-		}
-		else
-		{
-			dprintf(1, "x : \033[0;31m%s - %d\e[0m\n", game->map[x], x);
-			game->plan[0][x].a = 0;
-			game->plan[0][x].b = 0;
-			game->plan[0][x].c = 0;
-			game->plan[0][x].d = 0;
-		}
-		x++;
-	}
-	x = 1;
-	ft_printf("y :  ");
-	while (x < game->max_x - 1)
-	{
-		if ((!ft_is_double_x(game->map, x)))
-		{
-			ft_printf("+");
-			game->plan[1][x].a = 1;
-			game->plan[1][x].b = 0;
-			game->plan[1][x].c = 0;
-			game->plan[1][x].d = -x;
-		}
-		else
-		{
-			ft_printf("-");
-			game->plan[1][x].a = 0;
-			game->plan[1][x].b = 0;
-			game->plan[1][x].c = 0;
-			game->plan[1][x].d = 0;
-		}
-		x++;
-	}
-	ft_printf("\n");
+	ft_create_plan_n_s(game, 1);
+	ft_create_plan_e_w(game, 1);
 	return (1);
 }
 
@@ -383,7 +398,25 @@ int64_t	get_time(void)
 	return ((tv.tv_sec * (int64_t)1000) + (tv.tv_usec / 1000));
 }
 
-void ft_fps(t_game *game)
+void	ft_put_fps(t_game *game, int lframe, int total_second, int total_frame)
+{
+	game->put_fps = ft_itoa(lframe);
+	mlx_string_put(game->graphic->mlx, game->graphic->win,
+		2, 10, 0xffffff, "FPS: ");
+	mlx_string_put(game->graphic->mlx, game->graphic->win,
+		30, 10, 0xffffff, game->put_fps);
+	if (total_second > 1)
+	{
+		free(game->put_fps);
+		game->put_fps = ft_itoa(total_frame / total_second);
+		mlx_string_put(game->graphic->mlx, game->graphic->win,
+			2, 30, 0xffffff, "Moy FPS : ");
+		mlx_string_put(game->graphic->mlx, game->graphic->win,
+			60, 30, 0xffffff, game->put_fps);
+	}
+	free(game->put_fps);
+}
+void	ft_fps(t_game *game)
 {
 	static int		lframe = 0;
 	static int		frame = 0;
@@ -403,17 +436,7 @@ void ft_fps(t_game *game)
 		total_second += 1;
 		frame = 1;
 	}
-	game->put_fps = ft_itoa(lframe);
-	mlx_string_put(game->graphic->mlx, game->graphic->win, 2, 10, 0xffffff, "FPS: ");
-	mlx_string_put(game->graphic->mlx, game->graphic->win, 30, 10, 0xffffff, game->put_fps);
-	if (total_second > 1)
-	{
-		free(game->put_fps);
-		game->put_fps = ft_itoa(total_frame / total_second);
-		mlx_string_put(game->graphic->mlx, game->graphic->win, 2, 30, 0xffffff, "Moy FPS : ");
-		mlx_string_put(game->graphic->mlx, game->graphic->win, 60, 30, 0xffffff, game->put_fps);
-	}
-	free(game->put_fps);
+	ft_put_fps(game, lframe, total_second, total_frame);
 }
 
 void ft_draw_square(t_img img, int y, int x, int max_y, int color, t_game *game)
@@ -753,6 +776,7 @@ void	*ft_updater(void	*data)
 		}
 		i++;
 	}
+	return (0);
 }
 
 void	ft_set_sprites(t_game *game)
