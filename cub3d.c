@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/17 13:12:22 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/18 09:30:01 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,39 +176,44 @@ int	ft_nb_of(t_game *game, char	charset)
 	return (total);
 }
 
+int		ft_init_sprite(t_game *game, int b, int x, int y)
+{
+	game->sprites[b].sx = x + 0.5;
+	game->sprites[b].sy = y + 0.5;
+	game->plan[2][b].a = 0;
+	game->plan[2][b].b = 0;
+	game->plan[2][b].c = 0;
+	game->plan[2][b].d = 0;
+	return (1);
+}
+
 void	ft_create_sprite(t_game *game, char *charset)
 {
-	int a;
+	int	a;
 	int	b;
 	int	x;
 	int	y;
-	
+
 	a = 0;
 	b = 0;
-    while (a < ft_strlen(charset))
-    {
+	while (a < ft_strlen(charset))
+	{
 		y = 0;
-        while (game->map[y])
+		while (game->map[y])
 		{
 			x = 0;
 			while (game->map[y][x])
 			{
 				if (game->map[y][x] == charset[a])
 				{
-					game->sprites[b].sx = x + 0.5;
-					game->sprites[b].sy = y + 0.5;
-					game->plan[2][b].a = 0;
-					game->plan[2][b].b = 0;
-					game->plan[2][b].c = 0;
-					game->plan[2][b].d = 0;
-					b++;
+					b += ft_init_sprite(game, b, x, y);
 				}
 				x++;
 			}
 			y++;
 		}
 		a++;
-    }
+	}
 }
 
 void	ft_create_door(t_game *game)
@@ -359,7 +364,8 @@ void	ft_create_vector(t_game *game)
 		while (j < game->twidth)
 		{
 			r_h = 2 * tan((60 * PI / 180) * 0.5) / game->twidth;
-			r_v = 2 * tan((60 * PI / 180) * game->theight / (game->twidth * 2)) / game->theight;
+			r_v = 2 * tan((60 * PI / 180)
+					* game->theight / (game->twidth * 2)) / game->theight;
 			game->rayon[i][j].x = ((j - game->twidth * 0.5) * r_h);
 			game->rayon[i][j].y = -1.0;
 			game->rayon[i][j].z = ((game->theight * 0.5 - i) * r_v);
@@ -379,12 +385,11 @@ int64_t	get_time(void)
 
 void ft_fps(t_game *game)
 {
-	static int	lframe = 0;
-	static int	frame = 0;
-	static int	total_frame = 0;
-	static int	total_second = -1;
+	static int		lframe = 0;
+	static int		frame = 0;
+	static int		total_frame = 0;
+	static int		total_second = -1;
 	static int64_t	fps = 0;
-	char		*test;
 
 	if (get_time() - fps < 1000)
 	{
@@ -398,17 +403,17 @@ void ft_fps(t_game *game)
 		total_second += 1;
 		frame = 1;
 	}
-	test = ft_itoa(lframe);
+	game->put_fps = ft_itoa(lframe);
 	mlx_string_put(game->graphic->mlx, game->graphic->win, 2, 10, 0xffffff, "FPS: ");
-	mlx_string_put(game->graphic->mlx, game->graphic->win, 30, 10, 0xffffff, test);
+	mlx_string_put(game->graphic->mlx, game->graphic->win, 30, 10, 0xffffff, game->put_fps);
 	if (total_second > 1)
 	{
-		free(test);
-		test = ft_itoa(total_frame / total_second);
+		free(game->put_fps);
+		game->put_fps = ft_itoa(total_frame / total_second);
 		mlx_string_put(game->graphic->mlx, game->graphic->win, 2, 30, 0xffffff, "Moy FPS : ");
-		mlx_string_put(game->graphic->mlx, game->graphic->win, 60, 30, 0xffffff, test);
+		mlx_string_put(game->graphic->mlx, game->graphic->win, 60, 30, 0xffffff, game->put_fps);
 	}
-	free(test);
+	free(game->put_fps);
 }
 
 void ft_draw_square(t_img img, int y, int x, int max_y, int color, t_game *game)
@@ -1015,31 +1020,43 @@ int	ft_data_image(t_game *game)
 
 	return (1);
 }
-int	ft_create_image(t_game *game)
+
+int	ft_create_image_e_w(t_game *game)
 {
 	if (ft_image_len(game->n, 2) == 0)
 		return (0);
-	if (ft_check_image(game->n + 3))
-		game->img_n.img_ptr = ft_open_xpm(game, game->n + 3, game->img_n.size_l);
-	else
-		return (0);
-	if (ft_image_len(game->n, 2) == 0)
-		return (0);
-	if (ft_check_image(game->s + 3))
-		game->img_s.img_ptr = ft_open_xpm(game, game->s + 3, game->img_s.size_l);
-	else
-		return (0);
-	if (ft_image_len(game->n, 2) == 0)
-		return (0);
 	if (ft_check_image(game->w + 3))
-		game->img_w.img_ptr = ft_open_xpm(game, game->w + 3, game->img_w.size_l);
+		game->img_w.img_ptr = ft_open_xpm(game, game->w + 3,
+				game->img_w.size_l);
 	else
 		return (0);
 	if (ft_image_len(game->n, 2) == 0)
 		return (0);
 	if (ft_check_image(game->e + 3))
-		game->img_e.img_ptr = ft_open_xpm(game, game->e + 3, game->img_e.size_l);
+		game->img_e.img_ptr = ft_open_xpm(game, game->e + 3,
+				game->img_e.size_l);
 	else
+		return (0);
+	return (1);
+}
+
+int	ft_create_image_n_s(t_game *game)
+{
+	if (ft_image_len(game->n, 2) == 0)
+		return (0);
+	if (ft_check_image(game->n + 3))
+		game->img_n.img_ptr = ft_open_xpm(game, game->n + 3,
+				game->img_n.size_l);
+	else
+		return (0);
+	if (ft_image_len(game->n, 2) == 0)
+		return (0);
+	if (ft_check_image(game->s + 3))
+		game->img_s.img_ptr = ft_open_xpm(game, game->s + 3,
+				game->img_s.size_l);
+	else
+		return (0);
+	if (ft_create_image_e_w(game) != 1)
 		return (0);
 	return (ft_data_image(game));
 }
@@ -1059,7 +1076,8 @@ void ft_mouse(t_game *game)
 		game->angle_x += 0.025;
 	else if (y < game->theight / 2 && game->angle_x >= -0.5)
 		game->angle_x -= 0.025;
-	mlx_mouse_move(game->graphic->mlx, game->graphic->win, game->twidth / 2, game->theight / 2);
+	mlx_mouse_move(game->graphic->mlx, game->graphic->win,
+		game->twidth / 2, game->theight / 2);
 }
 
 void	*ft_music(void *data)
@@ -1086,36 +1104,42 @@ void	ft_stop_music(t_game *game, pthread_t music)
 		pthread_cancel(music);
 }
 
+void	ft_init_struct(t_game *game, t_graphic *graphic)
+{
+	t_rayon		**rayon;
+
+	game->twidth = WIDTH / PERF;
+	game->theight = HEIGHT / PERF;
+	game->keyboard.w = 0;
+	game->keyboard.a = 0;
+	game->keyboard.s = 0;
+	game->keyboard.d = 0;
+	game->keyboard.space = 0;
+	game->keyboard.up = 0;
+	game->keyboard.down = 0;
+	game->keyboard.left = 0;
+	game->keyboard.right = 0;
+	rayon = ft_malloc_rayon(game);
+	game->rayon = rayon;
+	game->angle_x = 0;
+	game->angle_z = 0;
+	game->player_x = -1;
+	game->player_y = -1;
+	game->graphic = graphic;
+	graphic->map_check = game;
+	graphic->mlx = mlx_init();
+	graphic->win = mlx_new_window(graphic->mlx, WIDTH, HEIGHT, "cub3d");
+}
+
 int main(int argc, char *argv[])
 {
 	t_game		game;
 	t_graphic	graphic;
 	pthread_t	music;
-	t_rayon		**rayon;
 
-	game.twidth = WIDTH / PERF;
-	game.theight = HEIGHT / PERF;
-	game.keyboard.w = 0;
-	game.keyboard.a = 0;
-	game.keyboard.s = 0;
-	game.keyboard.d = 0;
-	game.keyboard.space = 0;
-	game.keyboard.up = 0;
-	game.keyboard.down = 0;
-	game.keyboard.left = 0;
-	game.keyboard.right = 0;
-	rayon = ft_malloc_rayon(&game);
-	game.rayon = rayon;
-	game.angle_x = 0;
-	game.angle_z = 0;
-	game.player_x = -1;
-	game.player_y = -1;
-	game.graphic = &graphic;
-	graphic.map_check = &game;
-	graphic.mlx = mlx_init();
-	graphic.win = mlx_new_window(graphic.mlx, WIDTH, HEIGHT, "cub3d");
+	ft_init_struct(&game, &graphic);
 	if (ft_check_arg(argc, argv, &game)
-		&& ft_create_image(&game) && ft_get_pos(&game))
+		&& ft_create_image_n_s(&game) && ft_get_pos(&game))
 	{
 		ft_start_music(&game, music);
 		ft_create_vector(&game);

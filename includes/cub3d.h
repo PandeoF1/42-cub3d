@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/17 13:12:11 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/18 09:30:37 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@
 # define EVENT_D 100
 # define EVENT_SPACE 32
 # define EVENT_ESC 65307
-# define WIDTH 1920
-# define HEIGHT 1080
+# define WIDTH 1280
+# define HEIGHT 720
 # define NB_THREAD 16
 # define DOOR_CHAR "ZBNM"
 # define DOOR_LEN 4
@@ -108,6 +108,7 @@ typedef struct s_game
 	char				*e;
 	char				*f;
 	char				*c;
+	char				*put_fps;
 	struct s_keyboard	keyboard;
 	struct s_img		img_n;
 	struct s_img		img_s;
