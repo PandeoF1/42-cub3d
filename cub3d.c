@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/18 09:56:46 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/18 11:10:43 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -464,7 +464,8 @@ void ft_map(t_game *game, t_img img)
 	int		x;
 	int		y;
 
-	ft_draw_square(img, x + (game->twidth - (25 * 9)), y + 25, 25*10, 0x5e5e5e, game);
+	ft_draw_square(img, x + (game->twidth - (25 * 9)), y + 25,
+		25 * 10, 0x5e5e5e, game);
 	i = (game->player_x * 4) - 25 * 4;
 	if (i < 0)
 		i = 0;
@@ -495,56 +496,59 @@ void ft_map(t_game *game, t_img img)
 	}
 }
 
+void	ft_door_close(t_game *game, int x, int y)
+{
+	if (game->map[y][x] == DOOR_CHAR[1])
+		game->map[y][x] = DOOR_CHAR[0];
+	else if (game->map[y][x] == DOOR_CHAR[2])
+		game->map[y][x] = DOOR_CHAR[1];
+	else if (game->map[y][x] == DOOR_CHAR[3])
+		game->map[y][x] = DOOR_CHAR[2];
+	else if (game->map[y][x] == 'X')
+		game->map[y][x] = DOOR_CHAR[3];
+}
+
+void	ft_door_open(t_game *game, int x, int y)
+{
+	if (game->dist_x < 2.5 && game->dist_y < 2.5 && game->keyboard.space)
+	{
+		if (game->map[y][x] == DOOR_CHAR[0])
+			game->map[y][x] = DOOR_CHAR[1];
+		else if (game->map[y][x] == DOOR_CHAR[1])
+			game->map[y][x] = DOOR_CHAR[2];
+		else if (game->map[y][x] == DOOR_CHAR[2])
+			game->map[y][x] = DOOR_CHAR[3];
+		else if (game->map[y][x] == DOOR_CHAR[3])
+			game->map[y][x] = 'X';
+	}
+	else
+		ft_door_close(game, x, y);
+}
+
 void	ft_door(t_game *game)
 {
 	static int64_t	timer = 0;
 	int				x;
 	int				y;
-	float			t_x;
-	float			t_y;
 
 	if ((timer == 0 || get_time() - timer > 150))
 		timer = get_time();
 	else
 		return ;
-	y = 0;
-	while (y < game->max_y)
+	y = -1;
+	while (++y < game->max_y)
 	{
-		x = 0;
-		while (x < game->max_x)
+		x = -1;
+		while (++x < game->max_x)
 		{
-			t_x = x - game->player_x;
-			t_y = y - game->player_y;
-			if (t_x < 0)
-				t_x = -t_x;
-			if (t_y < 0)
-				t_y = -t_y;
-			if (t_x < 2.5 && t_y < 2.5 && game->keyboard.space)
-			{
-				if (game->map[y][x] == DOOR_CHAR[0])
-					game->map[y][x] = DOOR_CHAR[1];
-				else if (game->map[y][x] == DOOR_CHAR[1])
-					game->map[y][x] = DOOR_CHAR[2];
-				else if (game->map[y][x] == DOOR_CHAR[2])
-					game->map[y][x] = DOOR_CHAR[3];
-				else if (game->map[y][x] == DOOR_CHAR[3])
-					game->map[y][x] = 'X';
-			}
-			else
-			{
-				if (game->map[y][x] == DOOR_CHAR[1])
-					game->map[y][x] = DOOR_CHAR[0];
-				else if (game->map[y][x] == DOOR_CHAR[2])
-					game->map[y][x] = DOOR_CHAR[1];
-				else if (game->map[y][x] == DOOR_CHAR[3])
-					game->map[y][x] = DOOR_CHAR[2];
-				else if (game->map[y][x] == 'X')
-					game->map[y][x] = DOOR_CHAR[3];
-				
-			}
-			x++;
+			game->dist_x = x - game->player_x;
+			game->dist_y = y - game->player_y;
+			if (game->dist_x < 0)
+				game->dist_x = -game->dist_x;
+			if (game->dist_y < 0)
+				game->dist_y = -game->dist_y;
+			ft_door_open(game, x, y);
 		}
-		y++;
 	}
 }
 
@@ -636,7 +640,7 @@ void	*ft_updater(void	*data)
 							{
 								point_x = rayon_temp.x * t;
 								point_y = rayon_temp.y * t;
-								point_z = 0.5 + rayon_temp.z * t;
+								point_z = game->size_p + rayon_temp.z * t;
 								if (v != 2 && point_z < 1 && point_z > 0 && (int)(game->player_x + point_x) >= 0 && (int)(game->player_y + point_y) >= 0 && (int)(game->player_x + point_x) < game->max_x && (int)(game->player_y + point_y) < game->max_y)
 								{
 									if ((best_t == 0 || t < best_t) && ((v == 0 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v][u].d - 1) < game->max_y && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(-game->plan[v][u].d - 1)][(int)(game->player_x + point_x)] == '1')
@@ -718,7 +722,7 @@ void	*ft_updater(void	*data)
 			{
 				point_x = rayon_temp.x * best_t;
 				point_y = rayon_temp.y * best_t;
-				point_z = 0.5 + rayon_temp.z * best_t; // Si pas besoin de le stocker le mettre directement dans le if
+				point_z = game->size_p + rayon_temp.z * best_t; // Si pas besoin de le stocker le mettre directement dans le if
 				if (v_plan == 3 && (game->player_y + point_y) > game->player_y && (int)(-game->plan[v_plan][u_plan].d) < game->max_y && (int)(-game->plan[v_plan][u_plan].d) >= 0 && ft_is_door(game->map[(int)(-game->plan[v_plan][u_plan].d)][(int)(game->player_x + point_x)]) != 0)
 				{
 					door = ft_is_door(game->map[(int)(-game->plan[v_plan][u_plan].d)][(int)(game->player_x + point_x)]) - 1;
@@ -789,32 +793,58 @@ void	ft_set_sprites(t_game *game)
 		game->plan[2][x].a = game->sprites[x].sx - game->player_x;
 		game->plan[2][x].b = game->sprites[x].sy - game->player_y;
 		game->plan[2][x].c = 0;
-		game->plan[2][x].d = -(game->plan[2][x].a * game->sprites[x].sx) - (game->plan[2][x].b * game->sprites[x].sy);
+		game->plan[2][x].d = -(game->plan[2][x].a * game->sprites[x].sx)
+			- (game->plan[2][x].b * game->sprites[x].sy);
 		x++;
 	}
 }
 
 void ft_put_image(t_game *game, t_img img2)
 {
-    int		i;
-    int		j;
-    t_img	img;
+	int		i;
+	int		j;
+	t_img	img;
 
-    img.img_ptr = mlx_new_image(game->graphic->mlx, WIDTH, HEIGHT);
-    img.data = (int *)mlx_get_data_addr(img.img_ptr, &img.bpp, &img.size_l, &img.endian);
+	img.img_ptr = mlx_new_image(game->graphic->mlx, WIDTH, HEIGHT);
+	img.data = (int *)mlx_get_data_addr(img.img_ptr,
+			&img.bpp, &img.size_l, &img.endian);
 	i = 0;
 	while (i < HEIGHT)
-    {
-        j = 0;
-        while (j < WIDTH)
-        {
-			img.data[(i) * WIDTH + (j)] = img2.data[((i / PERF) * game->twidth + (j / PERF))];
+	{
+		j = 0;
+		while (j < WIDTH)
+		{
+			img.data[(i) * WIDTH + (j)]
+				= img2.data[((i / PERF) * game->twidth + (j / PERF))];
 			j++;
 		}
 		i++;
-    }
-    mlx_put_image_to_window(game->graphic->mlx, game->graphic->win, img.img_ptr, 0, 0);
-    mlx_destroy_image(game->graphic->mlx, img.img_ptr);
+	}
+	mlx_put_image_to_window(game->graphic->mlx, game->graphic->win,
+		img.img_ptr, 0, 0);
+	mlx_destroy_image(game->graphic->mlx, img.img_ptr);
+}
+
+void	ft_threads(t_game *game, t_update *updt, pthread_t *thread, t_img *img)
+{
+	int	x;
+
+	x = 0;
+	while (x < NB_THREAD)
+	{
+		updt[x].img = img;
+		if (x == 0)
+			updt[x].start_y = 0;
+		else
+			updt[x].start_y = (x * game->theight) / NB_THREAD;
+		updt[x].end_y = ((x + 1) * game->theight) / NB_THREAD;
+		updt[x].game = game;
+		pthread_create(&thread[x], NULL, &ft_updater, &updt[x]);
+		x++;
+	}
+	x = 0;
+	while (x < NB_THREAD)
+		pthread_join(thread[x++], NULL);
 }
 
 int	ft_update(t_game *game)
@@ -822,33 +852,20 @@ int	ft_update(t_game *game)
 	t_update	update[NB_THREAD];
 	pthread_t	thread[NB_THREAD];
 	t_img		img;
-	int			x;
 
 	ft_door(game);
 	ft_move(game);
 	ft_mouse(game);
 	ft_set_sprites(game);
-	img.img_ptr = mlx_new_image(game->graphic->mlx, game->twidth, game->theight);
-	img.data = (int *)mlx_get_data_addr(img.img_ptr, &img.bpp, &img.size_l, &img.endian);
-	x = 0;
-	while (x < NB_THREAD)
-	{
-		update[x].img = &img;
-		if (x == 0)
-			update[x].start_y = 0;
-		else
-			update[x].start_y = (x * game->theight) / NB_THREAD;
-		update[x].end_y = ((x + 1) * game->theight) / NB_THREAD;
-		update[x].game = game;
-		pthread_create(&thread[x], NULL, &ft_updater, &update[x]);
-		x++;
-	}
-	x = 0;
-	while (x < NB_THREAD)
-		pthread_join(thread[x++], NULL);
+	img.img_ptr = mlx_new_image(game->graphic->mlx,
+			game->twidth, game->theight);
+	img.data = (int *)mlx_get_data_addr(img.img_ptr,
+			&img.bpp, &img.size_l, &img.endian);
+	ft_threads(game, update, thread, &img);
 	//ft_map(game, img);
 	ft_put_image(game, img);
-	mlx_string_put(game->graphic->mlx, game->graphic->win, (WIDTH * 0.5) - 2, (HEIGHT * 0.5) + 4, 0xFF0000, "+");
+	mlx_string_put(game->graphic->mlx, game->graphic->win
+		, (WIDTH * 0.5) - 2, (HEIGHT * 0.5) + 4, 0xFF0000, "+");
 	ft_fps(game);
 	mlx_destroy_image(game->graphic->mlx, img.img_ptr);
 	return (0);
@@ -938,7 +955,8 @@ int	ft_color_format(char *str)
 		ft_free_split(split);
 		return (-1);
 	}
-	return ((ft_atoi(split[0]) << 16) + (ft_atoi(split[1]) << 8) + ft_atoi(split[2]));
+	return ((ft_atoi(split[0]) << 16)
+		+ (ft_atoi(split[1]) << 8) + ft_atoi(split[2]));
 }
 
 int	ft_data_image(t_game *game)
@@ -1143,6 +1161,7 @@ void	ft_init_struct(t_game *game, t_graphic *graphic)
 	game->keyboard.down = 0;
 	game->keyboard.left = 0;
 	game->keyboard.right = 0;
+	game->size_p = SIZE_P_STANDING;
 	rayon = ft_malloc_rayon(game);
 	game->rayon = rayon;
 	game->angle_x = 0;

@@ -34,6 +34,8 @@ int	ft_win_event(int keycode, t_game *game)
 		game->keyboard.left = 1;
 	if (keycode == 65361)
 		game->keyboard.right = 1;
+	if (keycode == 65505)
+		game->size_p = SIZE_P_CROUCHING;
 	return (0);
 }
 
@@ -57,6 +59,8 @@ int	ft_unpress(int keycode, t_game *game)
 		game->keyboard.left = 0;
 	if (keycode == 65361)
 		game->keyboard.right = 0;
+	if (keycode == 65505)
+		game->size_p = SIZE_P_STANDING;
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/18 09:54:10 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/18 10:57:46 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@
 # define WIDTH 1280
 # define HEIGHT 720
 # define NB_THREAD 16
+# define SIZE_P_STANDING 0.5
+# define SIZE_P_CROUCHING 0.25
 # define DOOR_CHAR "ZBNM"
 # define DOOR_LEN 4
 # define SPRITE_CHAR "TUVW"
@@ -127,6 +129,9 @@ typedef struct s_game
 	float				sin_x;
 	float				player_x;
 	float				player_y;
+	float				dist_x;
+	float				dist_y;
+	float				size_p;
 	int					max_y;
 	int					max_x;
 	int					nb_sprites;
