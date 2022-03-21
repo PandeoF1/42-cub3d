@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/18 10:57:46 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/18 16:54:42 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,17 @@ typedef struct s_sprite
 	float	sy;
 }				t_sprite;
 
+typedef struct s_rayon
+{
+	float		x;
+	float		y;
+	float		z;
+}				t_rayon;
+
 typedef struct s_update
 {
+	int				i;
+	int				j;
 	float			end_y;
 	float			start_y;
 	struct s_img	*img;
@@ -142,13 +151,6 @@ typedef struct s_game
 	struct s_rayon		**rayon;
 	struct s_graphic	*graphic;
 }	t_game;
-
-typedef struct s_rayon
-{
-	float		x;
-	float		y;
-	float		z;
-}				t_rayon;
 
 /* Utils */
 char	*ft_strnjoinf(char *s1, char *s2, int n); // free second

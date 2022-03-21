@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/18 11:10:43 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/21 09:35:22 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -554,15 +554,10 @@ void	ft_door(t_game *game)
 
 void	*ft_updater(void	*data)
 {
-	int		i;
-	int		j;
 	int		u;
 	int		v;
 	float	r;
 	float	r_h;
-	float	best_t;
-	int		v_plan;
-	int		u_plan;
 	int		best_x;
 	int		best_y;
 	int		switch_plan;
@@ -575,10 +570,12 @@ void	*ft_updater(void	*data)
 	float	point_y;
 	float	point_z;
 	int		door;
+	float	best_t;
+	int		v_plan;
+	int		u_plan;
 	
 	t_rayon	rayon_temp;
 	t_rayon	rayon_tempp;
-	t_img	img;
 	t_update	*update;
 	t_game		*game;
 
@@ -586,17 +583,17 @@ void	*ft_updater(void	*data)
 	game = update->game;
 	x = 0;
 	y = 0;
-	i = update->start_y;
-	while (i < update->end_y)
+	update->i = update->start_y;
+	while (update->i < update->end_y)
 	{
-		j = 0;
-		while (j < game->twidth)
+		update->j= 0;
+		while (update->j < game->twidth)
 		{
-			rayon_tempp.y = game->rayon[i][j].y * game->cos_x + game->rayon[i][j].z * -game->sin_x;
-			rayon_tempp.z = game->rayon[i][j].y * game->sin_x + game->rayon[i][j].z * game->cos_x;
-			rayon_temp.x = game->rayon[i][j].x  * game->cos_z + rayon_tempp.y * -game->sin_z;
-			rayon_temp.y = game->rayon[i][j].x  * game->sin_z + rayon_tempp.y * game->cos_z;
-			rayon_temp.z = game->rayon[i][j].y * game->sin_x + game->rayon[i][j].z * game->cos_x;
+			rayon_tempp.y = game->rayon[update->i][update->j].y * game->cos_x + game->rayon[update->i][update->j].z * -game->sin_x;
+			rayon_tempp.z = game->rayon[update->i][update->j].y * game->sin_x + game->rayon[update->i][update->j].z * game->cos_x;
+			rayon_temp.x = game->rayon[update->i][update->j].x * game->cos_z + rayon_tempp.y * -game->sin_z;
+			rayon_temp.y = game->rayon[update->i][update->j].x * game->sin_z + rayon_tempp.y * game->cos_z;
+			rayon_temp.z = game->rayon[update->i][update->j].y * game->sin_x + game->rayon[update->i][update->j].z * game->cos_x;
 			v = 0;
 			best_t = 0;
 			v_plan = 4;
@@ -706,9 +703,9 @@ void	*ft_updater(void	*data)
 								else if (point_z > 1.0 || point_z < 0.0)
 								{
 									if (point_z > 1.0)
-										update->img->data[i * game->twidth + j] = game->ceiling_color;
+										update->img->data[update->i * game->twidth + update->j] = game->ceiling_color;
 									else
-										update->img->data[i * game->twidth + j] = game->floor_color;
+										update->img->data[update->i * game->twidth + update->j] = game->floor_color;
 									u = -8;
 								}
 							}
@@ -730,7 +727,7 @@ void	*ft_updater(void	*data)
 					{
 						x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->door_color[door].size_l * 0.25);
 						y = (int)((point_z - (int)(point_z)) * game->door_color[door].size_l * 0.25);
-						update->img->data[i * game->twidth + j] = game->door_color[door].data[(int)(y * (game->door_color[door].size_l * 0.25) + x)];
+						update->img->data[update->i* game->twidth + update->j] = game->door_color[door].data[(int)(y * (game->door_color[door].size_l * 0.25) + x)];
 					}
 				}
 				else if (v_plan == 3 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v_plan][u_plan].d - 0.5) < game->max_y && (int)(-game->plan[v_plan][u_plan].d - 0.5) >= 0 && ft_is_door(game->map[(int)(-game->plan[v_plan][u_plan].d - 0.5)][(int)(game->player_x + point_x)]) != 0)
@@ -740,45 +737,45 @@ void	*ft_updater(void	*data)
 					{
 						x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->door_color[door].size_l * 0.25);
 						y = (int)((point_z - (int)(point_z)) * game->door_color[door].size_l * 0.25);
-						update->img->data[i * game->twidth + j] = game->door_color[door].data[(int)(y * (game->door_color[door].size_l * 0.25) + x)];
+						update->img->data[update->i* game->twidth + update->j] = game->door_color[door].data[(int)(y * (game->door_color[door].size_l * 0.25) + x)];
 					}
 				}
 				else if (v_plan == 2 && best_x != - 7 && best_x != -7)
 				{
 					x = best_x;
 					y = best_y;
-					update->img->data[i * game->twidth + j] = game->img_s.data[(int)(y * (game->img_s.size_l * 0.25) + x)];
+					update->img->data[update->i* game->twidth + update->j] = game->img_s.data[(int)(y * (game->img_s.size_l * 0.25) + x)];
 				}
 				else if (v_plan == 0 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_y && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(-game->plan[v_plan][u_plan].d - 1)][(int)(game->player_x + point_x)] == '1')
 				{
 					x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->img_n.size_l * 0.25);
 					y = (int)((point_z - (int)(point_z)) * game->img_n.size_l * 0.25);
-					update->img->data[i * game->twidth + j] = game->img_n.data[(int)(y * (game->img_n.size_l * 0.25) + x)];
+					update->img->data[update->i* game->twidth + update->j] = game->img_n.data[(int)(y * (game->img_n.size_l * 0.25) + x)];
 				}
 				else if (v_plan == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_x && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v_plan][u_plan].d - 1)] == '1')
 				{
 					x = (int)(((game->player_y + point_y) - (int)(game->player_y + point_y)) * game->img_w.size_l * 0.25);
 					y = (int)((point_z - (int)(point_z)) * game->img_w.size_l * 0.25);
-					update->img->data[i * game->twidth + j] = game->img_w.data[(int)(y * (game->img_w.size_l * 0.25) + x)];
+					update->img->data[update->i* game->twidth + update->j] = game->img_w.data[(int)(y * (game->img_w.size_l * 0.25) + x)];
 				}
 				else if (v_plan == 0 && (game->player_y + point_y) > game->player_y && (int)(-game->plan[v_plan][u_plan].d) < game->max_y && (int)(-game->plan[v_plan][u_plan].d) >= 0 && game->map[(int)(-game->plan[v_plan][u_plan].d)][(int)(game->player_x + point_x)] == '1')
 				{
 					x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->img_s.size_l * 0.25);
 					y = (int)((point_z - (int)(point_z)) * game->img_s.size_l * 0.25);
-					update->img->data[i * game->twidth + j] = game->img_s.data[(int)(y * (game->img_s.size_l * 0.25) + x)];
+					update->img->data[update->i* game->twidth + update->j] = game->img_s.data[(int)(y * (game->img_s.size_l * 0.25) + x)];
 				}
 				else
 				{
 					x = (int)(((game->player_y + point_y) - (int)(game->player_y + point_y)) * game->img_e.size_l * 0.25);
 					y = (int)((point_z - (int)(point_z)) * game->img_e.size_l * 0.25);
-					update->img->data[i * game->twidth + j] = game->img_e.data[(int)(y * (game->img_e.size_l * 0.25) + x)];
+					update->img->data[update->i* game->twidth + update->j] = game->img_e.data[(int)(y * (game->img_e.size_l * 0.25) + x)];
 				}
 			}
 			y = 0;
 			t = 0;
-			j++;
+			update->j++;
 		}
-		i++;
+		update->i++;
 	}
 	return (0);
 }
@@ -959,6 +956,50 @@ int	ft_color_format(char *str)
 		+ (ft_atoi(split[1]) << 8) + ft_atoi(split[2]));
 }
 
+void	ft_reverse_img(t_img *img, int t, int x, int temp)
+{
+	int	value;
+
+	x = 0;
+	value = img->size_l * 0.25;
+	while (x < (img->size_l * 0.25 * img->size_l
+			* 0.25 - (img->size_l * 0.25 / 2)))
+	{
+		if (x >= value - img->size_l * 0.25 / 2)
+		{
+			x = value;
+			t = 0;
+			value += img->size_l * 0.25;
+		}
+		temp = img->data[x];
+		img->data[x] = img->data[value - 1 - t];
+		img->data[value - 1 - t] = temp;
+		t++;
+		x++;
+	}
+}
+
+void	ft_flip_img(t_img *img, int x, int temp, int check)
+{
+	int	value;
+
+	img->data = (int *)mlx_get_data_addr(img->img_ptr,
+			&img->bpp, &img->size_l, &img->endian);
+	if (x == 0)
+	{
+		value = img->size_l * 0.25 * img->size_l * 0.25;
+		while (x < value / 2)
+		{
+			temp = img->data[x];
+			img->data[x] = img->data[value - 1 - x];
+			img->data[value - 1 - x] = temp;
+			x++;
+		}
+	}
+	if (check == 1)
+		ft_reverse_img(img, 0, 0, 0);
+}
+
 int	ft_data_image(t_game *game)
 {
 	int	x;
@@ -976,81 +1017,10 @@ int	ft_data_image(t_game *game)
 	game->ceiling_color = ft_color_format(game->c + 2);
 	if (game->ceiling_color == -1)
 		return (0);
-	x = 0;
-	game->img_n.data = (int *)mlx_get_data_addr(game->img_n.img_ptr, &game->img_n.bpp, &game->img_n.size_l, &game->img_n.endian);
-	value = game->img_n.size_l * 0.25 * game->img_n.size_l * 0.25;
-	while (x < value / 2)
-	{
-		temp = game->img_n.data[x];
-		game->img_n.data[x] = game->img_n.data[value - 1 - x];
-		game->img_n.data[value - 1 - x] = temp;
-		x++;
-	}
-	x = 0;
-	t = 0;
-	value = game->img_n.size_l * 0.25;
-	while (x < (game->img_n.size_l * 0.25 * game->img_n.size_l * 0.25 - (game->img_n.size_l * 0.25 / 2)))
-	{
-		if (x >= value - game->img_n.size_l * 0.25 / 2)
-		{
-			x = value;
-			t = 0;
-			value += game->img_n.size_l * 0.25;
-		}
-		temp = game->img_n.data[x];
-		game->img_n.data[x] = game->img_n.data[value - 1 - t];
-		game->img_n.data[value - 1 - t] = temp;
-		t++;
-		x++;
-	}
-	x = 0;
-	game->img_s.data = (int *)mlx_get_data_addr(game->img_s.img_ptr, &game->img_s.bpp, &game->img_s.size_l, &game->img_s.endian);
-	value = game->img_s.size_l * 0.25 * game->img_s.size_l * 0.25;
-	while (x < value / 2)
-	{
-		temp = game->img_s.data[x];
-		game->img_s.data[x] = game->img_s.data[value - 1 - x];
-		game->img_s.data[value - 1 - x] = temp;
-		x++;
-	}
-	x = 0;
-	game->img_e.data = (int *)mlx_get_data_addr(game->img_e.img_ptr, &game->img_e.bpp, &game->img_e.size_l, &game->img_e.endian);
-	value = game->img_e.size_l * 0.25 * game->img_e.size_l * 0.25;
-	while (x < value / 2)
-	{
-		temp = game->img_e.data[x];
-		game->img_e.data[x] = game->img_e.data[value - 1 - x];
-		game->img_e.data[value - 1 - x] = temp;
-		x++;
-	}
-	x = 0;
-	t = 0;
-	value = game->img_e.size_l * 0.25;
-	while (x < (game->img_e.size_l * 0.25 * game->img_e.size_l * 0.25 - (game->img_e.size_l * 0.25 / 2)))
-	{
-		if (x >= value - game->img_e.size_l * 0.25 / 2)
-		{
-			x = value;
-			t = 0;
-			value += game->img_e.size_l * 0.25;
-		}
-		temp = game->img_e.data[x];
-		game->img_e.data[x] = game->img_e.data[value - 1 - t];
-		game->img_e.data[value - 1 - t] = temp;
-		t++;
-		x++;
-	}
-	x = 0;
-	game->img_w.data = (int *)mlx_get_data_addr(game->img_w.img_ptr, &game->img_w.bpp, &game->img_w.size_l, &game->img_w.endian);
-	value = game->img_w.size_l * 0.25 * game->img_w.size_l * 0.25;
-	while (x < value / 2)
-	{
-		temp = game->img_w.data[x];
-		game->img_w.data[x] = game->img_w.data[value - 1 - x];
-		game->img_w.data[value - 1 - x] = temp;
-		x++;
-	}
-	x = 0;
+	ft_flip_img(&game->img_n, 0, 0, 1);
+	ft_flip_img(&game->img_s, 0, 0, 0);
+	ft_flip_img(&game->img_e, 0, 0, 1);
+	ft_flip_img(&game->img_w, 0, 0, 0);
 	game->door_color[0].img_ptr = ft_open_xpm(game, "./img/door/door1.xpm", game->door_color[0].size_l);
 	game->door_color[1].img_ptr = ft_open_xpm(game, "./img/door/door2.xpm", game->door_color[1].size_l);
 	game->door_color[2].img_ptr = ft_open_xpm(game, "./img/door/door3.xpm", game->door_color[2].size_l);
