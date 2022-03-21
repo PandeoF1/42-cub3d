@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/21 09:35:22 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/21 09:42:00 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -996,7 +996,7 @@ void	ft_flip_img(t_img *img, int x, int temp, int check)
 			x++;
 		}
 	}
-	if (check == 1)
+	if (check == 0)
 		ft_reverse_img(img, 0, 0, 0);
 }
 
@@ -1017,10 +1017,10 @@ int	ft_data_image(t_game *game)
 	game->ceiling_color = ft_color_format(game->c + 2);
 	if (game->ceiling_color == -1)
 		return (0);
-	ft_flip_img(&game->img_n, 0, 0, 1);
-	ft_flip_img(&game->img_s, 0, 0, 0);
-	ft_flip_img(&game->img_e, 0, 0, 1);
-	ft_flip_img(&game->img_w, 0, 0, 0);
+	ft_flip_img(&game->img_n, 0, 0, 0);
+	ft_flip_img(&game->img_s, 0, 0, 1);
+	ft_flip_img(&game->img_e, 0, 0, 0);
+	ft_flip_img(&game->img_w, 0, 0, 1);
 	game->door_color[0].img_ptr = ft_open_xpm(game, "./img/door/door1.xpm", game->door_color[0].size_l);
 	game->door_color[1].img_ptr = ft_open_xpm(game, "./img/door/door2.xpm", game->door_color[1].size_l);
 	game->door_color[2].img_ptr = ft_open_xpm(game, "./img/door/door3.xpm", game->door_color[2].size_l);
