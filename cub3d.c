@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/21 09:42:00 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/29 14:30:06 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -687,9 +687,9 @@ void	*ft_updater(void	*data)
 										r = ((ux * (game->plan[v][u].b / sqrt1)) + (uy * (-game->plan[v][u].a / sqrt1)) + 0.5);
 										if (r >= 0 && r < 1)
 										{
-											x = r * game->img_s.size_l * 0.25;
-											y = (int)((point_z - (int)(point_z)) * game->img_s.size_l * 0.25);
-											if (game->img_s.data[(int)(y * (game->img_s.size_l * 0.25) + x)] != -16777216)
+											x = r * game->img_t.size_l * 0.25;
+											y = (int)((point_z - (int)(point_z)) * game->img_t.size_l * 0.25);
+											if (game->img_t.data[(int)(y * (game->img_t.size_l * 0.25) + x)] != -16777216)
 											{
 												best_t = t;
 												best_x = x;
@@ -744,7 +744,7 @@ void	*ft_updater(void	*data)
 				{
 					x = best_x;
 					y = best_y;
-					update->img->data[update->i* game->twidth + update->j] = game->img_s.data[(int)(y * (game->img_s.size_l * 0.25) + x)];
+					update->img->data[update->i* game->twidth + update->j] = game->img_t.data[(int)(y * (game->img_t.size_l * 0.25) + x)];
 				}
 				else if (v_plan == 0 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_y && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(-game->plan[v_plan][u_plan].d - 1)][(int)(game->player_x + point_x)] == '1')
 				{
@@ -1021,34 +1021,51 @@ int	ft_data_image(t_game *game)
 	ft_flip_img(&game->img_s, 0, 0, 1);
 	ft_flip_img(&game->img_e, 0, 0, 0);
 	ft_flip_img(&game->img_w, 0, 0, 1);
-	game->door_color[0].img_ptr = ft_open_xpm(game, "./img/door/door1.xpm", game->door_color[0].size_l);
-	game->door_color[1].img_ptr = ft_open_xpm(game, "./img/door/door2.xpm", game->door_color[1].size_l);
-	game->door_color[2].img_ptr = ft_open_xpm(game, "./img/door/door3.xpm", game->door_color[2].size_l);
-	game->door_color[3].img_ptr = ft_open_xpm(game, "./img/door/door4.xpm", game->door_color[3].size_l);
-	game->door_color[0].data = (int *)mlx_get_data_addr(game->door_color[0].img_ptr, &game->door_color[0].bpp, &game->door_color[0].size_l, &game->door_color[0].endian);
-	game->door_color[1].data = (int *)mlx_get_data_addr(game->door_color[1].img_ptr, &game->door_color[1].bpp, &game->door_color[1].size_l, &game->door_color[1].endian);
-	game->door_color[2].data = (int *)mlx_get_data_addr(game->door_color[2].img_ptr, &game->door_color[2].bpp, &game->door_color[2].size_l, &game->door_color[2].endian);
-	game->door_color[3].data = (int *)mlx_get_data_addr(game->door_color[3].img_ptr, &game->door_color[3].bpp, &game->door_color[3].size_l, &game->door_color[3].endian);
-
+	ft_flip_img(&game->img_t, 0, 0, 0);
+	ft_flip_img(&game->door_color[0], 0, 0, 0);
+	ft_flip_img(&game->door_color[1], 0, 0, 0);
+	ft_flip_img(&game->door_color[2], 0, 0, 0);
+	ft_flip_img(&game->door_color[3], 0, 0, 0);
 	return (1);
 }
 
 int	ft_create_image_e_w(t_game *game)
 {
-	if (ft_image_len(game->n, 2) == 0)
+	int	i;
+
+	i = 0;
+	if (ft_image_len(game->w, 2) == 0)
 		return (0);
 	if (ft_check_image(game->w + 3))
 		game->img_w.img_ptr = ft_open_xpm(game, game->w + 3,
 				game->img_w.size_l);
 	else
 		return (0);
-	if (ft_image_len(game->n, 2) == 0)
+	if (ft_image_len(game->e, 2) == 0)
 		return (0);
 	if (ft_check_image(game->e + 3))
 		game->img_e.img_ptr = ft_open_xpm(game, game->e + 3,
 				game->img_e.size_l);
 	else
 		return (0);
+	if (ft_image_len(game->t, 2) == 0)
+		return (0);
+	if (ft_check_image(game->t + 3))
+		game->img_t.img_ptr = ft_open_xpm(game, game->t + 3,
+				game->img_t.size_l);
+	else
+		return (0);
+	while (i < 4)
+	{
+		if (ft_image_len(game->z[i], 2) == 0)
+			return (0);
+		if (ft_check_image(game->z[i] + 3))
+			game->door_color[i].img_ptr = ft_open_xpm(game, game->z[i] + 3,
+					game->door_color[i].size_l);
+		else
+			return (0);
+		i++;
+	}
 	return (1);
 }
 
@@ -1061,7 +1078,7 @@ int	ft_create_image_n_s(t_game *game)
 				game->img_n.size_l);
 	else
 		return (0);
-	if (ft_image_len(game->n, 2) == 0)
+	if (ft_image_len(game->s, 2) == 0)
 		return (0);
 	if (ft_check_image(game->s + 3))
 		game->img_s.img_ptr = ft_open_xpm(game, game->s + 3,

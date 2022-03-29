@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 16:19:11 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/05 23:19:29 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/29 14:28:44 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,16 @@ int	ft_add_texture(char *split, t_game *game, int x, int y)
 		game->f = ft_strdup(split);
 	else if (split[0] == 'C' && !game->c)
 		game->c = ft_strdup(split);
+	else if (split[0] == 'T' && !game->t)
+		game->t = ft_strdup(split);
+	else if (split[0] == 'Z' && !game->z[0])
+		game->z[0] = ft_strdup(split);
+	else if (split[0] == 'B' && !game->z[1])
+		game->z[1] = ft_strdup(split);
+	else if (split[0] == 'V' && !game->z[2])
+		game->z[2] = ft_strdup(split);
+	else if (split[0] == 'C' && !game->z[3])
+		game->z[3] = ft_strdup(split);
 	else
 		return (0);
 	return (1);
@@ -70,7 +80,7 @@ int	ft_check_texture(char *str, t_game *game)
 		if (!ft_add_texture(split[x], game, x, y))
 			return (0);
 		if (game->n && game->s && game->w
-			&& game->e && game->f && game->c && split[x + 1])
+			&& game->e && game->f && game->c && game->t && game->z[0] && game->z[1] && game->z[2] && game->z[3] && split[x + 1])
 		{
 			if (ft_check_map(game, ft_pos(split[x + 1], str),
 					str, ft_pos(split[x + 1], str)))

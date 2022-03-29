@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/18 16:54:42 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/29 14:28:41 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@
 # define NB_THREAD 16
 # define SIZE_P_STANDING 0.5
 # define SIZE_P_CROUCHING 0.25
-# define DOOR_CHAR "ZBNM"
+# define DOOR_CHAR "ZBVC"
 # define DOOR_LEN 4
-# define SPRITE_CHAR "TUVW"
-# define SPRITE_LEN 4
+# define SPRITE_CHAR "T"
+# define SPRITE_LEN 1
 # define PERF 2
 
 # define MUSIC 0
@@ -119,12 +119,15 @@ typedef struct s_game
 	char				*e;
 	char				*f;
 	char				*c;
+	char				*z[DOOR_LEN];
+	char				*t;
 	char				*put_fps;
 	struct s_keyboard	keyboard;
 	struct s_img		img_n;
 	struct s_img		img_s;
 	struct s_img		img_w;
 	struct s_img		img_e;
+	struct s_img		img_t;
 	int					floor_color;
 	int					ceiling_color;
 	struct s_img		door_color[4];

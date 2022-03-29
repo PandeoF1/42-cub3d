@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:38:36 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/05 23:19:12 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/29 14:25:44 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,11 @@ void	ft_init(t_game *game)
 	game->e = NULL;
 	game->f = NULL;
 	game->c = NULL;
+	game->t = NULL;
+	game->z[0] = NULL;
+	game->z[1] = NULL;
+	game->z[2] = NULL;
+	game->z[3] = NULL;
 	game->map = NULL;
 }
 
