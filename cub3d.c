@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/29 14:30:06 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/30 17:53:31 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -379,7 +379,7 @@ void	ft_create_vector(t_game *game)
 		while (j < game->twidth)
 		{
 			r_h = 2 * tan((60 * PI / 180) * 0.5) / game->twidth;
-			r_v = 2 * tan((60 * PI / 180)
+			r_v= 2 * tan((60 * PI / 180)
 					* game->theight / (game->twidth * 2)) / game->theight;
 			game->rayon[i][j].x = ((j - game->twidth * 0.5) * r_h);
 			game->rayon[i][j].y = -1.0;
@@ -552,227 +552,262 @@ void	ft_door(t_game *game)
 	}
 }
 
+void	ft_set_rayons(t_update *update, t_game *game)
+{
+	update->rayon_tempp.y = game->rayon[update->i][update->j].y
+		* game->cos_x + game->rayon[update->i][update->j].z * -game->sin_x;
+	update->rayon_tempp.z = game->rayon[update->i][update->j].y
+		* game->sin_x + game->rayon[update->i][update->j].z * game->cos_x;
+	update->rayon_tempp.x = game->rayon[update->i][update->j].x
+		* game->cos_z + update->rayon_tempp.y * -game->sin_z;
+	update->rayon_tempp.y = game->rayon[update->i][update->j].x
+		* game->sin_z + update->rayon_tempp.y * game->cos_z;
+	update->rayon_tempp.z = game->rayon[update->i][update->j].y
+		* game->sin_x + game->rayon[update->i][update->j].z * game->cos_x;
+}
+
+void	ft_set_switch(t_update *update, t_game *game)
+{
+	if (update->v == 0)
+	{
+		update->switch_plan = game->max_y;
+		update->u = game->player_y;
+	}
+	else if (update->v == 1)
+	{
+		update->switch_plan = game->max_x;
+		update->u = game->player_x;
+	}
+	else if (update->v == 2)
+		update->switch_plan = game->nb_sprites - 1;
+	else if (update->v == 3)
+		update->switch_plan = game->nb_door;
+	update->add = 1;
+	if ((update->v == 0 && update->rayon_tempp.y < 0)
+		|| (update->v == 1 && update->rayon_tempp.x < 0))
+		update->add = -1;
+	else if (update->v == 3 && update->rayon_tempp.y < 0)
+	{
+		update->add = -1;
+		update->u = game->nb_door;
+	}
+}
+
+void	ft_set_points(t_update *update, t_game *game, float t)
+{
+	update->point_x = update->rayon_tempp.x * t;
+	update->point_y = update->rayon_tempp.y * t;
+	update->point_z = game->size_p + update->rayon_tempp.z * t;
+	update->px_px = (game->player_x + update->point_x);
+	update->py_py = (game->player_y + update->point_y);
+}
+
+int	ft_case_one(t_update *u, t_game *g, float best_t)
+{
+	if ((best_t == 0 || u->t < best_t) && ((u->v == 0 && u->py_py < g->player_y \
+		&& (int)(-g->plan[u->v][u->u].d - 1) < g->max_y && (int)(-g->plan \
+		[u->v][u->u].d - 1) >= 0 && g->map[(int)(-g->plan[u->v][u->u].d - 1)] \
+		[(int)u->px_px] == '1') || (u->v == 1 && u->px_px < g->player_x \
+		&& (int)(-g->plan[u->v][u->u].d - 1) < g->max_x && (int)(-g->plan \
+		[u->v][u->u].d - 1) >= 0 && g->map[(int)u->py_py][(int)(-g->plan[u->v] \
+		[u->u].d - 1)] == '1') || (u->v == 0 && u->py_py > g->player_y && (int) \
+		(-g->plan[u->v][u->u].d) < g->max_y && (int)(-g->plan[u->v][u->u].d) \
+		>= 0 && g->map[(int)(-g->plan[u->v][u->u].d)][(int)u->px_px] == '1') \
+		|| (u->v == 1 && u->px_px > g->player_x && (int)(-g->plan \
+		[u->v][u->u].d) < g->max_x && (int)(-g->plan[u->v][u->u].d) >= 0 \
+		&& g->map[(int)u->py_py][(int)(-g->plan[u->v][u->u].d)] == '1') \
+		|| (u->v == 3 && u->py_py > g->player_y \
+		&& (int)(-g->plan[u->v][u->u].d) < g->max_y \
+		&& (int)(-g->plan[u->v][u->u].d) >= 0 \
+		&& ft_is_door(g->map[(int) \
+		(-g->plan[u->v][u->u].d)][(int)u->px_px]) != 0)
+		|| (u->v == 3 && u->py_py < g->player_y \
+		&& (int)(-g->plan[u->v][u->u].d) < g->max_y \
+		&& (int)(-g->plan[u->v][u->u].d - 0.5) >= 0 \
+		&& ft_is_door(g->map[(int)(-g->plan \
+		[u->v][u->u].d - 0.5)][(int)u->px_px]) != 0)))
+		return (1);
+	else
+		return (0);
+}
+
+int	ft_case_two(t_update *update, t_game *game)
+{
+	if (game->plan[update->v][update->u].a == 1 || game->plan \
+	[update->v][update->u].b == 1 || update->v == 2)
+	{
+		update->t = (game->plan[update->v][update->u].a * \
+		update->rayon_tempp.x + game->plan[update->v][update->u].b * \
+		update->rayon_tempp.y + game->plan[update->v][update->u].c * \
+		update->rayon_tempp.z);
+		return (1);
+	}
+	return (0);
+}
 void	*ft_updater(void	*data)
 {
-	int		u;
-	int		v;
-	float	r;
-	float	r_h;
-	int		best_x;
-	int		best_y;
-	int		switch_plan;
-	int		add;
-	float	r_v;
-	float	t;
-	int		x;
-	int		y;
-	float	point_x;
-	float	point_y;
-	float	point_z;
-	int		door;
-	float	best_t;
-	int		v_plan;
-	int		u_plan;
-	
-	t_rayon	rayon_temp;
-	t_rayon	rayon_tempp;
 	t_update	*update;
 	t_game		*game;
+	float		best_t;
+	int			v_plan;
+	int			u_plan;
 
 	update = (t_update *)data;
 	game = update->game;
-	x = 0;
-	y = 0;
 	update->i = update->start_y;
 	while (update->i < update->end_y)
 	{
-		update->j= 0;
+		update->j = 0;
 		while (update->j < game->twidth)
 		{
-			rayon_tempp.y = game->rayon[update->i][update->j].y * game->cos_x + game->rayon[update->i][update->j].z * -game->sin_x;
-			rayon_tempp.z = game->rayon[update->i][update->j].y * game->sin_x + game->rayon[update->i][update->j].z * game->cos_x;
-			rayon_temp.x = game->rayon[update->i][update->j].x * game->cos_z + rayon_tempp.y * -game->sin_z;
-			rayon_temp.y = game->rayon[update->i][update->j].x * game->sin_z + rayon_tempp.y * game->cos_z;
-			rayon_temp.z = game->rayon[update->i][update->j].y * game->sin_x + game->rayon[update->i][update->j].z * game->cos_x;
-			v = 0;
+			ft_set_rayons(update, game);
 			best_t = 0;
 			v_plan = 4;
 			u_plan = -7;
-			best_x = -7;
-			best_y = -7;
-			while (v < 4)
+			update->v = 0;
+			update->best_x = -7;
+			update->best_y = -7;
+			while (update->v < 4)
 			{
-				u = 0;
-				if (v == 0)
+				update->u = 0;
+				ft_set_switch(update, game);
+				while (update->u <= update->switch_plan && update->u >= 0)
 				{
-					switch_plan = game->max_y;
-					u = game->player_y;
-				}
-				else if (v == 1)
-				{
-					switch_plan = game->max_x;
-					u = game->player_x;
-				}
-				else if (v == 2)
-					switch_plan = game->nb_sprites - 1;
-				else if (v == 3)
-					switch_plan = game->nb_door;
-				add = 1;
-				if ((v == 0 && rayon_temp.y < 0) || (v == 1 && rayon_temp.x < 0))
-					add = -1;
-				else if (v == 3 && rayon_temp.y < 0)
-				{
-					add = -1;
-					u = game->nb_door;
-				}
-				while (u <= switch_plan && u >= 0)
-				{
-					if (game->plan[v][u].a == 1 || game->plan[v][u].b == 1 || v == 2)
+					if (ft_case_two(update, game))
 					{
-						t = (game->plan[v][u].a * rayon_temp.x  + game->plan[v][u].b * rayon_temp.y + game->plan[v][u].c * rayon_temp.z);
-						if (t != 0)
+						if (update->t != 0)
 						{
-							t = -(game->plan[v][u].a * game->player_x + game->plan[v][u].b * game->player_y + game->plan[v][u].c * 0.5 + game->plan[v][u].d) / t;
-							if (t > 0)
+							update->t = -(game->plan[update->v][update->u].a * game->player_x + game->plan[update->v][update->u].b * game->player_y + game->plan[update->v][update->u].c * 0.5 + game->plan[update->v][update->u].d) / update->t;
+							if (update->t > 0)
 							{
-								point_x = rayon_temp.x * t;
-								point_y = rayon_temp.y * t;
-								point_z = game->size_p + rayon_temp.z * t;
-								if (v != 2 && point_z < 1 && point_z > 0 && (int)(game->player_x + point_x) >= 0 && (int)(game->player_y + point_y) >= 0 && (int)(game->player_x + point_x) < game->max_x && (int)(game->player_y + point_y) < game->max_y)
+								ft_set_points(update, game, update->t);
+								if (update->v!= 2 && update->point_z < 1 && update->point_z > 0 && (int)update->px_px >= 0 && (int)update->py_py >= 0 && (int)update->px_px < game->max_x && (int)update->py_py < game->max_y)
 								{
-									if ((best_t == 0 || t < best_t) && ((v == 0 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v][u].d - 1) < game->max_y && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(-game->plan[v][u].d - 1)][(int)(game->player_x + point_x)] == '1')
-									|| (v == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v][u].d - 1) < game->max_x && (int)(-game->plan[v][u].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d - 1)] == '1')
-									|| (v == 0 && (game->player_y + point_y) > game->player_y && (int)(-game->plan[v][u].d) < game->max_y && (int)(-game->plan[v][u].d) >= 0 && game->map[(int)(-game->plan[v][u].d)][(int)(game->player_x + point_x)] == '1')
-									|| (v == 1 && (game->player_x + point_x) > game->player_x && (int)(-game->plan[v][u].d) < game->max_x && (int)(-game->plan[v][u].d) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v][u].d)] == '1')
-									|| (v == 3 && (game->player_y + point_y) > game->player_y && (int)(-game->plan[v][u].d) < game->max_y && (int)(-game->plan[v][u].d) >= 0 && ft_is_door(game->map[(int)(-game->plan[v][u].d)][(int)(game->player_x + point_x)]) != 0)
-									|| (v == 3 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v][u].d) < game->max_y && (int)(-game->plan[v][u].d - 0.5) >= 0 && ft_is_door(game->map[(int)(-game->plan[v][u].d - 0.5)][(int)(game->player_x + point_x)]) != 0)))
+									if (ft_case_one(update, game, best_t))
 									{
-										if (v == 3)
+										if (update->v== 3)
 										{
-											door = 0;
-											if ((game->player_y + point_y) > game->player_y && (int)(-game->plan[v][u].d) < game->max_y && (int)(-game->plan[v][u].d) >= 0 && ft_is_door(game->map[(int)(-game->plan[v][u].d)][(int)(game->player_x + point_x)]) != 0)
-												door = ft_is_door(game->map[(int)(-game->plan[v][u].d)][(int)(game->player_x + point_x)]) - 1;
-											else if ((game->player_y + point_y) < game->player_y && (int)(-game->plan[v][u].d) < game->max_y && (int)(-game->plan[v][u].d - 0.5) >= 0 && ft_is_door(game->map[(int)(-game->plan[v][u].d - 0.5)][(int)(game->player_x + point_x)]) != 0)
-												door = ft_is_door(game->map[(int)(-game->plan[v][u].d - 0.5)][(int)(game->player_x + point_x)]) - 1;
-											if (door != 4)
+											update->door = 0;
+											if (update->py_py > game->player_y && (int)(-game->plan[update->v][update->u].d) < game->max_y && (int)(-game->plan[update->v][update->u].d) >= 0 && ft_is_door(game->map[(int)(-game->plan[update->v][update->u].d)][(int)update->px_px]) != 0)
+												update->door = ft_is_door(game->map[(int)(-game->plan[update->v][update->u].d)][(int)update->px_px]) - 1;
+											else if (update->py_py < game->player_y && (int)(-game->plan[update->v][update->u].d) < game->max_y && (int)(-game->plan[update->v][update->u].d - 0.5) >= 0 && ft_is_door(game->map[(int)(-game->plan[update->v][update->u].d - 0.5)][(int)update->px_px]) != 0)
+												update->door = ft_is_door(game->map[(int)(-game->plan[update->v][update->u].d - 0.5)][(int)update->px_px]) - 1;
+											if (update->door != 4)
 											{
-												x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->door_color[door].size_l * 0.25);
-												y = (int)((point_z - (int)(point_z)) * game->door_color[door].size_l * 0.25);
-												if (game->door_color[door].data[(int)(y * (game->door_color[door].size_l * 0.25) + x)] != -16777216)
+												update->x = (int)((update->px_px - (int)update->px_px) * game->door_color[update->door].size_l * 0.25);
+												update->y = (int)((update->point_z - (int)(update->point_z)) * game->door_color[update->door].size_l * 0.25);
+												if (game->door_color[update->door].data[(int)(update->y * (game->door_color[update->door].size_l * 0.25) + update->x)] != -16777216)
 												{
-													best_t = t;
-													v_plan = v;
-													u_plan = u;
-													u = -8;
+													best_t = update->t;
+													v_plan = update->v;
+													u_plan = update->u;
+													update->u= -8;
 												}
 											}
 										}
 										else
 										{
-											best_t = t;
-											v_plan = v;
-											u_plan = u;
-											u = -8;
+											best_t = update->t;
+											v_plan = update->v;
+											u_plan = update->u;
+											update->u= -8;
 										}
 									}
 								}
-								else if (v == 2)
+								else if (update->v== 2)
 								{
-									if ((best_t == 0 || t < best_t) && point_z < 1.0 && point_z > 0.0 && (int)(game->player_x + point_x) >= 0 && (int)(game->player_y + point_y) >= 0 && (int)(game->player_x + point_x) < game->max_x && (int)(game->player_y + point_y) < game->max_y && game->map[(int)(game->player_y + point_y)][(int)(game->player_x + point_x)] == 'T')
+									if ((best_t == 0 || update->t < best_t) && update->point_z < 1.0 && update->point_z > 0.0 && (int)update->px_px >= 0 && (int)update->py_py >= 0 && (int)update->px_px < game->max_x && (int)update->py_py < game->max_y && game->map[(int)update->py_py][(int)update->px_px] == 'T')
 									{
 										float	ux, uy, sqrt1;
-										ux = ((game->player_x + point_x) - game->sprites[u].sx);
-										uy = ((game->player_y + point_y) - game->sprites[u].sy);
-										sqrt1 = sqrt(pow(game->plan[v][u].b, 2) + pow(-game->plan[v][u].a, 2));
-										r = ((ux * (game->plan[v][u].b / sqrt1)) + (uy * (-game->plan[v][u].a / sqrt1)) + 0.5);
-										if (r >= 0 && r < 1)
+										ux = (update->px_px - game->sprites[update->u].sx);
+										uy = (update->py_py - game->sprites[update->u].sy);
+										sqrt1 = sqrt(pow(game->plan[update->v][update->u].b, 2) + pow(-game->plan[update->v][update->u].a, 2));
+										update->r = ((ux * (game->plan[update->v][update->u].b / sqrt1)) + (uy * (-game->plan[update->v][update->u].a / sqrt1)) + 0.5);
+										if (update->r >= 0 && update->r < 1)
 										{
-											x = r * game->img_t.size_l * 0.25;
-											y = (int)((point_z - (int)(point_z)) * game->img_t.size_l * 0.25);
-											if (game->img_t.data[(int)(y * (game->img_t.size_l * 0.25) + x)] != -16777216)
+											update->x = update->r * game->img_t.size_l * 0.25;
+											update->y = (int)((update->point_z - (int)(update->point_z)) * game->img_t.size_l * 0.25);
+											if (game->img_t.data[(int)(update->y * (game->img_t.size_l * 0.25) + update->x)] != -16777216)
 											{
-												best_t = t;
-												best_x = x;
-												best_y = y;
-												v_plan = v;
-												u_plan = u;
+												best_t = update->t;
+												update->best_x = update->x;
+												update->best_y = update->y;
+												v_plan = update->v;
+												u_plan = update->u;
 											}
 										}
 									}
 								}
-								else if (point_z > 1.0 || point_z < 0.0)
+								else if (update->point_z > 1.0 || update->point_z < 0.0)
 								{
-									if (point_z > 1.0)
+									if (update->point_z > 1.0)
 										update->img->data[update->i * game->twidth + update->j] = game->ceiling_color;
 									else
 										update->img->data[update->i * game->twidth + update->j] = game->floor_color;
-									u = -8;
+									update->u= -8;
 								}
 							}
 						}
 					}
-					u += add;
+					update->u+= update->add;
 				}
-				v++;
+				update->v++;
 			}
 			if (best_t != 0 && v_plan != 4 && u_plan != - 7)
 			{
-				point_x = rayon_temp.x * best_t;
-				point_y = rayon_temp.y * best_t;
-				point_z = game->size_p + rayon_temp.z * best_t; // Si pas besoin de le stocker le mettre directement dans le if
-				if (v_plan == 3 && (game->player_y + point_y) > game->player_y && (int)(-game->plan[v_plan][u_plan].d) < game->max_y && (int)(-game->plan[v_plan][u_plan].d) >= 0 && ft_is_door(game->map[(int)(-game->plan[v_plan][u_plan].d)][(int)(game->player_x + point_x)]) != 0)
+				ft_set_points(update, game, best_t);
+				if (v_plan == 3 && update->py_py > game->player_y && (int)(-game->plan[v_plan][u_plan].d) < game->max_y && (int)(-game->plan[v_plan][u_plan].d) >= 0 && ft_is_door(game->map[(int)(-game->plan[v_plan][u_plan].d)][(int)update->px_px]) != 0)
 				{
-					door = ft_is_door(game->map[(int)(-game->plan[v_plan][u_plan].d)][(int)(game->player_x + point_x)]) - 1;
-					if (door != 4)
+					update->door = ft_is_door(game->map[(int)(-game->plan[v_plan][u_plan].d)][(int)update->px_px]) - 1;
+					if (update->door != 4)
 					{
-						x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->door_color[door].size_l * 0.25);
-						y = (int)((point_z - (int)(point_z)) * game->door_color[door].size_l * 0.25);
-						update->img->data[update->i* game->twidth + update->j] = game->door_color[door].data[(int)(y * (game->door_color[door].size_l * 0.25) + x)];
+						update->x = (int)((update->px_px - (int)update->px_px) * game->door_color[update->door].size_l * 0.25);
+						update->y = (int)((update->point_z - (int)(update->point_z)) * game->door_color[update->door].size_l * 0.25);
+						update->img->data[update->i* game->twidth + update->j] = game->door_color[update->door].data[(int)(update->y * (game->door_color[update->door].size_l * 0.25) + update->x)];
 					}
 				}
-				else if (v_plan == 3 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v_plan][u_plan].d - 0.5) < game->max_y && (int)(-game->plan[v_plan][u_plan].d - 0.5) >= 0 && ft_is_door(game->map[(int)(-game->plan[v_plan][u_plan].d - 0.5)][(int)(game->player_x + point_x)]) != 0)
+				else if (v_plan == 3 && update->py_py < game->player_y && (int)(-game->plan[v_plan][u_plan].d - 0.5) < game->max_y && (int)(-game->plan[v_plan][u_plan].d - 0.5) >= 0 && ft_is_door(game->map[(int)(-game->plan[v_plan][u_plan].d - 0.5)][(int)update->px_px]) != 0)
 				{
-					door = ft_is_door(game->map[(int)(-game->plan[v_plan][u_plan].d)][(int)(game->player_x + point_x)]) - 1;
-					if (door != 4)
+					update->door = ft_is_door(game->map[(int)(-game->plan[v_plan][u_plan].d)][(int)update->px_px]) - 1;
+					if (update->door != 4)
 					{
-						x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->door_color[door].size_l * 0.25);
-						y = (int)((point_z - (int)(point_z)) * game->door_color[door].size_l * 0.25);
-						update->img->data[update->i* game->twidth + update->j] = game->door_color[door].data[(int)(y * (game->door_color[door].size_l * 0.25) + x)];
+						update->x = (int)((update->px_px - (int)update->px_px) * game->door_color[update->door].size_l * 0.25);
+						update->y = (int)((update->point_z - (int)(update->point_z)) * game->door_color[update->door].size_l * 0.25);
+						update->img->data[update->i* game->twidth + update->j] = game->door_color[update->door].data[(int)(update->y * (game->door_color[update->door].size_l * 0.25) + update->x)];
 					}
 				}
-				else if (v_plan == 2 && best_x != - 7 && best_x != -7)
+				else if (v_plan == 2 && update->best_x != - 7 && update->best_x != -7)
 				{
-					x = best_x;
-					y = best_y;
-					update->img->data[update->i* game->twidth + update->j] = game->img_t.data[(int)(y * (game->img_t.size_l * 0.25) + x)];
+					update->x = update->best_x;
+					update->y = update->best_y;
+					update->img->data[update->i* game->twidth + update->j] = game->img_t.data[(int)(update->y * (game->img_t.size_l * 0.25) + update->x)];
 				}
-				else if (v_plan == 0 && (game->player_y + point_y) < game->player_y && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_y && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(-game->plan[v_plan][u_plan].d - 1)][(int)(game->player_x + point_x)] == '1')
+				else if (v_plan == 0 && update->py_py < game->player_y && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_y && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(-game->plan[v_plan][u_plan].d - 1)][(int)update->px_px] == '1')
 				{
-					x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->img_n.size_l * 0.25);
-					y = (int)((point_z - (int)(point_z)) * game->img_n.size_l * 0.25);
-					update->img->data[update->i* game->twidth + update->j] = game->img_n.data[(int)(y * (game->img_n.size_l * 0.25) + x)];
+					update->x = (int)((update->px_px - (int)update->px_px) * game->img_n.size_l * 0.25);
+					update->y = (int)((update->point_z - (int)(update->point_z)) * game->img_n.size_l * 0.25);
+					update->img->data[update->i* game->twidth + update->j] = game->img_n.data[(int)(update->y * (game->img_n.size_l * 0.25) + update->x)];
 				}
-				else if (v_plan == 1 && (game->player_x + point_x) < game->player_x && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_x && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)(game->player_y + point_y)][(int)(-game->plan[v_plan][u_plan].d - 1)] == '1')
+				else if (v_plan == 1 && update->px_px < game->player_x && (int)(-game->plan[v_plan][u_plan].d - 1) < game->max_x && (int)(-game->plan[v_plan][u_plan].d - 1) >= 0 && game->map[(int)update->py_py][(int)(-game->plan[v_plan][u_plan].d - 1)] == '1')
 				{
-					x = (int)(((game->player_y + point_y) - (int)(game->player_y + point_y)) * game->img_w.size_l * 0.25);
-					y = (int)((point_z - (int)(point_z)) * game->img_w.size_l * 0.25);
-					update->img->data[update->i* game->twidth + update->j] = game->img_w.data[(int)(y * (game->img_w.size_l * 0.25) + x)];
+					update->x = (int)((update->py_py - (int)update->py_py) * game->img_w.size_l * 0.25);
+					update->y = (int)((update->point_z - (int)(update->point_z)) * game->img_w.size_l * 0.25);
+					update->img->data[update->i* game->twidth + update->j] = game->img_w.data[(int)(update->y * (game->img_w.size_l * 0.25) + update->x)];
 				}
-				else if (v_plan == 0 && (game->player_y + point_y) > game->player_y && (int)(-game->plan[v_plan][u_plan].d) < game->max_y && (int)(-game->plan[v_plan][u_plan].d) >= 0 && game->map[(int)(-game->plan[v_plan][u_plan].d)][(int)(game->player_x + point_x)] == '1')
+				else if (v_plan == 0 && update->py_py > game->player_y && (int)(-game->plan[v_plan][u_plan].d) < game->max_y && (int)(-game->plan[v_plan][u_plan].d) >= 0 && game->map[(int)(-game->plan[v_plan][u_plan].d)][(int)update->px_px] == '1')
 				{
-					x = (int)(((game->player_x + point_x) - (int)(game->player_x + point_x)) * game->img_s.size_l * 0.25);
-					y = (int)((point_z - (int)(point_z)) * game->img_s.size_l * 0.25);
-					update->img->data[update->i* game->twidth + update->j] = game->img_s.data[(int)(y * (game->img_s.size_l * 0.25) + x)];
+					update->x = (int)((update->px_px - (int)update->px_px) * game->img_s.size_l * 0.25);
+					update->y = (int)((update->point_z - (int)(update->point_z)) * game->img_s.size_l * 0.25);
+					update->img->data[update->i* game->twidth + update->j] = game->img_s.data[(int)(update->y * (game->img_s.size_l * 0.25) + update->x)];
 				}
 				else
 				{
-					x = (int)(((game->player_y + point_y) - (int)(game->player_y + point_y)) * game->img_e.size_l * 0.25);
-					y = (int)((point_z - (int)(point_z)) * game->img_e.size_l * 0.25);
-					update->img->data[update->i* game->twidth + update->j] = game->img_e.data[(int)(y * (game->img_e.size_l * 0.25) + x)];
+					update->x = (int)((update->py_py - (int)update->py_py) * game->img_e.size_l * 0.25);
+					update->y = (int)((update->point_z - (int)(update->point_z)) * game->img_e.size_l * 0.25);
+					update->img->data[update->i* game->twidth + update->j] = game->img_e.data[(int)(update->y * (game->img_e.size_l * 0.25) + update->x)];
 				}
 			}
-			y = 0;
-			t = 0;
+			update->t = 0;
 			update->j++;
 		}
 		update->i++;
@@ -1021,7 +1056,7 @@ int	ft_data_image(t_game *game)
 	ft_flip_img(&game->img_s, 0, 0, 1);
 	ft_flip_img(&game->img_e, 0, 0, 0);
 	ft_flip_img(&game->img_w, 0, 0, 1);
-	ft_flip_img(&game->img_t, 0, 0, 0);
+	ft_flip_img(&game->img_t, 0, 0, 1);
 	ft_flip_img(&game->door_color[0], 0, 0, 0);
 	ft_flip_img(&game->door_color[1], 0, 0, 0);
 	ft_flip_img(&game->door_color[2], 0, 0, 0);

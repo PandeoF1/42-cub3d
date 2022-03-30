@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/29 14:28:41 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/03/30 17:08:25 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,24 @@ typedef struct s_update
 {
 	int				i;
 	int				j;
+	float			point_x;
+	float			point_y;
+	float			point_z;
+	int				switch_plan;
+	int				u;
+	int				v;
+	float			r;
+	int				x;
+	int				y;
+	float			t;
+	int				add;
+	int				door;
+	float			py_py;
+	float			px_px;
+	t_rayon			rayon_temp;
+	t_rayon			rayon_tempp;
+	int				best_x;
+	int				best_y;
 	float			end_y;
 	float			start_y;
 	struct s_img	*img;

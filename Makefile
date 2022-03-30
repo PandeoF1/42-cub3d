@@ -6,7 +6,7 @@
 #    By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/09 13:04:45 by tnard             #+#    #+#              #
-#    Updated: 2022/03/10 17:03:34 by asaffroy         ###   ########lyon.fr    #
+#    Updated: 2022/03/30 16:16:59 by asaffroy         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ OBJS_DIR	= objs/
 OBJS		= $(SRCS:.c=.o)
 OBJECTS_PREFIXED = $(addprefix $(OBJS_DIR), $(OBJS))
 CC			= gcc
-CC_FLAGS	= -O3 -Ofast -flto -march=native -ffast-math -lpthread #-fsanitize=address -g3 #-Wall -Werror -Wextra -g3  
+CC_FLAGS	= -O3 -Ofast -flto -march=native -ffast-math -lpthread -framework CoreFoundation #-fsanitize=address -g3 #-Wall -Werror -Wextra -g3  
 MLB_FLAGS	= -I -g -L /usr/X11/lib -Lincludes -L./mlbx -lmlx -Imlx -lXext -lX11 -lz -lm libft/libft.a ft_printf/libftprintf.a
 
 $(OBJS_DIR)%.o : %.c includes/cub3d.h
