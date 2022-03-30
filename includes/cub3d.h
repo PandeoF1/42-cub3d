@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/30 17:08:25 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/03/30 18:19:10 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,9 @@ typedef struct s_update
 	int				door;
 	float			py_py;
 	float			px_px;
+	float			best_t;
+	int				v_plan;
+	int				u_plan;
 	t_rayon			rayon_temp;
 	t_rayon			rayon_tempp;
 	int				best_x;
