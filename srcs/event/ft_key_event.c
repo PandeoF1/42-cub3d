@@ -36,6 +36,8 @@ int	ft_win_event(int keycode, t_game *game)
 		game->keyboard.right = 1;
 	if (keycode == 65505)
 		game->size_p = SIZE_P_CROUCHING;
+	if (keycode == 109)
+		game->minimap *= -1;
 	return (0);
 }
 

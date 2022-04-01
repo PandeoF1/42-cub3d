@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/30 18:19:10 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/01 12:12:25 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,7 @@ typedef struct s_game
 	struct s_sprite		*sprites;
 	struct s_rayon		**rayon;
 	struct s_graphic	*graphic;
+	int					minimap;
 }	t_game;
 
 /* Utils */
@@ -198,5 +199,44 @@ void	ft_move_next(t_game *game);
 void	ft_move(t_game *game);
 int		ft_exit_hook(t_game *game);
 void	ft_mouse(t_game *game);
+
+/* Set var */
+
+void	ft_set_rayons(t_update *update, t_game *game);
+void	ft_set_switch(t_update *update, t_game *game);
+void	ft_set_points(t_update *update, t_game *game, float t);
+void	ft_set_var(t_update *update);
+void	ft_set_sprites(t_game *game);
+
+/* put texture */
+
+int		ft_put_s_e_wall(t_update *u, t_game *g);
+int		ft_put_n_w_wall(t_update *u, t_game *g);
+int		ft_put_sprite(t_update *update, t_game *game);
+int		ft_put_door(t_update *u, t_game *g);
+int		ft_put_door_2(t_update *update, t_game *game);
+
+/* check */
+
+int		ft_is_door(char c);
+int		ft_is_sprite(char c);
+int		ft_is_double_x(char	**str, int x);
+int		ft_is_double_y(char	**str, int y);
+
+/* create plan */
+
+int		ft_create_plan(t_game *game);
+void	ft_create_plan_n_s(t_game *game, int x);
+void	ft_create_plan_e_w(t_game *game, int x);
+int		ft_create_plan_sprite_door(t_game *game);
+
+/* door */
+
+int		ft_door_count(t_game *game);
+void	ft_create_door(t_game *game);
+
+
+int		ft_nb_of(t_game *game, char	charset);
+void	ft_create_sprite(t_game *game, char *charset);
 
 #endif
