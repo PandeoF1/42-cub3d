@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/04/01 12:12:25 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/01 12:20:11 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,11 +232,16 @@ int		ft_create_plan_sprite_door(t_game *game);
 
 /* door */
 
+void	ft_door(t_game *game);
+void	ft_door_open(t_game *game, int x, int y);
+void	ft_door_close(t_game *game, int x, int y);
 int		ft_door_count(t_game *game);
 void	ft_create_door(t_game *game);
 
+/* jsp encore */
 
-int		ft_nb_of(t_game *game, char	charset);
+int		ft_nb_of(t_game *game, char charset);
 void	ft_create_sprite(t_game *game, char *charset);
+int64_t	get_time(void);
 
 #endif
