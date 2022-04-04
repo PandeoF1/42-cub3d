@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/04/04 09:46:31 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/04 10:16:04 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,6 +264,17 @@ void	ft_reverse_img(t_img *img, int t, int x, int temp);
 int		ft_image_len(char *str, int y);
 void	*ft_open_xpm(t_game *game, char *str, int size_x);
 int		ft_check_image(char *path);
+void	ft_put_image(t_game *game, t_img img2);
+
+/* position */
+
+int		ft_get_pos(t_game *game);
+int		ft_select_pos(t_game *game, int x, int y);
+
+/* end */
+
+void	ft_free_rayon(t_rayon **rayon, t_game *game);
+void	ft_close(t_game *game);
 
 /* jsp encore */
 

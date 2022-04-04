@@ -6,115 +6,11 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/04/04 09:39:46 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/04 10:15:03 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/cub3d.h"
-
-void	ft_free_rayon(t_rayon **rayon, t_game *game)
-{
-	int			x;
-
-	x = 0;
-	while (x < game->theight)
-	{
-		free(rayon[x]);
-		x++;
-	}
-	free(rayon);
-}
-
-void	ft_close(t_game *game)
-{
-	if (game->map)
-		ft_free_split(game->map);
-	if (game->n)
-		free(game->n);
-	if (game->s)
-		free(game->s);
-	if (game->e)
-		free(game->e);
-	if (game->w)
-		free(game->w);
-	if (game->f)
-		free(game->f);
-	if (game->c)
-		free(game->c);
-	ft_free_rayon(game->rayon, game);
-	mlx_destroy_image(game->graphic->mlx, game->img_n.img_ptr);
-	mlx_destroy_image(game->graphic->mlx, game->img_s.img_ptr);
-	mlx_destroy_image(game->graphic->mlx, game->img_e.img_ptr);
-	mlx_destroy_image(game->graphic->mlx, game->img_w.img_ptr);
-	mlx_destroy_window(game->graphic->mlx, game->graphic->win);
-	mlx_destroy_display(game->graphic->mlx);
-	printf("Cub3d: exit\n");
-}
-
-int	ft_select_pos(t_game *game, int x, int y)
-{
-	if (game->map[y][x] == 'N')
-		game->angle_z = 0;
-	else if (game->map[y][x] == 'S')
-		game->angle_z = 3.14;
-	else if (game->map[y][x] == 'W')
-		game->angle_z = 3.14 * 0.5;
-	else if (game->map[y][x] == 'E')
-		game->angle_z = 3.14 * 0.5 + 3.14;
-	else
-		return (1);
-	if (game->player_x != -1 || game->player_y != -1)
-		return (0);
-	game->player_x = x + 0.5;
-	game->player_y = y + 0.5;
-	game->map[y][x] = '0';
-	return (1);
-}
-
-int	ft_get_pos(t_game *game)
-{
-	int			x;
-	int			y;
-
-	y = 0;
-	while (game->map[y])
-	{
-		x = 0;
-		while (game->map[y][x])
-		{
-			if (!ft_select_pos(game, x, y))
-				return (0);
-			x++;
-		}
-		y++;
-	}
-	game->max_y = ft_splitlen(game->map);
-	if (game->player_x == -1 || game->player_y == -1)
-		return (0);
-	return (1);
-}
-
-int	ft_nb_of(t_game *game, char charset)
-{
-	int	x;
-	int	y;
-	int	total;
-
-	x = 0;
-	total = 0;
-	while (game->map[x])
-	{
-		y = 0;
-		while (game->map[x][y])
-		{
-			if (game->map[x][y] == charset)
-				total++;
-			y++;
-		}
-		x++;
-	}
-	return (total);
-}
 
 int64_t	get_time(void)
 {
@@ -340,32 +236,6 @@ void	*ft_updater(void	*data)
 	return (0);
 }
 
-void ft_put_image(t_game *game, t_img img2)
-{
-	int		i;
-	int		j;
-	t_img	img;
-
-	img.img_ptr = mlx_new_image(game->graphic->mlx, WIDTH, HEIGHT);
-	img.data = (int *)mlx_get_data_addr(img.img_ptr,
-			&img.bpp, &img.size_l, &img.endian);
-	i = 0;
-	while (i < HEIGHT)
-	{
-		j = 0;
-		while (j < WIDTH)
-		{
-			img.data[(i) * WIDTH + (j)]
-				= img2.data[((i / PERF) * game->twidth + (j / PERF))];
-			j++;
-		}
-		i++;
-	}
-	mlx_put_image_to_window(game->graphic->mlx, game->graphic->win,
-		img.img_ptr, 0, 0);
-	mlx_destroy_image(game->graphic->mlx, img.img_ptr);
-}
-
 void	ft_threads(t_game *game, t_update *updt, pthread_t *thread, t_img *img)
 {
 	int	x;
@@ -411,38 +281,6 @@ int	ft_update(t_game *game)
 	ft_fps(game);
 	mlx_destroy_image(game->graphic->mlx, img.img_ptr);
 	return (0);
-}
-
-int	ft_image_len(char *str, int y)
-{
-	int	x;
-
-	x = 0;
-	while (str[x])
-	{
-		if (x > y - 1)
-			if (x == y && str[x] != ' ')
-				return (0);
-		x++;
-	}
-	if (str[x - 1] == ' ' || x < y + 2)
-		return (0);
-	return (x);
-}
-
-int	ft_check_image(char *path)
-{
-	char	*ext;
-	int		fd;
-
-	fd = open(path, O_RDONLY);
-	if (fd < 0)
-		return (0);
-	close(fd);
-	ext = ft_strrchr(path, '.');
-	if (ext == NULL || ft_strncmp(".xpm", ext, ft_strlen(".xpm")) != 0)
-		return (0);
-	return (1);
 }
 
 void	*ft_open_xpm(t_game *game, char *str, int size_x)
@@ -493,14 +331,8 @@ void ft_mouse(t_game *game)
 
 	mlx_mouse_get_pos(game->graphic->mlx, game->graphic->win, &x, &y);
 	mlx_mouse_hide(game->graphic->mlx, game->graphic->win);
-	if (x > game->twidth / 2)
-		game->angle_z += 0.05;
-	else if (x < game->twidth / 2)
-		game->angle_z -= 0.05;
-	if (y > game->theight / 2 && game->angle_x <= 0.75)
-		game->angle_x += 0.025;
-	else if (y < game->theight / 2 && game->angle_x >= -0.5)
-		game->angle_x -= 0.025;
+	game->angle_z += (x - game->twidth / 2) * 0.005;
+	game->angle_x += (y - game->theight / 2) * 0.0025;
 	mlx_mouse_move(game->graphic->mlx, game->graphic->win,
 		game->twidth / 2, game->theight / 2);
 }
@@ -512,6 +344,8 @@ int main(int argc, char *argv[])
 	pthread_t	music;
 
 	ft_init_struct(&game, &graphic);
+	mlx_mouse_move(game.graphic->mlx, game.graphic->win,
+		game.twidth / 2, game.theight / 2);
 	if (ft_check_arg(argc, argv, &game)
 		&& ft_create_image_n_s(&game) && ft_get_pos(&game))
 	{
