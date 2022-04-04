@@ -6,7 +6,7 @@
 #    By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/09 13:04:45 by tnard             #+#    #+#              #
-#    Updated: 2022/04/04 11:20:02 by asaffroy         ###   ########lyon.fr    #
+#    Updated: 2022/04/04 12:40:49 by asaffroy         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,7 @@ SRCS		= cub3d.c srcs/check/ft_check_arg.c srcs/check/ft_check_map.c \
 				srcs/img_fct/ft_img_utils.c srcs/utils/ft_end.c \
 				srcs/utils/ft_split_number.c srcs/event/ft_mouse.c \
 				srcs/update/ft_update.c srcs/update/ft_update_2.c \
+				srcs/img_fct/ft_reverse_flip_img.c srcs/utils/ft_gettime.c \
 
 NAME		= cub3d
 minilibx	= mlbx/libmlx.a

@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 16:19:11 by tnard             #+#    #+#             */
-/*   Updated: 2022/04/04 11:22:27 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/04 11:41:52 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,18 @@ int	ft_pos(char *line, char *str)
 	return (0);
 }
 
+int	ft_check_texture_util(t_game *game, char **split, char *str, int x)
+{
+	if (ft_check_map(game, ft_pos(split[x + 1], str),
+			str, ft_pos(split[x + 1], str)))
+	{
+		ft_free_split(split);
+		return (1);
+	}
+	ft_free_split(split);
+	return (0);
+}
+
 int	ft_check_texture(char *str, t_game *game)
 {
 	char	**split;
@@ -83,14 +95,7 @@ int	ft_check_texture(char *str, t_game *game)
 			&& game->e && game->f && game->c && game->t && game->z[0] && \
 			game->z[1] && game->z[2] && game->z[3] && split[x + 1])
 		{
-			if (ft_check_map(game, ft_pos(split[x + 1], str),
-					str, ft_pos(split[x + 1], str)))
-			{
-				ft_free_split(split);
-				return (1);
-			}
-			ft_free_split(split);
-			return (0);
+			return (ft_check_texture_util(game, split, str, x));
 		}
 	}
 	ft_free_split(split);

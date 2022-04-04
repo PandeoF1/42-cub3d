@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/04/04 11:17:40 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/04 12:48:43 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,8 @@ typedef struct s_game
 	struct s_img		img_w;
 	struct s_img		img_e;
 	struct s_img		img_t;
+	struct s_img		img_map;
+	int					map_color;
 	int					floor_color;
 	int					ceiling_color;
 	struct s_img		door_color[4];
@@ -246,8 +248,7 @@ void	ft_create_door(t_game *game);
 void	ft_fps(t_game *game);
 void	ft_put_fps(t_game *game, int lframe, int total_second, int total_frame);
 void	ft_map(t_game *game, t_img img);
-void	ft_draw_square(t_img img, int y, int x, \
-		int max_y, int color, t_game *game);
+void	ft_draw_square(int y, int x, int max_y, t_game *game);
 
 /* music */
 
@@ -288,7 +289,6 @@ void	ft_updater_4(t_update *u, t_game *g);
 void	ft_updater_4_util(t_update *update);
 void	ft_updater_5(t_update *update, t_game *game);
 float	ft_best_var(t_update *update, t_game *game);
-
 
 /* jsp encore */
 

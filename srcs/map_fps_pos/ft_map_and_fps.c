@@ -6,19 +6,11 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 12:22:18 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/04 11:20:49 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/04 13:09:49 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
-
-int64_t	get_time(void)
-{
-	static struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	return ((tv.tv_sec * (int64_t)1000) + (tv.tv_usec / 1000));
-}
 
 void	ft_put_fps(t_game *game, int lframe, int total_second, int total_frame)
 {
@@ -62,7 +54,7 @@ void	ft_fps(t_game *game)
 	ft_put_fps(game, lframe, total_second, total_frame);
 }
 
-void ft_draw_square(t_img img, int y, int x, int max_y, int color, t_game *game)
+void	ft_draw_square(int y, int x, int max_y, t_game *game)
 {
 	int		i;
 	int		j;
@@ -73,22 +65,26 @@ void ft_draw_square(t_img img, int y, int x, int max_y, int color, t_game *game)
 		j = 0;
 		while (j < max_y)
 		{
-			img.data[(i + x) * (game->twidth) + (j + y)] = color;
+			game->img_map.data[(i + x) * (game->twidth) + \
+			(j + y)] = game->map_color;
 			j++;
 		}
 		i++;
 	}
 }
 
-void ft_map(t_game *game, t_img img)
+void	ft_map(t_game *game, t_img img)
 {
 	int		i;
 	int		j;
 	int		x;
 	int		y;
 
-	ft_draw_square(img, x + (game->twidth - (25 * 9)), y + 25,
-		25 * 10, 0x5e5e5e, game);
+	game->img_map = img;
+	game->map_color = 0x5e5e5e;
+	//x = 0;
+	//y = 0;
+	//ft_draw_square(x + (game->twidth - (25 * 9)), y + 25, 25 * 10, game);
 	i = (game->player_x * 4) - 25 * 4;
 	if (i < 0)
 		i = 0;
@@ -101,16 +97,29 @@ void ft_map(t_game *game, t_img img)
 		y = 0;
 		while (j < game->max_y * 4 && j < (game->player_y * 4) + 25 * 4)
 		{
-			if ((int)(i * 0.25) == (int)game->player_x && j * 0.25 == (int)game->player_y)
+			if ((int)(i * 0.25) == (int)game->player_x && j * 0.25 \
+			== (int)game->player_y)
 			{
-				ft_draw_square(img, x + (game->twidth - (25 * 9)), y + 25, 4, 0xffffff, game);
+				game->map_color = 0xffffff;
+				ft_draw_square(x + (game->twidth - (25 * 9)), \
+				y + 25, 4, game);
 				j += 3;
 				y += 3;
 			}
 			else if (game->map[(int)(j * 0.25)][(int)(i * 0.25)] == '1')
-				ft_draw_square(img, x + (game->twidth - (25 * 9)), y + 25, 4, 0x9000ff, game);
-			else if (game->map[(int)(j * 0.25)][(int)(i * 0.25)] == '0' || ft_is_door(game->map[(int)(j * 0.25)][(int)(i * 0.25)]) || game->map[(int)(j * 0.25)][(int)(i * 0.25)] == 'X')
-				ft_draw_square(img, x + (game->twidth - (25 * 9)), y + 25, 4, 0x2205ff, game);
+			{
+				game->map_color = 0x9000ff;
+				ft_draw_square(x + (game->twidth - (25 * 9)), y + 25, \
+				4, game);
+			}
+			else if (game->map[(int)(j * 0.25)][(int)(i * 0.25)] == '0' \
+			|| ft_is_door(game->map[(int)(j * 0.25)][(int)(i * 0.25)]) \
+			|| game->map[(int)(j * 0.25)][(int)(i * 0.25)] == 'X')
+			{
+				game->map_color = 0x2205ff;
+				ft_draw_square(x + (game->twidth - (25 * 9)), y + 25, \
+				4, game);
+			}
 			j++;
 			y++;
 		}
