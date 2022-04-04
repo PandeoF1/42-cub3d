@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_check_texture.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 16:19:11 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/29 14:28:44 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/04 11:22:27 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,8 @@ int	ft_check_texture(char *str, t_game *game)
 		if (!ft_add_texture(split[x], game, x, y))
 			return (0);
 		if (game->n && game->s && game->w
-			&& game->e && game->f && game->c && game->t && game->z[0] && game->z[1] && game->z[2] && game->z[3] && split[x + 1])
+			&& game->e && game->f && game->c && game->t && game->z[0] && \
+			game->z[1] && game->z[2] && game->z[3] && split[x + 1])
 		{
 			if (ft_check_map(game, ft_pos(split[x + 1], str),
 					str, ft_pos(split[x + 1], str)))

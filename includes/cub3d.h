@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/04/04 10:16:04 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/04 11:17:40 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,6 +182,7 @@ char	*ft_strnjoinf(char *s1, char *s2, int n); // free second
 char	*ft_strnjoin(char *s1, char *s2, int n); // free first
 void	ft_free_split(char **split);
 int		ft_splitlen(char **split);
+int		ft_split_number(char **split);
 int		ft_atoi_base(char *str, char *base);
 
 /* Check - Parsing */
@@ -275,6 +276,19 @@ int		ft_select_pos(t_game *game, int x, int y);
 
 void	ft_free_rayon(t_rayon **rayon, t_game *game);
 void	ft_close(t_game *game);
+
+/* update */
+
+int		ft_case_one(t_update *u, t_game *g);
+int		ft_case_two(t_update *update, t_game *game);
+void	ft_case_two_util(t_update *update, t_game *game);
+void	ft_updater_2(t_update *update, t_game *game);
+void	ft_updater_3(t_update *u, t_game *g);
+void	ft_updater_4(t_update *u, t_game *g);
+void	ft_updater_4_util(t_update *update);
+void	ft_updater_5(t_update *update, t_game *game);
+float	ft_best_var(t_update *update, t_game *game);
+
 
 /* jsp encore */
 

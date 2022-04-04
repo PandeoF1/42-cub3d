@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_check_arg.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:38:36 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/29 14:25:44 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/04 10:35:52 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,7 @@ int	ft_check_arg(int argc, char **argv, t_game *game)
 		return (0);
 	}
 	free(str);
+	mlx_mouse_move(game->graphic->mlx, game->graphic->win,
+		game->twidth / 2, game->theight / 2);
 	return (1);
 }

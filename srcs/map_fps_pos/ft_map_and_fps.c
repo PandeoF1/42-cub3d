@@ -1,16 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map_and_fps.c                                      :+:      :+:    :+:   */
+/*   ft_map_and_fps.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 12:22:18 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/01 12:22:54 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/04 11:20:49 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
+
+int64_t	get_time(void)
+{
+	static struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return ((tv.tv_sec * (int64_t)1000) + (tv.tv_usec / 1000));
+}
 
 void	ft_put_fps(t_game *game, int lframe, int total_second, int total_frame)
 {

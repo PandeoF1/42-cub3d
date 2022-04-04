@@ -6,7 +6,7 @@
 #    By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/09 13:04:45 by tnard             #+#    #+#              #
-#    Updated: 2022/04/04 10:16:22 by asaffroy         ###   ########lyon.fr    #
+#    Updated: 2022/04/04 11:20:02 by asaffroy         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,8 @@ SRCS		= cub3d.c srcs/check/ft_check_arg.c srcs/check/ft_check_map.c \
 				srcs/img_fct/ft_img_init.c srcs/init/ft_init.c \
 				srcs/map_fps_pos/ft_pos.c srcs/utils/ft_nb_of.c \
 				srcs/img_fct/ft_img_utils.c srcs/utils/ft_end.c \
+				srcs/utils/ft_split_number.c srcs/event/ft_mouse.c \
+				srcs/update/ft_update.c srcs/update/ft_update_2.c \
 
 NAME		= cub3d
 minilibx	= mlbx/libmlx.a
@@ -51,6 +53,7 @@ $(OBJS_DIR)%.o : %.c includes/cub3d.h
 	@mkdir -p $(OBJS_DIR)srcs/map_fps_pos
 	@mkdir -p $(OBJS_DIR)srcs/init
 	@mkdir -p $(OBJS_DIR)srcs/img_fct
+	@mkdir -p $(OBJS_DIR)srcs/update
 	@$(CC) $(CC_FLAGS) -c $< -o $@
 	@printf	"\033[2K\r${BLU}[BUILD - $(NAME)]${RST} '$<' $(END)"
 

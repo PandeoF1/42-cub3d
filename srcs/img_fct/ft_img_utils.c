@@ -6,11 +6,32 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 09:57:26 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/04 09:58:24 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/04 11:23:32 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
+
+void	*ft_open_xpm(t_game *game, char *str, int size_x)
+{
+	return (mlx_xpm_file_to_image(
+			game->graphic->mlx, str, &size_x,
+			&size_x));
+}
+
+int	ft_color_format(char *str)
+{
+	char	**split;
+
+	split = ft_split(str, ',');
+	if (ft_splitlen(split) != 3 || !ft_split_number(split))
+	{
+		ft_free_split(split);
+		return (-1);
+	}
+	return ((ft_atoi(split[0]) << 16)
+		+ (ft_atoi(split[1]) << 8) + ft_atoi(split[2]));
+}
 
 int	ft_image_len(char *str, int y)
 {

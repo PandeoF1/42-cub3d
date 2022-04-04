@@ -1,35 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_nb_of.c                                         :+:      :+:    :+:   */
+/*   ft_split_number.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/04 09:54:16 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/04 11:23:12 by asaffroy         ###   ########lyon.fr   */
+/*   Created: 2022/04/04 10:19:14 by asaffroy          #+#    #+#             */
+/*   Updated: 2022/04/04 10:19:21 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
-int	ft_nb_of(t_game *game, char charset)
+int	ft_split_number(char **split)
 {
 	int	x;
 	int	y;
-	int	total;
 
 	x = 0;
-	total = 0;
-	while (game->map[x])
+	while (split[x])
 	{
 		y = 0;
-		while (game->map[x][y])
+		while (split[x][y])
 		{
-			if (game->map[x][y] == charset)
-				total++;
+			if (split[x][y] < '0' || split[x][y] > '9')
+				return (0);
 			y++;
 		}
 		x++;
 	}
-	return (total);
+	return (1);
 }

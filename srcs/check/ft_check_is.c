@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 11:59:07 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/01 12:03:53 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/04 11:21:45 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ int	ft_is_double_x(char	**str, int x)
 	y = 0;
 	while (str[y] && str[y][x] && str[y][x - 1])
 	{
-		//printf("y : %d %d - %c %c\n", y, x, str[y][x], str[y][x + 1]);
-		//if (str[y][x] != ' ' && str[y][x + 1] != ' ')
 		if (str[y][x] != str[y][x - 1])
 			return (0);
 		y++;
