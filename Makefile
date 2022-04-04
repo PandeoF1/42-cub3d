@@ -6,7 +6,7 @@
 #    By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/09 13:04:45 by tnard             #+#    #+#              #
-#    Updated: 2022/04/01 12:18:43 by asaffroy         ###   ########lyon.fr    #
+#    Updated: 2022/04/04 09:46:51 by asaffroy         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,9 @@ SRCS		= cub3d.c srcs/check/ft_check_arg.c srcs/check/ft_check_map.c \
 				srcs/event/ft_key_event.c srcs/event/ft_move.c \
 				srcs/set/ft_set.c srcs/put_texture/ft_put_texture.c \
 				srcs/check/ft_check_is.c srcs/create_plan/ft_create_plan.c \
-				srcs/door/ft_door.c
+				srcs/door/ft_door.c srcs/map_and_fps/ft_map_and_fps.c \
+				srcs/utils/ft_music.c srcs/init/ft_create.c \
+				srcs/img_init/ft_img_init.c srcs/init/ft_init.c \
 
 NAME		= cub3d
 minilibx	= mlbx/libmlx.a
@@ -44,6 +46,9 @@ $(OBJS_DIR)%.o : %.c includes/cub3d.h
 	@mkdir -p $(OBJS_DIR)srcs/put_texture
 	@mkdir -p $(OBJS_DIR)srcs/create_plan
 	@mkdir -p $(OBJS_DIR)srcs/door
+	@mkdir -p $(OBJS_DIR)srcs/map_and_fps
+	@mkdir -p $(OBJS_DIR)srcs/init
+	@mkdir -p $(OBJS_DIR)srcs/img_init
 	@$(CC) $(CC_FLAGS) -c $< -o $@
 	@printf	"\033[2K\r${BLU}[BUILD - $(NAME)]${RST} '$<' $(END)"
 

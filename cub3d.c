@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/04/01 12:16:16 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/04 09:39:46 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int	ft_get_pos(t_game *game)
 	return (1);
 }
 
-int	ft_nb_of(t_game *game, char	charset)
+int	ft_nb_of(t_game *game, char charset)
 {
 	int	x;
 	int	y;
@@ -116,175 +116,12 @@ int	ft_nb_of(t_game *game, char	charset)
 	return (total);
 }
 
-int		ft_init_sprite(t_game *game, int b, int x, int y)
-{
-	game->sprites[b].sx = x + 0.5;
-	game->sprites[b].sy = y + 0.5;
-	game->plan[2][b].a = 0;
-	game->plan[2][b].b = 0;
-	game->plan[2][b].c = 0;
-	game->plan[2][b].d = 0;
-	return (1);
-}
-
-void	ft_create_sprite(t_game *game, char *charset)
-{
-	int	a;
-	int	b;
-	int	x;
-	int	y;
-
-	a = 0;
-	b = 0;
-	while (a < ft_strlen(charset))
-	{
-		y = 0;
-		while (game->map[y])
-		{
-			x = 0;
-			while (game->map[y][x])
-			{
-				if (game->map[y][x] == charset[a])
-				{
-					b += ft_init_sprite(game, b, x, y);
-				}
-				x++;
-			}
-			y++;
-		}
-		a++;
-	}
-}
-
-void	ft_create_vector(t_game *game)
-{
-	int		i;
-	int		j;
-	float	r_h;
-	float	r_v;
-
-	i = 0;
-	while (i < game->theight)
-	{
-		j = 0;
-		while (j < game->twidth)
-		{
-			r_h = 2 * tan((60 * PI / 180) * 0.5) / game->twidth;
-			r_v = 2 * tan((60 * PI / 180)
-					* game->theight / (game->twidth * 2)) / game->theight;
-			game->rayon[i][j].x = ((j - game->twidth * 0.5) * r_h);
-			game->rayon[i][j].y = -1.0;
-			game->rayon[i][j].z = ((game->theight * 0.5 - i) * r_v);
-			j++;
-		}
-		i++;
-	}
-}
-
 int64_t	get_time(void)
 {
 	static struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
 	return ((tv.tv_sec * (int64_t)1000) + (tv.tv_usec / 1000));
-}
-
-void	ft_put_fps(t_game *game, int lframe, int total_second, int total_frame)
-{
-	game->put_fps = ft_itoa(lframe);
-	mlx_string_put(game->graphic->mlx, game->graphic->win,
-		2, 10, 0xffffff, "FPS: ");
-	mlx_string_put(game->graphic->mlx, game->graphic->win,
-		30, 10, 0xffffff, game->put_fps);
-	if (total_second > 1)
-	{
-		free(game->put_fps);
-		game->put_fps = ft_itoa(total_frame / total_second);
-		mlx_string_put(game->graphic->mlx, game->graphic->win,
-			2, 30, 0xffffff, "Moy FPS : ");
-		mlx_string_put(game->graphic->mlx, game->graphic->win,
-			60, 30, 0xffffff, game->put_fps);
-	}
-	free(game->put_fps);
-}
-void	ft_fps(t_game *game)
-{
-	static int		lframe = 0;
-	static int		frame = 0;
-	static int		total_frame = 0;
-	static int		total_second = -1;
-	static int64_t	fps = 0;
-
-	if (get_time() - fps < 1000)
-	{
-		frame++;
-	}
-	else
-	{
-		lframe = frame;
-		fps = get_time();
-		total_frame += frame;
-		total_second += 1;
-		frame = 1;
-	}
-	ft_put_fps(game, lframe, total_second, total_frame);
-}
-
-void ft_draw_square(t_img img, int y, int x, int max_y, int color, t_game *game)
-{
-	int		i;
-	int		j;
-
-	i = 0;
-	while (i < max_y)
-	{
-		j = 0;
-		while (j < max_y)
-		{
-			img.data[(i + x) * (game->twidth) + (j + y)] = color;
-			j++;
-		}
-		i++;
-	}
-}
-
-void ft_map(t_game *game, t_img img)
-{
-	int		i;
-	int		j;
-	int		x;
-	int		y;
-
-	ft_draw_square(img, x + (game->twidth - (25 * 9)), y + 25,
-		25 * 10, 0x5e5e5e, game);
-	i = (game->player_x * 4) - 25 * 4;
-	if (i < 0)
-		i = 0;
-	x = 0;
-	while (i < game->max_x * 4 && i < (game->player_x * 4) + 25 * 4)
-	{
-		j = (game->player_y * 4) - 25 * 4;
-		if (j < 0)
-			j = 0;
-		y = 0;
-		while (j < game->max_y * 4 && j < (game->player_y * 4) + 25 * 4)
-		{
-			if ((int)(i * 0.25) == (int)game->player_x && j * 0.25 == (int)game->player_y)
-			{
-				ft_draw_square(img, x + (game->twidth - (25 * 9)), y + 25, 4, 0xffffff, game);
-				j += 3;
-				y += 3;
-			}
-			else if (game->map[(int)(j * 0.25)][(int)(i * 0.25)] == '1')
-				ft_draw_square(img, x + (game->twidth - (25 * 9)), y + 25, 4, 0x9000ff, game);
-			else if (game->map[(int)(j * 0.25)][(int)(i * 0.25)] == '0' || ft_is_door(game->map[(int)(j * 0.25)][(int)(i * 0.25)]) || game->map[(int)(j * 0.25)][(int)(i * 0.25)] == 'X')
-				ft_draw_square(img, x + (game->twidth - (25 * 9)), y + 25, 4, 0x2205ff, game);
-			j++;
-			y++;
-		}
-		x++;
-		i++;
-	}
 }
 
 int	ft_case_one(t_update *u, t_game *g)
@@ -576,21 +413,6 @@ int	ft_update(t_game *game)
 	return (0);
 }
 
-t_rayon **ft_malloc_rayon(t_game *game)
-{
-	t_rayon		**rayon;
-	int			x;
-
-	x = 0;
-	rayon = malloc(sizeof(t_rayon *) * game->theight + 1);
-	while (x < game->theight)
-	{
-		rayon[x] = malloc(sizeof(t_rayon) * game->twidth + 1);
-		x++;
-	}
-	return (rayon);
-}
-
 int	ft_image_len(char *str, int y)
 {
 	int	x;
@@ -664,140 +486,6 @@ int	ft_color_format(char *str)
 		+ (ft_atoi(split[1]) << 8) + ft_atoi(split[2]));
 }
 
-void	ft_reverse_img(t_img *img, int t, int x, int temp)
-{
-	int	value;
-
-	x = 0;
-	value = img->size_l * 0.25;
-	while (x < (img->size_l * 0.25 * img->size_l
-			* 0.25 - (img->size_l * 0.25 / 2)))
-	{
-		if (x >= value - img->size_l * 0.25 / 2)
-		{
-			x = value;
-			t = 0;
-			value += img->size_l * 0.25;
-		}
-		temp = img->data[x];
-		img->data[x] = img->data[value - 1 - t];
-		img->data[value - 1 - t] = temp;
-		t++;
-		x++;
-	}
-}
-
-void	ft_flip_img(t_img *img, int x, int temp, int check)
-{
-	int	value;
-
-	img->data = (int *)mlx_get_data_addr(img->img_ptr,
-			&img->bpp, &img->size_l, &img->endian);
-	if (x == 0)
-	{
-		value = img->size_l * 0.25 * img->size_l * 0.25;
-		while (x < value / 2)
-		{
-			temp = img->data[x];
-			img->data[x] = img->data[value - 1 - x];
-			img->data[value - 1 - x] = temp;
-			x++;
-		}
-	}
-	if (check == 0)
-		ft_reverse_img(img, 0, 0, 0);
-}
-
-int	ft_data_image(t_game *game)
-{
-	int	x;
-	int	temp;
-	int	t;
-	int	value;
-
-	if (ft_image_len(game->f, 1) == 0)
-		return (0);
-	game->floor_color = ft_color_format(game->f + 2);
-	if (game->floor_color == -1)
-		return (0);
-	if (ft_image_len(game->c, 1) == 0)
-		return (0);
-	game->ceiling_color = ft_color_format(game->c + 2);
-	if (game->ceiling_color == -1)
-		return (0);
-	ft_flip_img(&game->img_n, 0, 0, 0);
-	ft_flip_img(&game->img_s, 0, 0, 1);
-	ft_flip_img(&game->img_e, 0, 0, 0);
-	ft_flip_img(&game->img_w, 0, 0, 1);
-	ft_flip_img(&game->img_t, 0, 0, 1);
-	ft_flip_img(&game->door_color[0], 0, 0, 0);
-	ft_flip_img(&game->door_color[1], 0, 0, 0);
-	ft_flip_img(&game->door_color[2], 0, 0, 0);
-	ft_flip_img(&game->door_color[3], 0, 0, 0);
-	return (1);
-}
-
-int	ft_create_image_e_w(t_game *game)
-{
-	int	i;
-
-	i = 0;
-	if (ft_image_len(game->w, 2) == 0)
-		return (0);
-	if (ft_check_image(game->w + 3))
-		game->img_w.img_ptr = ft_open_xpm(game, game->w + 3,
-				game->img_w.size_l);
-	else
-		return (0);
-	if (ft_image_len(game->e, 2) == 0)
-		return (0);
-	if (ft_check_image(game->e + 3))
-		game->img_e.img_ptr = ft_open_xpm(game, game->e + 3,
-				game->img_e.size_l);
-	else
-		return (0);
-	if (ft_image_len(game->t, 2) == 0)
-		return (0);
-	if (ft_check_image(game->t + 3))
-		game->img_t.img_ptr = ft_open_xpm(game, game->t + 3,
-				game->img_t.size_l);
-	else
-		return (0);
-	while (i < 4)
-	{
-		if (ft_image_len(game->z[i], 2) == 0)
-			return (0);
-		if (ft_check_image(game->z[i] + 3))
-			game->door_color[i].img_ptr = ft_open_xpm(game, game->z[i] + 3,
-					game->door_color[i].size_l);
-		else
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-int	ft_create_image_n_s(t_game *game)
-{
-	if (ft_image_len(game->n, 2) == 0)
-		return (0);
-	if (ft_check_image(game->n + 3))
-		game->img_n.img_ptr = ft_open_xpm(game, game->n + 3,
-				game->img_n.size_l);
-	else
-		return (0);
-	if (ft_image_len(game->s, 2) == 0)
-		return (0);
-	if (ft_check_image(game->s + 3))
-		game->img_s.img_ptr = ft_open_xpm(game, game->s + 3,
-				game->img_s.size_l);
-	else
-		return (0);
-	if (ft_create_image_e_w(game) != 1)
-		return (0);
-	return (ft_data_image(game));
-}
-
 void ft_mouse(t_game *game)
 {
 	int	x;
@@ -815,59 +503,6 @@ void ft_mouse(t_game *game)
 		game->angle_x -= 0.025;
 	mlx_mouse_move(game->graphic->mlx, game->graphic->win,
 		game->twidth / 2, game->theight / 2);
-}
-
-void	*ft_music(void *data)
-{
-	t_game	*game;
-
-	game = (t_game *)data;
-	while (42)
-		system("afplay music.mp3");
-}
-
-void	ft_start_music(t_game *game, pthread_t music)
-{
-	if (MUSIC)
-	{
-		pthread_create(&music, NULL, ft_music, game);
-		pthread_detach(music);
-	}
-}
-
-void	ft_stop_music(t_game *game, pthread_t music)
-{
-	if (MUSIC)
-		pthread_cancel(music);
-}
-
-void	ft_init_struct(t_game *game, t_graphic *graphic)
-{
-	t_rayon		**rayon;
-
-	game->twidth = WIDTH / PERF;
-	game->theight = HEIGHT / PERF;
-	game->keyboard.w = 0;
-	game->keyboard.a = 0;
-	game->keyboard.s = 0;
-	game->keyboard.d = 0;
-	game->keyboard.space = 0;
-	game->keyboard.up = 0;
-	game->keyboard.down = 0;
-	game->keyboard.left = 0;
-	game->keyboard.right = 0;
-	game->minimap = -1;
-	game->size_p = SIZE_P_STANDING;
-	rayon = ft_malloc_rayon(game);
-	game->rayon = rayon;
-	game->angle_x = 0;
-	game->angle_z = 0;
-	game->player_x = -1;
-	game->player_y = -1;
-	game->graphic = graphic;
-	graphic->map_check = game;
-	graphic->mlx = mlx_init();
-	graphic->win = mlx_new_window(graphic->mlx, WIDTH, HEIGHT, "cub3d");
 }
 
 int main(int argc, char *argv[])

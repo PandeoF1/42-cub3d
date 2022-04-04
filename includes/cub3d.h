@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/04/01 12:20:11 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/04 09:46:31 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,6 +202,8 @@ void	ft_mouse(t_game *game);
 
 /* Set var */
 
+t_rayon	**ft_malloc_rayon(t_game *game);
+void	ft_init_struct(t_game *game, t_graphic *graphic);
 void	ft_set_rayons(t_update *update, t_game *game);
 void	ft_set_switch(t_update *update, t_game *game);
 void	ft_set_points(t_update *update, t_game *game, float t);
@@ -238,10 +240,40 @@ void	ft_door_close(t_game *game, int x, int y);
 int		ft_door_count(t_game *game);
 void	ft_create_door(t_game *game);
 
+/* map and fps */
+
+void	ft_fps(t_game *game);
+void	ft_put_fps(t_game *game, int lframe, int total_second, int total_frame);
+void	ft_map(t_game *game, t_img img);
+void	ft_draw_square(t_img img, int y, int x, \
+		int max_y, int color, t_game *game);
+
+/* music */
+
+void	*ft_music(void *data);
+void	ft_start_music(t_game *game, pthread_t music);
+void	ft_stop_music(t_game *game, pthread_t music);
+
+/* img */
+
+int		ft_create_image_n_s(t_game *game);
+int		ft_create_image_e_w(t_game *game);
+int		ft_data_image(t_game *game);
+void	ft_flip_img(t_img *img, int x, int temp, int check);
+void	ft_reverse_img(t_img *img, int t, int x, int temp);
+int		ft_image_len(char *str, int y);
+void	*ft_open_xpm(t_game *game, char *str, int size_x);
+int		ft_check_image(char *path);
+
 /* jsp encore */
 
 int		ft_nb_of(t_game *game, char charset);
 void	ft_create_sprite(t_game *game, char *charset);
 int64_t	get_time(void);
+
+void	ft_create_vector(t_game *game);
+int		ft_init_sprite(t_game *game, int b, int x, int y);
+void	ft_create_sprite(t_game *game, char *charset);
+int		ft_color_format(char *str);
 
 #endif
