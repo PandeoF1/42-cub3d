@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/04/04 12:48:43 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/06 11:19:12 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,13 @@ typedef struct s_plan
 	float	d;
 }				t_plan;
 
+typedef struct s_map_util
+{
+	int		i;
+	int		j;
+	int		x;
+	int		y;
+}				t_map_util;
 typedef struct s_sprite
 {
 	float	sx;
@@ -176,6 +183,7 @@ typedef struct s_game
 	struct s_sprite		*sprites;
 	struct s_rayon		**rayon;
 	struct s_graphic	*graphic;
+	struct s_map_util	map_util;
 	int					minimap;
 }	t_game;
 
