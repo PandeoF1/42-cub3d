@@ -7,7 +7,7 @@
 #    By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/09 13:04:45 by tnard             #+#    #+#              #
-#    Updated: 2022/04/04 12:40:49 by asaffroy         ###   ########lyon.fr    #
+#    Updated: 2022/04/06 11:34:01 by asaffroy         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ SRCS		= cub3d.c srcs/check/ft_check_arg.c srcs/check/ft_check_map.c \
 				srcs/event/ft_key_event.c srcs/event/ft_move.c \
 				srcs/set/ft_set.c srcs/put_texture/ft_put_texture.c \
 				srcs/check/ft_check_is.c srcs/create_plan/ft_create_plan.c \
-				srcs/door/ft_door.c srcs/map_fps_pos/ft_map_and_fps.c \
+				srcs/door/ft_door.c srcs/map_fps_pos/ft_map.c \
 				srcs/utils/ft_music.c srcs/init/ft_create.c \
 				srcs/img_fct/ft_img_init.c srcs/init/ft_init.c \
 				srcs/map_fps_pos/ft_pos.c srcs/utils/ft_nb_of.c \
@@ -32,6 +32,7 @@ SRCS		= cub3d.c srcs/check/ft_check_arg.c srcs/check/ft_check_map.c \
 				srcs/utils/ft_split_number.c srcs/event/ft_mouse.c \
 				srcs/update/ft_update.c srcs/update/ft_update_2.c \
 				srcs/img_fct/ft_reverse_flip_img.c srcs/utils/ft_gettime.c \
+				srcs/map_fps_pos/ft_fps.c
 
 NAME		= cub3d
 minilibx	= mlbx/libmlx.a
