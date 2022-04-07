@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_img_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 09:57:26 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/04 11:29:25 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/07 09:07:42 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	*ft_open_xpm(t_game *game, char *str, int size_x)
 int	ft_color_format(char *str)
 {
 	char	**split;
+	int		i;
 
 	split = ft_split(str, ',');
 	if (ft_splitlen(split) != 3 || !ft_split_number(split))
@@ -29,8 +30,10 @@ int	ft_color_format(char *str)
 		ft_free_split(split);
 		return (-1);
 	}
-	return ((ft_atoi(split[0]) << 16)
-		+ (ft_atoi(split[1]) << 8) + ft_atoi(split[2]));
+	i = (ft_atoi(split[0]) << 16)
+		+ (ft_atoi(split[1]) << 8) + ft_atoi(split[2]);
+	ft_free_split(split);
+	return (i);
 }
 
 int	ft_image_len(char *str, int y)

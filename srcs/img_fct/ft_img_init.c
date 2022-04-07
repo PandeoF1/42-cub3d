@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 14:45:49 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/07 09:02:57 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/07 09:09:26 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	ft_data_image(t_game *game)
 	ft_flip_img(&game->door_color[3], 0, 0, 0);
 	return (1);
 }
+
 int	ft_create_image_util(t_game *game)
 {
 	if (ft_image_len(game->w, 2) == 0)
