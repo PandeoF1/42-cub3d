@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_end.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 10:15:13 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/07 10:54:16 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/07 11:12:29 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ void	ft_close_3(t_game *game)
 	while (++i < DOOR_LEN)
 		if (game->s_color-- > 0)
 			mlx_destroy_image(game->graphic->mlx, game->door_color[i].img_ptr);
-	mlx_destroy_window(game->graphic->mlx, game->graphic->win);
+	if (game->graphic->mlx)
+		mlx_destroy_window(game->graphic->mlx, game->graphic->win);
 	free(game->graphic->mlx);
 	printf("Cub3d: exit\n");
 }
