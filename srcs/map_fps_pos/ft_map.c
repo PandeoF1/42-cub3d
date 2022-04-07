@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 12:22:18 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/07 09:09:36 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/07 10:02:13 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,9 @@ void	ft_map_util_2(t_game *game)
 		ft_map_util_3(game);
 	}
 	else if (game->map[(int) \
-	(game->m_u.j * 0.25)][(int)(game->m_u.i * 0.25)] == '0')
+	(game->m_u.j * 0.25)][(int)(game->m_u.i * 0.25)] == '0' \
+	|| game->map[(int) \
+	(game->m_u.j * 0.25)][(int)(game->m_u.i * 0.25)] == 'X')
 	{
 		game->map_color = 0x2205ff;
 		ft_map_util_3(game);
@@ -57,7 +59,13 @@ void	ft_map_util_2(t_game *game)
 		ft_map_util_3(game);
 	}
 	else if (game->map[(int) \
-	(game->m_u.j * 0.25)][(int)(game->m_u.i * 0.25)] == 'Z')
+	(game->m_u.j * 0.25)][(int)(game->m_u.i * 0.25)] == 'Z' \
+	|| game->map[(int) \
+	(game->m_u.j * 0.25)][(int)(game->m_u.i * 0.25)] == 'B' \
+	|| game->map[(int) \
+	(game->m_u.j * 0.25)][(int)(game->m_u.i * 0.25)] == 'V' \
+	|| game->map[(int) \
+	(game->m_u.j * 0.25)][(int)(game->m_u.i * 0.25)] == 'C')
 	{
 		game->map_color = 0xFF0000;
 		ft_map_util_3(game);

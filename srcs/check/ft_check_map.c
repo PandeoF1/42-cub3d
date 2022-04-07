@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 16:18:22 by tnard             #+#    #+#             */
-/*   Updated: 2022/03/29 14:26:17 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/07 10:00:17 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,10 +99,11 @@ int	ft_check_map(t_game *game, int x, char *str, int i)
 
 	while (str[i])
 	{
-		if (str[i + 1] && str[i] == '\n' && str[i + 1] == '\n'
-			&& (str[i] != '\n' || str[i] != '0' || str[i] != '1'
-				|| str[i] != ' ' || str[i] != 'N' || str[i] != 'E'
-				|| str[i] != 'S' || str[i] != 'W'))
+		if (str[i] != '\n' || str[i] != '0' || str[i] != '1'
+			|| str[i] != ' ' || str[i] != 'N' || str[i] != 'E'
+			|| str[i] != 'S' || str[i] != 'W' || str[i] != 'T'
+			|| str[i] != 'Z' || str[i] != 'B' || str[i] != 'V'
+			|| str[i] != 'C')
 			return (0);
 		i++;
 	}
