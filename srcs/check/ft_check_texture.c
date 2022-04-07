@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 16:19:11 by tnard             #+#    #+#             */
-/*   Updated: 2022/04/07 09:55:22 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/07 09:56:23 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	ft_check_texture(char *str, t_game *game)
 	{
 		if (!ft_add_texture(split[x], game, x, y))
 		{
-			fr_free_split(split);
+			ft_free_split(split);
 			return (0);
 		}
 		if (game->n && game->s && game->w
