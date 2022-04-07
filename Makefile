@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+         #
+#    By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/09 13:04:45 by tnard             #+#    #+#              #
-#    Updated: 2022/04/06 11:34:01 by asaffroy         ###   ########lyon.fr    #
+#    Updated: 2022/04/06 20:07:48 by tnard            ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,15 +33,14 @@ SRCS				= cub3d.c srcs/check/ft_check_arg.c srcs/check/ft_check_map.c \
 					srcs/img_fct/ft_reverse_flip_img.c srcs/utils/ft_gettime.c \
 					srcs/map_fps_pos/ft_fps.c
 
-NAME				= cub3d
-OS					= $(shell uname -s)
-ifeq ($(OS),Darwin)
-	minilibx		= mlbx-macos/libmlx.a
-	MLB_FLAGS		= -Lincludes -framework OpenGL -framework AppKit -framework OpenAL libft/libft.a ft_printf/libftprintf.a 
-else
-	minilibx		= mlbx-libmlx.a
-	MLB_FLAGS		= -lpthread -I -g -L /usr/X11/lib -Lincludes -L./mlbx -lmlx -Imlx -lXext -lX11 -lz -lm libft/libft.a ft_printf/libftprintf.a 
-endif
+NAME		= cub3d
+minilibx	= mlbx/libmlx.a
+OBJS_DIR	= objs/
+OBJS		= $(SRCS:.c=.o)
+OBJECTS_PREFIXED = $(addprefix $(OBJS_DIR), $(OBJS))
+CC			= gcc
+CC_FLAGS	= -O3 -Ofast -flto -march=native -ffast-math -lpthread #-Wall -Werror -Wextra #-fsanitize=address -g3 #-Wall -Werror -Wextra -g3  
+MLB_FLAGS	= -I -g -L /usr/X11/lib -Lincludes -L./mlbx -lmlx -Imlx -lXext -lX11 -lm libft/libft.a ft_printf/libftprintf.a #-lz 
 
 OBJS_DIR			= objs/
 OBJS				= $(SRCS:.c=.o)
