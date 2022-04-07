@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_end.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 10:15:13 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/04 10:15:19 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/07 09:02:26 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,24 @@ void	ft_close(t_game *game)
 	if (game->c)
 		free(game->c);
 	ft_free_rayon(game->rayon, game);
-	mlx_destroy_image(game->graphic->mlx, game->img_n.img_ptr);
-	mlx_destroy_image(game->graphic->mlx, game->img_s.img_ptr);
-	mlx_destroy_image(game->graphic->mlx, game->img_e.img_ptr);
-	mlx_destroy_image(game->graphic->mlx, game->img_w.img_ptr);
+	if (game->s_color-- > 0)
+		mlx_destroy_image(game->graphic->mlx, game->img_n.img_ptr);
+	if (game->s_color-- > 0)
+		mlx_destroy_image(game->graphic->mlx, game->img_s.img_ptr);
+	if (game->s_color-- > 0)
+		mlx_destroy_image(game->graphic->mlx, game->img_w.img_ptr);
+	if (game->s_color-- > 0)
+		mlx_destroy_image(game->graphic->mlx, game->img_e.img_ptr);
+	if (game->s_color-- > 0)
+		mlx_destroy_image(game->graphic->mlx, game->img_t.img_ptr);
+	if (game->s_color-- > 0)
+		mlx_destroy_image(game->graphic->mlx, game->door_color[0].img_ptr);
+	if (game->s_color-- > 0)
+		mlx_destroy_image(game->graphic->mlx, game->door_color[1].img_ptr);
+	if (game->s_color-- > 0)
+		mlx_destroy_image(game->graphic->mlx, game->door_color[2].img_ptr);
+	if (game->s_color-- > 0)
+		mlx_destroy_image(game->graphic->mlx, game->door_color[3].img_ptr);
 	mlx_destroy_window(game->graphic->mlx, game->graphic->win);
 	mlx_destroy_display(game->graphic->mlx);
 	printf("Cub3d: exit\n");

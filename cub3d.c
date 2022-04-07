@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/04/04 11:38:24 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/07 09:02:39 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ int	main(int argc, char *argv[])
 	t_graphic	graphic;
 	pthread_t	music;
 
+	game.s_color = 0;
 	ft_init_struct(&game, &graphic);
 	if (ft_check_arg(argc, argv, &game)
 		&& ft_create_image_n_s(&game) && ft_get_pos(&game))
