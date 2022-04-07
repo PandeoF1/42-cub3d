@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_img_init.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 14:45:49 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/07 09:35:34 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/07 10:27:28 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,6 @@
 
 int	ft_data_image(t_game *game)
 {
-	int	x;
-	int	temp;
-	int	t;
-	int	value;
-
 	if (ft_image_len(game->f, 1) == 0)
 		return (0);
 	game->floor_color = ft_color_format(game->f + 2);

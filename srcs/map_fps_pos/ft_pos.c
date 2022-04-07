@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 09:49:50 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/04 09:50:33 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/07 10:32:22 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,23 @@ int	ft_get_pos(t_game *game)
 	if (game->player_x == -1 || game->player_y == -1)
 		return (0);
 	return (1);
+}
+
+void	ft_draw_square(int y, int x, int max_y, t_game *game)
+{
+	int		i;
+	int		j;
+
+	i = 0;
+	while (i < max_y)
+	{
+		j = 0;
+		while (j < max_y)
+		{
+			game->img_map.data[(i + x) * (game->twidth) + \
+			(j + y)] = game->map_color;
+			j++;
+		}
+		i++;
+	}
 }

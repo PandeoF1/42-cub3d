@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 13:02:34 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/01 13:03:16 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/07 10:26:49 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	ft_start_music(t_game *game, pthread_t music)
 	}
 }
 
-void	ft_stop_music(t_game *game, pthread_t music)
+void	ft_stop_music(pthread_t music)
 {
 	if (MUSIC)
 		pthread_cancel(music);

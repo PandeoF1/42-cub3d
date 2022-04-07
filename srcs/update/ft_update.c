@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 11:14:17 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/04 11:18:14 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/07 10:28:57 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	ft_updater_2(t_update *update, t_game *game)
 			if (update->v == 3)
 				ft_updater_3(update, game);
 			else
-				ft_best_var(update, game);
+				ft_best_var(update);
 		}
 	}
 	else if (update->v == 2)
@@ -99,7 +99,7 @@ void	ft_updater_2(t_update *update, t_game *game)
 	}
 }
 
-float	ft_best_var(t_update *update, t_game *game)
+float	ft_best_var(t_update *update)
 {
 	update->best_t = update->t;
 	update->v_plan = update->v;

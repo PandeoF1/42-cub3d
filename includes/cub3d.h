@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/04/07 09:36:10 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/07 10:32:37 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,8 +184,9 @@ typedef struct s_game
 	struct s_sprite		*sprites;
 	struct s_rayon		**rayon;
 	struct s_graphic	*graphic;
-	struct s_map_util	m_u;
+	struct s_map_util	*m_u;
 	int					minimap;
+	pthread_t			music;
 }	t_game;
 
 /* Utils */
@@ -263,7 +264,7 @@ void	ft_draw_square(int y, int x, int max_y, t_game *game);
 
 void	*ft_music(void *data);
 void	ft_start_music(t_game *game, pthread_t music);
-void	ft_stop_music(t_game *game, pthread_t music);
+void	ft_stop_music(pthread_t music);
 
 /* img */
 
@@ -297,7 +298,7 @@ void	ft_updater_3(t_update *u, t_game *g);
 void	ft_updater_4(t_update *u, t_game *g);
 void	ft_updater_4_util(t_update *update);
 void	ft_updater_5(t_update *update, t_game *game);
-float	ft_best_var(t_update *update, t_game *game);
+float	ft_best_var(t_update *update);
 
 /* jsp encore */
 
@@ -309,5 +310,5 @@ void	ft_create_vector(t_game *game);
 int		ft_init_sprite(t_game *game, int b, int x, int y);
 void	ft_create_sprite(t_game *game, char *charset);
 int		ft_color_format(char *str);
-
+void	ft_draw_square(int y, int x, int max_y, t_game *game);
 #endif

@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 11:19:15 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/04 11:19:41 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/07 10:29:04 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	ft_updater_3(t_update *u, t_game *g)
 		g->door_color[u->door].size_l * 0.25);
 		if (g->door_color[u->door].data[(int)(u->y * \
 		(g->door_color[u->door].size_l * 0.25) + u->x)] != -16777216)
-			ft_best_var(u, g);
+			ft_best_var(u);
 	}
 }
 

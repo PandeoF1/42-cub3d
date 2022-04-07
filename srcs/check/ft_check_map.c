@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_check_map.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 16:18:22 by tnard             #+#    #+#             */
-/*   Updated: 2022/04/07 10:08:03 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/07 10:17:49 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	ft_add_space(char *str, int i, char **tmp, int x)
 
 int	ft_check_corner(char **split, int x, int y)
 {
-	if (y != ft_strlen(split[x]) && split[x][y + 1]
+	if (y != (int)ft_strlen(split[x]) && split[x][y + 1]
 		&& split[x][y + 1] == '0')
 		return (0);
 	if (y != 0 && split[x][y - 1] && split[x][y - 1] == '0')
@@ -44,12 +44,13 @@ int	ft_check_corner(char **split, int x, int y)
 	if (x != ft_splitlen(split) - 1 && split[x + 1][y]
 		&& split[x + 1][y] == '0')
 		return (0);
-	if (y != ft_strlen(split[x]) && x != 0 && split[x - 1][y + 1]
+	if (y != (int)ft_strlen(split[x]) && x != 0 && split[x - 1][y + 1]
 		&& split[x - 1][y + 1] == '0')
 		return (0);
 	if (y != 0 && x != 0 && split[x - 1][y - 1] && split[x - 1][y - 1] == '0')
 		return (0);
-	if (split[x + 1] && x != ft_splitlen(split) && y != ft_strlen(split[x + 1])
+	if (split[x + 1] && x != ft_splitlen(split) \
+		&& y != (int)ft_strlen(split[x + 1])
 		&& split[x + 1][y + 1] && split[x + 1][y + 1] == '0')
 		return (0);
 	if (x != ft_splitlen(split) - 1 && y != 0 && split[x + 1][y - 1]
@@ -95,7 +96,6 @@ int	ft_check_map(t_game *game, int x, char *str, int i)
 {
 	char	*tmp;
 	char	**split;
-	char	*space;
 
 	while (str[i])
 	{

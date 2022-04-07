@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_check_texture.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 16:19:11 by tnard             #+#    #+#             */
-/*   Updated: 2022/04/07 09:56:23 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/07 10:20:42 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
-int	ft_add_texture(char *split, t_game *game, int x, int y)
+int	ft_add_texture(char *split, t_game *game)
 {
 	if (split[0] == 'N' && !game->n)
 		game->n = ft_strdup(split);
@@ -59,7 +59,7 @@ int	ft_pos(char *line, char *str)
 				i++;
 				j++;
 			}
-			if (j == ft_strlen(line))
+			if (j == (int)ft_strlen(line))
 				return (i_temp);
 		}
 		i++;
@@ -83,13 +83,12 @@ int	ft_check_texture(char *str, t_game *game)
 {
 	char	**split;
 	int		x;
-	int		y;
 
 	x = -1;
 	split = ft_split(str, '\n');
 	while (split[++x])
 	{
-		if (!ft_add_texture(split[x], game, x, y))
+		if (!ft_add_texture(split[x], game))
 		{
 			ft_free_split(split);
 			return (0);

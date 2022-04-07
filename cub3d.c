@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/04/07 09:02:39 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/07 10:25:41 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,14 +94,14 @@ int	main(int argc, char *argv[])
 {
 	t_game		game;
 	t_graphic	graphic;
-	pthread_t	music;
 
 	game.s_color = 0;
+	game.music = NULL;
 	ft_init_struct(&game, &graphic);
+	ft_start_music(&game, game.music);
 	if (ft_check_arg(argc, argv, &game)
 		&& ft_create_image_n_s(&game) && ft_get_pos(&game))
 	{
-		ft_start_music(&game, music);
 		ft_create_vector(&game);
 		ft_create_plan(&game);
 		mlx_loop_hook(graphic.mlx, ft_update, &game);
@@ -114,7 +114,7 @@ int	main(int argc, char *argv[])
 	}
 	else
 		ft_printf("Error\n");
-	ft_stop_music(&game, music);
+	ft_stop_music(game.music);
 	ft_close(&game);
 	return (0);
 }

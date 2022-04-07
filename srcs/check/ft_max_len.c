@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_max_len.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 10:42:13 by tnard             #+#    #+#             */
-/*   Updated: 2022/02/22 10:42:20 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/07 10:21:10 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	ft_max_len(char *str)
 	split = ft_split(str, '\n');
 	while (split[x])
 	{
-		if (ft_strlen(split[x]) > max)
+		if ((int)ft_strlen(split[x]) > max)
 			max = ft_strlen(split[x]);
 		x++;
 	}

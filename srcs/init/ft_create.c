@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_create.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 14:38:10 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/07 09:39:51 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/07 10:26:59 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	ft_create_sprite(t_game *game, char *charset)
 
 	a = 0;
 	b = 0;
-	while (a < ft_strlen(charset))
+	while (a < (int)ft_strlen(charset))
 	{
 		y = 0;
 		while (game->map[y])
