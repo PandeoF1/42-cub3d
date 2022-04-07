@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/04/06 20:16:59 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/06 16:43:38 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,6 @@ typedef struct s_game
 	struct s_img		img_e;
 	struct s_img		img_t;
 	struct s_img		img_map;
-	int					s_color;
 	int					map_color;
 	int					floor_color;
 	int					ceiling_color;
@@ -184,7 +183,7 @@ typedef struct s_game
 	struct s_sprite		*sprites;
 	struct s_rayon		**rayon;
 	struct s_graphic	*graphic;
-	struct s_map_util	map_util;
+	struct s_map_util	m_u;
 	int					minimap;
 }	t_game;
 
