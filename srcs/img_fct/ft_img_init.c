@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 14:45:49 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/07 09:09:26 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/07 09:35:34 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	ft_create_image_e_w(t_game *game)
 	i = 0;
 	if (ft_create_image_util(game) == 0)
 		return (0);
-	while (i < 4)
+	while (i < DOOR_LEN)
 	{
 		if (ft_image_len(game->z[i], 2) == 0)
 			return (0);
