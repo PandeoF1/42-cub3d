@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+         #
+#    By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/09 13:04:45 by tnard             #+#    #+#              #
-#    Updated: 2022/04/07 10:43:08 by tnard            ###   ########lyon.fr    #
+#    Updated: 2022/04/07 10:57:44 by asaffroy         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,17 +40,17 @@ OBJS		= $(SRCS:.c=.o)
 OBJECTS_PREFIXED = $(addprefix $(OBJS_DIR), $(OBJS))
 CC			= gcc
 CC_FLAGS	= -O3 -Ofast -flto -march=native -ffast-math -Wall -Werror -Wextra
-MLB_FLAGS	= -Lincludes -framework OpenGL -framework AppKit -framework OpenAL libft/libft.a ft_printf/libftprintf.a
+MLB_FLAGS	= -Lmlx -lmlx -framework OpenGL -framework AppKit -Imlx -L./mlbx libft/libft.a ft_printf/libftprintf.a
 
 $(OBJS_DIR)%.o : %.c includes/cub3d.h
 	@$(CC) $(CC_FLAGS) -c $< -o $@
 	@printf	"\033[2K\r${BLU}[BUILD - $(NAME)]${RST} '$<' $(END)"
 
-$(NAME): $(OBJECTS_PREFIXED) maker
+$(NAME): file $(OBJECTS_PREFIXED) maker
 	@$(CC) -o $(NAME) $(OBJECTS_PREFIXED) $(CC_FLAGS) $(MLB_FLAGS)
 	@printf "\033[2K\r\033[0;32m[END]\033[0m $(NAME)$(END)\n"
 
-all: file $(NAME)
+all: $(NAME)
 
 file:
 	@mkdir -p $(OBJS_DIR)

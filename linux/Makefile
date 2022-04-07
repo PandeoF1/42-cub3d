@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+         #
+#    By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/09 13:04:45 by tnard             #+#    #+#              #
-#    Updated: 2022/04/07 10:43:15 by tnard            ###   ########lyon.fr    #
+#    Updated: 2022/04/07 10:47:39 by asaffroy         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,11 +46,11 @@ $(OBJS_DIR)%.o : %.c includes/cub3d.h
 	@$(CC) $(CC_FLAGS) -c $< -o $@
 	@printf	"\033[2K\r${BLU}[BUILD - $(NAME)]${RST} '$<' $(END)"
 
-$(NAME): $(OBJECTS_PREFIXED) maker
+$(NAME): file $(OBJECTS_PREFIXED) maker
 	@$(CC) -o $(NAME) $(OBJECTS_PREFIXED) $(CC_FLAGS) $(MLB_FLAGS)
 	@printf "\033[2K\r\033[0;32m[END]\033[0m $(NAME)$(END)\n"
 
-all: file $(NAME)
+all: $(NAME)
 
 file:
 	@mkdir -p $(OBJS_DIR)

@@ -6,7 +6,7 @@
 /*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/04/07 10:32:37 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/07 11:10:18 by asaffroy         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,13 @@
 
 # define PI 3.14159265
 
-# define EVENT_W 119
-# define EVENT_A 97
-# define EVENT_S 115
-# define EVENT_D 100
-# define EVENT_SPACE 32
-# define EVENT_ESC 65307
+# define EVENT_W 13
+# define EVENT_A 0
+# define EVENT_S 1
+# define EVENT_D 2
+# define EVENT_SPACE 49
+# define EVENT_SHIFT 257
+# define EVENT_ESC 53
 # define WIDTH 1280
 # define HEIGHT 720
 # define NB_THREAD 16

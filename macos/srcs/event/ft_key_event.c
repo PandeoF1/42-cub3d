@@ -15,7 +15,7 @@
 int	ft_win_event(int keycode, t_game *game)
 {
 	if (keycode == EVENT_ESC)
-		mlx_loop_end(game->graphic->mlx);
+		mlx_destroy_window(game->graphic->mlx, game->graphic->win);
 	if (keycode == EVENT_SPACE)
 		game->keyboard.space = 1;
 	if (keycode == EVENT_W)
@@ -26,17 +26,17 @@ int	ft_win_event(int keycode, t_game *game)
 		game->keyboard.a = 1;
 	if (keycode == EVENT_D)
 		game->keyboard.d = 1;
-	if (keycode == 65362)
+	if (keycode == 126)
 		game->keyboard.up = 1;
-	if (keycode == 65364)
+	if (keycode == 125)
 		game->keyboard.down = 1;
-	if (keycode == 65363)
+	if (keycode == 124)
 		game->keyboard.left = 1;
-	if (keycode == 65361)
+	if (keycode == 123)
 		game->keyboard.right = 1;
-	if (keycode == 65505)
+	if (keycode == EVENT_SHIFT)
 		game->size_p = SIZE_P_CROUCHING;
-	if (keycode == 109)
+	if (keycode == 46)
 		game->minimap *= -1;
 	return (0);
 }
@@ -53,21 +53,21 @@ int	ft_unpress(int keycode, t_game *game)
 		game->keyboard.a = 0;
 	if (keycode == EVENT_D)
 		game->keyboard.d = 0;
-	if (keycode == 65362)
+	if (keycode == 126)
 		game->keyboard.up = 0;
-	if (keycode == 65364)
+	if (keycode == 125)
 		game->keyboard.down = 0;
-	if (keycode == 65363)
+	if (keycode == 124)
 		game->keyboard.left = 0;
-	if (keycode == 65361)
+	if (keycode == 123)
 		game->keyboard.right = 0;
-	if (keycode == 65505)
+	if (keycode == EVENT_SHIFT)
 		game->size_p = SIZE_P_STANDING;
 	return (0);
 }
 
 int	ft_exit_hook(t_game *game)
 {
-	mlx_loop_end(game->graphic->mlx);
+	mlx_destroy_window(game->graphic->mlx, game->graphic->win);
 	return (0);
 }
