@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_mouse.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 10:36:58 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/04 10:37:08 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/07 09:19:07 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,11 @@ void	ft_mouse(t_game *game)
 
 	mlx_mouse_get_pos(game->graphic->mlx, game->graphic->win, &x, &y);
 	mlx_mouse_hide(game->graphic->mlx, game->graphic->win);
-	game->angle_z += (x - game->twidth / 2) * 0.005;
-	game->angle_x += (y - game->theight / 2) * 0.0025;
+	if (x > game->twidth / 2 || x < game->twidth / 2)
+		game->angle_z += (x - game->twidth / 2) * 0.005;
+	if ((y > game->theight / 2 && game->angle_x <= 0.75)
+		|| (y < game->theight / 2 && game->angle_x >= -0.5))
+		game->angle_x += (y - game->theight / 2) * 0.002;
 	mlx_mouse_move(game->graphic->mlx, game->graphic->win,
 		game->twidth / 2, game->theight / 2);
 }
