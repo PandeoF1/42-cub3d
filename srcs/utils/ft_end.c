@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 10:15:13 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/07 09:09:09 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/07 09:13:35 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	ft_close(t_game *game)
 {
 	int	i;
 
-	i = 0;
+	i = -1;
 	if (game->map)
 		ft_free_split(game->map);
 	if (game->n)
@@ -46,7 +46,7 @@ void	ft_close(t_game *game)
 		free(game->c);
 	if (game->t)
 		free(game->t);
-	while (i < DOOR_LEN)
+	while (++i < DOOR_LEN)
 		if (game->z[i])
 			free(game->z[i]);
 	ft_free_rayon(game->rayon, game);
@@ -60,8 +60,8 @@ void	ft_close(t_game *game)
 		mlx_destroy_image(game->graphic->mlx, game->img_e.img_ptr);
 	if (game->s_color-- > 0)
 		mlx_destroy_image(game->graphic->mlx, game->img_t.img_ptr);
-	i = 0;
-	while (i < DOOR_LEN)
+	i = -1;
+	while (++i < DOOR_LEN)
 		if (game->s_color-- > 0)
 			mlx_destroy_image(game->graphic->mlx, game->door_color[i].img_ptr);
 	mlx_destroy_window(game->graphic->mlx, game->graphic->win);
