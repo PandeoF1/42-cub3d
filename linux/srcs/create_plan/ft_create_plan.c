@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 12:05:41 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/07 09:40:54 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/08 14:50:54 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,7 @@ int	ft_create_plan_sprite_door(t_game *game)
 int	ft_create_plan(t_game *game)
 {
 	int	x;
-	int	next;
 
-	next = 0;
 	game->nb_door = ft_door_count(game);
 	game->plan = malloc(sizeof(t_plan *) * 5);
 	if (!game->plan)

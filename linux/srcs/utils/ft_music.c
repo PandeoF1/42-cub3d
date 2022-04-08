@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_music.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 13:02:34 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/07 10:26:49 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/08 14:52:04 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,10 @@
 
 void	*ft_music(void *data)
 {
-	t_game	*game;
-
-	game = (t_game *)data;
+	(void) data;
 	while (42)
-		system("afplay music.mp3");
+		if (system("afplay music.mp3"))
+			sleep(5);
 }
 
 void	ft_start_music(t_game *game, pthread_t music)
