@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/04/08 14:50:43 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/12 09:40:58 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ int	main(int argc, char *argv[])
 	t_graphic	graphic;
 
 	game.s_color = 0;
-	//game.music = NULL;
 	ft_init_struct(&game, &graphic);
 	ft_start_music(&game, game.music);
 	if (ft_check_arg(argc, argv, &game)

@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/04/07 11:16:19 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/12 09:38:52 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,6 @@ typedef struct s_img
 
 typedef struct s_game
 {
-	int					started;
 	char				*n;
 	char				*s;
 	char				*w;

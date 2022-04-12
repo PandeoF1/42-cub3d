@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 14:38:10 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/07 11:17:30 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/12 09:38:40 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	ft_create_vector(t_game *game)
 	float	r_h;
 	float	r_v;
 
-	game->started = 1;
 	i = 0;
 	while (i < game->theight)
 	{

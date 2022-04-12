@@ -15,7 +15,7 @@
 int	ft_win_event(int keycode, t_game *game)
 {
 	if (keycode == EVENT_ESC)
-		mlx_destroy_window(game->graphic->mlx, game->graphic->win);
+		ft_close(game);
 	if (keycode == EVENT_SPACE)
 		game->keyboard.space = 1;
 	if (keycode == EVENT_W)
@@ -68,6 +68,6 @@ int	ft_unpress(int keycode, t_game *game)
 
 int	ft_exit_hook(t_game *game)
 {
-	mlx_destroy_window(game->graphic->mlx, game->graphic->win);
+	ft_close(game);
 	return (0);
 }

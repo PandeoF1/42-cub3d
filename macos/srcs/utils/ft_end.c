@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 10:15:13 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/07 11:17:16 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/12 09:36:56 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,8 @@ void	ft_close_3(t_game *game)
 	while (++i < DOOR_LEN)
 		if (game->s_color-- > 0)
 			mlx_destroy_image(game->graphic->mlx, game->door_color[i].img_ptr);
-	if (!game->started)
-	{
-		mlx_destroy_window(game->graphic->mlx, game->graphic->win);
-		if (game->graphic->mlx)
-			free(game->graphic->mlx);
-	}
 	printf("Cub3d: exit\n");
+	exit(0);
 }
 
 void	ft_close_2(t_game *game)

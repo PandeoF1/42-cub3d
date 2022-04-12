@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_map.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 12:22:18 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/07 10:31:58 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/12 09:37:08 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,6 @@ void	ft_map(t_game *game, t_img img)
 	game->map_color = 0x5e5e5e;
 	game->m_u->x = 0;
 	game->m_u->y = 0;
-	// ft_draw_square(game->m_u->x + (game->twidth - (25 * 9)), \
-	// game->m_u->y + 25, 25 * 10, game);
 	game->m_u->i = (game->player_x * 4) - 25 * 4;
 	if (game->m_u->i < 0)
 		game->m_u->i = 0;

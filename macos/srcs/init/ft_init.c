@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 09:38:34 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/07 11:16:39 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/12 09:38:35 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void	ft_init_struct(t_game *game, t_graphic *graphic)
 	graphic->map_check = game;
 	graphic->mlx = mlx_init();
 	graphic->win = mlx_new_window(graphic->mlx, WIDTH, HEIGHT, "cub3d");
-	game->started = 0;
 }
 
 t_rayon	**ft_malloc_rayon(t_game *game)
