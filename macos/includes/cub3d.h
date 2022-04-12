@@ -6,14 +6,14 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 02:38:07 by tnard             #+#    #+#             */
-/*   Updated: 2022/04/12 09:38:52 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/12 10:55:26 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include "../mlbx/mlx.h"
+# include "../mlx/mlx.h"
 # include "../libft/libft.h"
 # include "../ft_printf/ft_printf.h"
 # include <stdio.h>

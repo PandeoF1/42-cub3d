@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+         #
+#    By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/09 13:04:45 by tnard             #+#    #+#              #
-#    Updated: 2022/04/07 10:57:44 by asaffroy         ###   ########lyon.fr    #
+#    Updated: 2022/04/12 10:56:52 by tnard            ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,13 +34,13 @@ SRCS		= cub3d.c srcs/check/ft_check_arg.c srcs/check/ft_check_map.c \
 				srcs/map_fps_pos/ft_fps.c
 
 NAME		= cub3d
-minilibx	= mlbx/libmlx.a
+minilibx	= mlx/libmlx.a
 OBJS_DIR	= objs/
 OBJS		= $(SRCS:.c=.o)
 OBJECTS_PREFIXED = $(addprefix $(OBJS_DIR), $(OBJS))
 CC			= gcc
 CC_FLAGS	= -O3 -Ofast -flto -march=native -ffast-math -Wall -Werror -Wextra
-MLB_FLAGS	= -Lmlx -lmlx -framework OpenGL -framework AppKit -Imlx -L./mlbx libft/libft.a ft_printf/libftprintf.a
+MLB_FLAGS	= -Lmlx -lmlx -framework OpenGL -framework AppKit -Imlx -L./mlx libft/libft.a ft_printf/libftprintf.a
 
 $(OBJS_DIR)%.o : %.c includes/cub3d.h
 	@$(CC) $(CC_FLAGS) -c $< -o $@
@@ -68,7 +68,7 @@ file:
 	@mkdir -p $(OBJS_DIR)srcs/update
 
 maker:
-	@make -C mlbx
+	@make -C mlx
 	@make -C libft
 	@make -C ft_printf
 
@@ -79,7 +79,7 @@ clean:
 	@echo "${GRN}[CLEAN]${RST} done"
 
 fclean: clean
-	@make clean -C mlbx
+	@make clean -C mlx
 	@make fclean -C libft
 	@make fclean -C ft_printf
 	@rm -f $(NAME)
