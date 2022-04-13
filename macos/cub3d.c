@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/04/12 09:40:30 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/13 21:15:21 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@ void	*ft_updater(void	*data)
 
 	update = (t_update *)data;
 	game = update->game;
-	update->i = update->start_y;
-	while (update->i < update->end_y)
+	update->i = 0;
+	while (update->i < game->theight)
 	{
-		update->j = 0;
-		while (update->j < game->twidth)
+		update->j = update->start_y;
+		while (update->j < update->end_y)
 		{
 			ft_updater_5(update, game);
 			update->t = 0;
@@ -54,8 +54,8 @@ void	ft_threads(t_game *game, t_update *updt, pthread_t *thread, t_img *img)
 		if (x == 0)
 			updt[x].start_y = 0;
 		else
-			updt[x].start_y = (x * game->theight) / NB_THREAD;
-		updt[x].end_y = ((x + 1) * game->theight) / NB_THREAD;
+			updt[x].start_y = (x * game->twidth) / NB_THREAD;
+		updt[x].end_y = ((x + 1) * game->twidth) / NB_THREAD;
 		updt[x].game = game;
 		pthread_create(&thread[x], NULL, &ft_updater, &updt[x]);
 		x++;
@@ -96,7 +96,6 @@ int	main(int argc, char *argv[])
 	t_graphic	graphic;
 
 	game.s_color = 0;
-	game.music = NULL;
 	ft_init_struct(&game, &graphic);
 	ft_start_music(&game, game.music);
 	if (ft_check_arg(argc, argv, &game)
