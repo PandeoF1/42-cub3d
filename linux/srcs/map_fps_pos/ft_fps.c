@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_fps.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 11:33:04 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/06 11:34:34 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/14 13:43:09 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	ft_put_fps(t_game *game, int lframe, int total_second, int total_frame)
 		free(game->put_fps);
 		game->put_fps = ft_itoa(total_frame / total_second);
 		mlx_string_put(game->graphic->mlx, game->graphic->win,
-			2, 30, 0xffffff, "Moy FPS : ");
+			2, 30, 0xffffff, "Moy FPS: ");
 		mlx_string_put(game->graphic->mlx, game->graphic->win,
 			60, 30, 0xffffff, game->put_fps);
 	}
