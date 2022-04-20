@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 12:32:17 by tnard             #+#    #+#             */
-/*   Updated: 2022/04/13 21:05:30 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/20 13:41:33 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	main(int argc, char *argv[])
 	ft_init_struct(&game, &graphic);
 	ft_start_music(&game, game.music);
 	if (ft_check_arg(argc, argv, &game)
-		&& ft_create_image_n_s(&game) && ft_get_pos(&game))
+		&& ft_get_pos(&game) && ft_create_image_n_s(&game))
 	{
 		ft_create_vector(&game);
 		ft_create_plan(&game);
