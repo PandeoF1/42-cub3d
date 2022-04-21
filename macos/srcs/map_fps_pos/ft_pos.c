@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pos.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 09:49:50 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/07 10:32:22 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/21 14:04:24 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ int	ft_select_pos(t_game *game, int x, int y)
 		game->angle_z = 0;
 	else if (game->map[y][x] == 'S')
 		game->angle_z = 3.14;
-	else if (game->map[y][x] == 'W')
-		game->angle_z = 3.14 * 0.5;
 	else if (game->map[y][x] == 'E')
+		game->angle_z = 3.14 * 0.5;
+	else if (game->map[y][x] == 'W')
 		game->angle_z = 3.14 * 0.5 + 3.14;
 	else
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 09:57:26 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/07 09:07:42 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/21 13:55:22 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	*ft_open_xpm(t_game *game, char *str, int size_x)
 {
+	while (*str == ' ')
+		str++;
 	return (mlx_xpm_file_to_image(
 			game->graphic->mlx, str, &size_x,
 			&size_x));
@@ -24,8 +26,18 @@ int	ft_color_format(char *str)
 	char	**split;
 	int		i;
 
+	while (*str == ' ')
+		str++;
 	split = ft_split(str, ',');
 	if (ft_splitlen(split) != 3 || !ft_split_number(split))
+	{
+		ft_free_split(split);
+		return (-1);
+	}
+	if ((ft_atoi(split[0]) > 255 || ft_atoi(split[1]) > 255
+			|| ft_atoi(split[2]) > 255) || (ft_atoi(split[0]) < 0
+			|| ft_atoi(split[1]) < 0
+			|| ft_atoi(split[2]) < 0))
 	{
 		ft_free_split(split);
 		return (-1);
@@ -41,6 +53,8 @@ int	ft_image_len(char *str, int y)
 	int	x;
 
 	x = 0;
+	while (str[x] == ' ')
+		x++;
 	while (str[x])
 	{
 		if (x > y - 1)
@@ -58,6 +72,8 @@ int	ft_check_image(char *path)
 	char	*ext;
 	int		fd;
 
+	while (*path == ' ')
+		path++;
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
 		return (0);

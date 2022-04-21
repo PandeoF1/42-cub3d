@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_img_init.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaffroy <asaffroy@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 14:45:49 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/07 10:27:28 by asaffroy         ###   ########lyon.fr   */
+/*   Updated: 2022/04/21 14:02:15 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	ft_data_image(t_game *game)
 	game->ceiling_color = ft_color_format(game->c + 2);
 	if (game->ceiling_color == -1)
 		return (0);
+	game->s_color++;
 	ft_flip_img(&game->img_n, 0, 0, 0);
 	ft_flip_img(&game->img_s, 0, 0, 1);
 	ft_flip_img(&game->img_e, 0, 0, 0);

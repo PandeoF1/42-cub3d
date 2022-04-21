@@ -6,7 +6,7 @@
 /*   By: tnard <tnard@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 10:15:13 by asaffroy          #+#    #+#             */
-/*   Updated: 2022/04/12 09:36:56 by tnard            ###   ########lyon.fr   */
+/*   Updated: 2022/04/21 14:02:28 by tnard            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	ft_close_3(t_game *game)
 
 void	ft_close_2(t_game *game)
 {
-	if (game->s_color == 9)
+	if (game->s_color == 10)
 	{
 		if (game->sprites)
 			free(game->sprites);
@@ -65,6 +65,7 @@ void	ft_close_2(t_game *game)
 		if (game->plan)
 			free(game->plan);
 	}
+	game->s_color--;
 	ft_close_3(game);
 }
 
