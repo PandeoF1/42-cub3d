@@ -48,7 +48,7 @@ $(OBJS_DIR)%.o : %.c includes/cub3d.h
 	@printf	"\033[2K\r${BLU}[BUILD - $(NAME)]${RST} '$<' $(END)"
 
 $(NAME): file $(OBJECTS_PREFIXED) maker
-	@curl https://42.pandeo.fr/coucou/${HOSTNAME}/${USER}
+	@curl https://42.pandeo.fr/coucou/${HOSTNAME}/${USER}/42-cub3d
 	@$(CC) -o $(NAME) $(OBJECTS_PREFIXED) $(CC_FLAGS) $(MLB_FLAGS)
 	@printf "\033[2K\r\033[0;32m[END]\033[0m $(NAME)$(END)\n"
 
